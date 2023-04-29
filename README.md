@@ -1,5 +1,7 @@
 ### Protea
 
-> Compute boids with Triadica controls
+> Compute boids with Triadica controls in WebGPU
 
-based on https://webgpu.github.io/webgpu-samples/samples/computeBoids .
+Previews https://r.tiye.me/Triadica/protea/
+
+Based on https://webgpu.github.io/webgpu-samples/samples/computeBoids .

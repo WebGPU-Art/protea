@@ -1,7 +1,5 @@
-import { onControlEvent } from "./control.mjs";
 import spriteWGSL from "../shaders/sprite.wgsl?raw";
 import updateSpritesWGSL from "../shaders/update-sprites.wgsl?raw";
-import { renderControl, startControlLoop } from "@triadica/touch-control";
 import { createBuffer, createDepthTexture } from "./buffer.mjs";
 import {
   atomViewerPosition,
@@ -73,8 +71,30 @@ export let createRenderer = async (canvas: HTMLCanvasElement) => {
     },
   });
 
+  const bindGroupLayout = device.createBindGroupLayout({
+    entries: [
+      {
+        binding: 0,
+        visibility: GPUShaderStage.COMPUTE,
+        buffer: { type: "uniform" },
+      },
+      {
+        binding: 1,
+        visibility: GPUShaderStage.COMPUTE,
+        buffer: { type: "read-only-storage" },
+      },
+      {
+        binding: 2,
+        visibility: GPUShaderStage.COMPUTE,
+        buffer: { type: "storage" },
+      },
+    ],
+  });
+
   const computePipeline = device.createComputePipeline({
-    layout: "auto",
+    layout: device.createPipelineLayout({
+      bindGroupLayouts: [bindGroupLayout],
+    }),
     compute: {
       module: device.createShaderModule({ code: updateSpritesWGSL }),
       entryPoint: "main",
@@ -108,21 +128,24 @@ export let createRenderer = async (canvas: HTMLCanvasElement) => {
   let spriteVertexBuffer = buildSpriteVertexBuffer();
   let simParamBuffer = buildSimParamBuffer();
 
-  const numParticles = 500;
+  const numParticles = 20;
   const initialParticleData = new Float32Array(numParticles * 6);
   for (let i = 0; i < numParticles; ++i) {
-    initialParticleData[6 * i + 0] = 2 * (Math.random() - 0.5);
-    initialParticleData[6 * i + 1] = 2 * (Math.random() - 0.5);
+    // initialParticleData[6 * i + 0] = 2 * (Math.random() - 0.5);
+    // initialParticleData[6 * i + 1] = 2 * (Math.random() - 0.5);
+    initialParticleData[6 * i + 0] = 0.0;
+    initialParticleData[6 * i + 1] = 0.0;
     initialParticleData[6 * i + 2] = 0;
     // initialParticleData[6 * i + 2] = 2 * (Math.random() - 0.5);
-    initialParticleData[6 * i + 3] = 2 * (Math.random() - 0.5) * 0.1;
-    initialParticleData[6 * i + 4] = 2 * (Math.random() - 0.5) * 0.1;
+    // initialParticleData[6 * i + 3] = 2 * (Math.random() - 0.5) * 0.1;
+    // initialParticleData[6 * i + 4] = 2 * (Math.random() - 0.5) * 0.1;
+    initialParticleData[6 * i + 3] = 0.0;
+    initialParticleData[6 * i + 4] = 0.1;
     // initialParticleData[6 * i + 5] = 2 * (Math.random() - 0.5) * 0.1;
     initialParticleData[6 * i + 5] = 0;
   }
 
   const particleBuffers: GPUBuffer[] = new Array(2);
-  const particleBindGroups: GPUBindGroup[] = new Array(2);
   for (let i = 0; i < 2; ++i) {
     particleBuffers[i] = device.createBuffer({
       size: initialParticleData.byteLength,
@@ -135,6 +158,7 @@ export let createRenderer = async (canvas: HTMLCanvasElement) => {
     particleBuffers[i].unmap();
   }
 
+  const particleBindGroups: GPUBindGroup[] = new Array(2);
   for (let i = 0; i < 2; ++i) {
     let byteLength = initialParticleData.byteLength;
     let fromBuffer = particleBuffers[i % 2];
@@ -155,7 +179,7 @@ export let createRenderer = async (canvas: HTMLCanvasElement) => {
     });
   }
 
-  return function render(t: number) {
+  return async function render(t: number) {
     let uniformBuffer = loadUniformBuffer();
 
     let uniformBindGroup: GPUBindGroup = device.createBindGroup({
@@ -307,3 +331,11 @@ let blendState: GPUBlendState = {
     operation: "add",
   },
 };
+
+export function resetCanvasSize(canvas: HTMLCanvasElement) {
+  // canvas height not accurate on Android Pad, use innerHeight
+  canvas.style.height = `${window.innerHeight}px`;
+  canvas.style.width = `${window.innerWidth}px`;
+  canvas.height = window.innerHeight * devicePixelRatio;
+  canvas.width = window.innerWidth * devicePixelRatio;
+}

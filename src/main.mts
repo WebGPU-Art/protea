@@ -2,7 +2,7 @@ import { onControlEvent } from "./control.mjs";
 import { renderControl, startControlLoop } from "@triadica/touch-control";
 import { createDepthTexture } from "./buffer.mjs";
 import { atomDepthTexture, atomDevice } from "./globals.mjs";
-import { createRenderer } from "./render.mjs";
+import { createRenderer, resetCanvasSize } from "./render.mjs";
 
 window.onload = async () => {
   if (navigator.gpu == null) {
@@ -25,14 +25,15 @@ window.onload = async () => {
 
   let t = 0;
   let renderer = () => {
-    ++t;
+    t++;
     setTimeout(() => {
       requestAnimationFrame(renderer);
-    }, 200);
+    }, 20);
     renderFrame(t);
   };
 
   renderer();
+  window["rrr"] = renderer;
 
   window.onresize = () => {
     resetCanvasSize(canvas);
@@ -40,18 +41,13 @@ window.onload = async () => {
   };
 };
 
-export function resetCanvasSize(canvas: HTMLCanvasElement) {
-  // canvas height not accurate on Android Pad, use innerHeight
-  canvas.style.height = `${window.innerHeight}px`;
-  canvas.style.width = `${window.innerWidth}px`;
-  canvas.height = window.innerHeight * devicePixelRatio;
-  canvas.width = window.innerWidth * devicePixelRatio;
-}
-
 declare global {
   /** dirty hook for extracting error messages */
   var __lagopusHandleCompilationInfo: (
     info: GPUCompilationInfo,
     code: string
   ) => void;
+
+  // to be triggered from command
+  var rrr: () => void;
 }

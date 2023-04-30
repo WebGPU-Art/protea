@@ -59,8 +59,7 @@ fn vert_main(
   @location(1) a_particle_vel: vec3<f32>,
   @location(2) a_pos: vec2<f32>
 ) -> VertexOutput {
-  // let angle = -atan2(a_particle_vel.x, a_particle_vel.y);
-  let angle = 0.02;
+  let angle = -atan2(a_particle_vel.x, a_particle_vel.y);
   let pos = vec2(
     (a_pos.x * cos(angle)) - (a_pos.y * sin(angle)),
     (a_pos.x * sin(angle)) + (a_pos.y * cos(angle))

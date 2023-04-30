@@ -41,11 +41,11 @@ export let createRenderer = async (canvas: HTMLCanvasElement) => {
       buffers: [
         {
           // instanced particles buffer
-          arrayStride: 6 * 4,
+          arrayStride: 8 * 4,
           stepMode: "instance",
           attributes: [
             { shaderLocation: 0, offset: 0, format: "float32x3" },
-            { shaderLocation: 1, offset: 3 * 4, format: "float32x3" },
+            { shaderLocation: 1, offset: 4 * 4, format: "float32x3" },
           ],
         },
         {
@@ -128,21 +128,23 @@ export let createRenderer = async (canvas: HTMLCanvasElement) => {
   let spriteVertexBuffer = buildSpriteVertexBuffer();
   let simParamBuffer = buildSimParamBuffer();
 
-  const numParticles = 20;
-  const initialParticleData = new Float32Array(numParticles * 6);
+  const numParticles = 200;
+  const initialParticleData = new Float32Array(numParticles * 8);
   for (let i = 0; i < numParticles; ++i) {
-    // initialParticleData[6 * i + 0] = 2 * (Math.random() - 0.5);
-    // initialParticleData[6 * i + 1] = 2 * (Math.random() - 0.5);
-    initialParticleData[6 * i + 0] = 0.0;
-    initialParticleData[6 * i + 1] = 0.0;
+    initialParticleData[6 * i + 0] = 2 * (Math.random() - 0.5);
+    initialParticleData[6 * i + 1] = 2 * (Math.random() - 0.5);
+    // initialParticleData[6 * i + 0] = 0.0;
+    // initialParticleData[6 * i + 1] = 0.0;
     initialParticleData[6 * i + 2] = 0;
+    initialParticleData[6 * i + 3] = 0;
     // initialParticleData[6 * i + 2] = 2 * (Math.random() - 0.5);
-    // initialParticleData[6 * i + 3] = 2 * (Math.random() - 0.5) * 0.1;
-    // initialParticleData[6 * i + 4] = 2 * (Math.random() - 0.5) * 0.1;
-    initialParticleData[6 * i + 3] = 0.0;
-    initialParticleData[6 * i + 4] = 0.1;
-    // initialParticleData[6 * i + 5] = 2 * (Math.random() - 0.5) * 0.1;
-    initialParticleData[6 * i + 5] = 0;
+    initialParticleData[6 * i + 4] = 2 * (Math.random() - 0.5) * 0.1;
+    initialParticleData[6 * i + 5] = 2 * (Math.random() - 0.5) * 0.1;
+    // initialParticleData[6 * i + 4] = 0.0;
+    // initialParticleData[6 * i + 5] = 0.0;
+    // initialParticleData[6 * i + 6] = 2 * (Math.random() - 0.5) * 0.1;
+    initialParticleData[6 * i + 6] = 0;
+    initialParticleData[6 * i + 7] = 0;
   }
 
   const particleBuffers: GPUBuffer[] = new Array(2);

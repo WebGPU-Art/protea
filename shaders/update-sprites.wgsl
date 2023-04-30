@@ -63,33 +63,34 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
     c_vel /= f32(c_vel_count);
   }
   v_vel += (c_mass * params.rule1_scale) + (col_vel * params.rule2_scale) + (c_vel * params.rule3_scale);
-  v_vel = vec3<f32>(0.05,0.0,0.0);
+  // v_vel = vec3<f32>(0.05,0.0,0.0);
 
   // clamp velocity for a more pleasing simulation
-  // v_vel = normalize(v_vel) * clamp(length(v_vel), 0.0, 0.1);
+  v_vel = normalize(v_vel) * clamp(length(v_vel), 0.0, 0.1);
   // kinematic update
   v_pos = v_pos + (v_vel * params.delta_t);
   // Wrap around boundary
-  // if (v_pos.x < -1.0) {
-  //   v_pos.x = 1.0;
-  // }
-  // if (v_pos.x > 1.0) {
-  //   v_pos.x = -1.0;
-  // }
-  // if (v_pos.y < -1.0) {
-  //   v_pos.y = 1.0;
-  // }
-  // if (v_pos.y > 1.0) {
-  //   v_pos.y = -1.0;
-  // }
+  if (v_pos.x < -1.0) {
+    v_pos.x = 1.0;
+  }
+  if (v_pos.x > 1.0) {
+    v_pos.x = -1.0;
+  }
+  if (v_pos.y < -1.0) {
+    v_pos.y = 1.0;
+  }
+  if (v_pos.y > 1.0) {
+    v_pos.y = -1.0;
+  }
   // Write back
-  // particles_b.particles[index].pos = vec3(0.3,0.0,0.0);
-  // particles_b.particles[index].vel = v_vel;
-  particles_b.particles[index].pos = particles_b.particles[index].pos;
-  particles_b.particles[index].vel = particles_b.particles[index].vel;
+  particles_b.particles[index].pos = v_pos;
+  particles_b.particles[index].vel = v_vel;
+  // particles_b.particles[index].pos = particles_b.particles[index].pos;
+  // particles_b.particles[index].vel = particles_b.particles[index].vel;
 
-  particles_b.particles[index].pos = vec3(0.5, 0.1, 0.1);
-  particles_b.particles[index].vel = vec3(0.0, 0.0, 0.0);
+  // particles_b.particles[index].pos = vec3(0.5, 0.1, 0.2);
+  // particles_b.particles[index].pos = vec3(0.2, 0.1, 0.1);
+  // particles_b.particles[index].vel = vec3(0.5, 0.1, 0.1);
 }
 
 fn xy0(v: vec3<f32>) -> vec3<f32> {

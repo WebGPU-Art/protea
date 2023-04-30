@@ -1,83 +1,92 @@
 struct Particle {
-  pos : vec2<f32>,
-  vel : vec2<f32>,
+  pos: vec3<f32>,
+  vel: vec3<f32>,
 }
+
 struct SimParams {
-  deltaT : f32,
-  rule1Distance : f32,
-  rule2Distance : f32,
-  rule3Distance : f32,
-  rule1Scale : f32,
-  rule2Scale : f32,
-  rule3Scale : f32,
+  deltaT: f32,
+  rule1_distance: f32,
+  rule2_distance: f32,
+  rule3_distance: f32,
+  rule1_scale: f32,
+  rule2_scale: f32,
+  rule3_scale: f32,
 }
+
 struct Particles {
-  particles : array<Particle>,
+  particles: array<Particle>,
 }
-@binding(0) @group(0) var<uniform> params : SimParams;
-@binding(1) @group(0) var<storage, read> particlesA : Particles;
-@binding(2) @group(0) var<storage, read_write> particlesB : Particles;
+
+@binding(0) @group(0) var<uniform> params: SimParams;
+@binding(1) @group(0) var<storage, read> particles_a: Particles;
+@binding(2) @group(0) var<storage, read_write> particles_b: Particles;
 
 // https://github.com/austinEng/Project6-Vulkan-Flocking/blob/master/data/shaders/computeparticles/particle.comp
 @compute @workgroup_size(64)
-fn main(@builtin(global_invocation_id) GlobalInvocationID : vec3<u32>) {
+fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
   var index = GlobalInvocationID.x;
 
-  var vPos = particlesA.particles[index].pos;
-  var vVel = particlesA.particles[index].vel;
-  var cMass = vec2(0.0);
-  var cVel = vec2(0.0);
-  var colVel = vec2(0.0);
-  var cMassCount = 0u;
-  var cVelCount = 0u;
-  var pos : vec2<f32>;
-  var vel : vec2<f32>;
+  var v_pos = particles_a.particles[index].pos;
+  var v_vel = particles_a.particles[index].vel;
+  var c_mass = vec3(0.0);
+  var c_vel = vec3(0.0);
+  var col_vel = vec3(0.0);
+  var c_mass_count = 0u;
+  var c_vel_count = 0u;
+  var pos: vec3<f32>;
+  var vel: vec3<f32>;
 
-  for (var i = 0u; i < arrayLength(&particlesA.particles); i++) {
+  for (var i = 0u; i < arrayLength(&particles_a.particles); i++) {
     if (i == index) {
       continue;
     }
 
-    pos = particlesA.particles[i].pos.xy;
-    vel = particlesA.particles[i].vel.xy;
-    if (distance(pos, vPos) < params.rule1Distance) {
-      cMass += pos;
-      cMassCount++;
+    pos = vec3<f32>(particles_a.particles[i].pos.xy, 0.);
+    vel = vec3<f32>(particles_a.particles[i].vel.xy, 0.);
+    if (distance(pos, xy0(v_pos)) < params.rule1_distance) {
+      c_mass += pos;
+      c_mass_count++;
     }
-    if (distance(pos, vPos) < params.rule2Distance) {
-      colVel -= pos - vPos;
+    if (distance(pos, xy0(v_pos)) < params.rule2_distance) {
+      col_vel -= pos - xy0(v_pos);
     }
-    if (distance(pos, vPos) < params.rule3Distance) {
-      cVel += vel;
-      cVelCount++;
+    if (distance(pos, xy0(v_pos)) < params.rule3_distance) {
+      c_vel += vel;
+      c_vel_count++;
     }
   }
-  if (cMassCount > 0u) {
-    cMass = (cMass / vec2(f32(cMassCount))) - vPos;
+  if (c_mass_count > 0u) {
+    c_mass = (c_mass / vec3(f32(c_mass_count))) - v_pos;
   }
-  if (cVelCount > 0u) {
-    cVel /= f32(cVelCount);
+  if (c_vel_count > 0u) {
+    c_vel /= f32(c_vel_count);
   }
-  vVel += (cMass * params.rule1Scale) + (colVel * params.rule2Scale) + (cVel * params.rule3Scale);
+  v_vel += (c_mass * params.rule1_scale) + (col_vel * params.rule2_scale) + (c_vel * params.rule3_scale);
 
   // clamp velocity for a more pleasing simulation
-  vVel = normalize(vVel) * clamp(length(vVel), 0.0, 0.1);
+  v_vel = normalize(v_vel) * clamp(length(v_vel), 0.0, 0.1);
   // kinematic update
-  vPos = vPos + (vVel * params.deltaT);
+  v_pos = v_pos + (v_vel * params.deltaT);
   // Wrap around boundary
-  if (vPos.x < -1.0) {
-    vPos.x = 1.0;
+  if (v_pos.x < -1.0) {
+    v_pos.x = 1.0;
   }
-  if (vPos.x > 1.0) {
-    vPos.x = -1.0;
+  if (v_pos.x > 1.0) {
+    v_pos.x = -1.0;
   }
-  if (vPos.y < -1.0) {
-    vPos.y = 1.0;
+  if (v_pos.y < -1.0) {
+    v_pos.y = 1.0;
   }
-  if (vPos.y > 1.0) {
-    vPos.y = -1.0;
+  if (v_pos.y > 1.0) {
+    v_pos.y = -1.0;
   }
   // Write back
-  particlesB.particles[index].pos = vPos;
-  particlesB.particles[index].vel = vVel;
+  particles_b.particles[index].pos = v_pos;
+  particles_b.particles[index].vel = v_vel;
+  // particles_b.particles[index].pos = particles_b.particles[index].pos;
+  // particles_b.particles[index].vel = particles_b.particles[index].vel;
+}
+
+fn xy0(v: vec3<f32>) -> vec3<f32> {
+  return vec3<f32>(v.x, v.y, 0.0);
 }

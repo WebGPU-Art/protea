@@ -48,20 +48,20 @@ let main = async (canvas: HTMLCanvasElement) => {
       buffers: [
         {
           // instanced particles buffer
-          arrayStride: 4 * 4,
+          arrayStride: 6 * 4,
           stepMode: "instance",
           attributes: [
             {
               // instance position
               shaderLocation: 0,
               offset: 0,
-              format: "float32x2",
+              format: "float32x3",
             },
             {
               // instance velocity
               shaderLocation: 1,
-              offset: 2 * 4,
-              format: "float32x2",
+              offset: 3 * 4,
+              format: "float32x3",
             },
           ],
         },
@@ -150,8 +150,9 @@ let main = async (canvas: HTMLCanvasElement) => {
 
   // prettier-ignore
   const vertexBufferData = new Float32Array([
-    -0.01, -0.02, 0.01,
-    -0.02, 0.0, 0.02,
+    -0.01, -0.02,
+    0.01, -0.02,
+    0.0, 0.02,
   ]);
 
   const spriteVertexBuffer = device.createBuffer({
@@ -196,13 +197,17 @@ let main = async (canvas: HTMLCanvasElement) => {
 
   updateSimParams();
 
-  const numParticles = 1500;
-  const initialParticleData = new Float32Array(numParticles * 4);
+  const numParticles = 500;
+  const initialParticleData = new Float32Array(numParticles * 6);
   for (let i = 0; i < numParticles; ++i) {
-    initialParticleData[4 * i + 0] = 2 * (Math.random() - 0.5);
-    initialParticleData[4 * i + 1] = 2 * (Math.random() - 0.5);
-    initialParticleData[4 * i + 2] = 2 * (Math.random() - 0.5) * 0.1;
-    initialParticleData[4 * i + 3] = 2 * (Math.random() - 0.5) * 0.1;
+    initialParticleData[6 * i + 0] = 2 * (Math.random() - 0.5);
+    initialParticleData[6 * i + 1] = 2 * (Math.random() - 0.5);
+    initialParticleData[6 * i + 2] = 0;
+    // initialParticleData[6 * i + 2] = 2 * (Math.random() - 0.5);
+    initialParticleData[6 * i + 3] = 2 * (Math.random() - 0.5) * 0.1;
+    initialParticleData[6 * i + 4] = 2 * (Math.random() - 0.5) * 0.1;
+    // initialParticleData[6 * i + 5] = 2 * (Math.random() - 0.5) * 0.1;
+    initialParticleData[6 * i + 5] = 0;
   }
 
   const particleBuffers: GPUBuffer[] = new Array(2);
@@ -321,7 +326,10 @@ let main = async (canvas: HTMLCanvasElement) => {
     device.queue.submit([commandEncoder.finish()]);
 
     ++t;
-    requestAnimationFrame(frame);
+
+    setTimeout(() => {
+      requestAnimationFrame(frame);
+    }, 200);
   }
   requestAnimationFrame(frame);
 };

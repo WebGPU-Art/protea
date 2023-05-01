@@ -5,9 +5,9 @@ import {
   atomViewerPosition,
   atomViewerUpward,
   newLookatPoint,
+  coneBackScale,
 } from "./perspective.mjs";
 import { vCross, vLength, vNormalize } from "./quaternion.mjs";
-import { coneBackScale } from "./config.mjs";
 import { atomDepthTexture, atomDevice } from "./globals.mjs";
 
 export let createRenderer = async (

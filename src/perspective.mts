@@ -1,5 +1,5 @@
-import { vCross, vDot, vScale, vAdd, vSub, V3 } from "./quaternion.mjs";
-import { Atom } from "@triadica/touch-control/lib/atom.mjs";
+import { vCross, vDot, vScale, vAdd, vSub, V3 } from "@triadica/touch-control";
+import { Atom } from "@triadica/touch-control";
 
 export let coneBackScale = 0.5;
 

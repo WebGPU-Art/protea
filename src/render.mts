@@ -7,7 +7,7 @@ import {
   newLookatPoint,
   coneBackScale,
 } from "./perspective.mjs";
-import { vCross, vLength, vNormalize } from "./quaternion.mjs";
+import { vCross, vLength, vNormalize } from "@triadica/touch-control";
 import { atomDepthTexture, atomDevice } from "./globals.mjs";
 
 export let createRenderer = async (

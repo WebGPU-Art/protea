@@ -1,4 +1,4 @@
-import { Atom } from "@triadica/touch-control/lib/atom.mjs";
+import { Atom } from "@triadica/touch-control";
 
 export var atomDevice: Atom<GPUDevice> = new Atom(null);
 export var atomContext: Atom<GPUCanvasContext> = new Atom(null);

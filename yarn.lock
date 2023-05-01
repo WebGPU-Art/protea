@@ -112,10 +112,10 @@
   resolved "https://registry.yarnpkg.com/@esbuild/win32-x64/-/win32-x64-0.17.18.tgz#3a8e57153905308db357fd02f57c180ee3a0a1fa"
   integrity sha512-qU25Ma1I3NqTSHJUOKi9sAH1/Mzuvlke0ioMJRthLXKm7JiSKVwFghlGbDLOO2sARECGhja4xYfRAZNPAkooYg==
 
-"@triadica/touch-control@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@triadica/touch-control/-/touch-control-0.0.2.tgz#782368adee18c1937dbbf1d401f35aaa9fe47e87"
-  integrity sha512-U7W0kqfgmD+qumYn38mIy4aC16s8bIc00eIt7vW3kLXokkTu2edVmXmfXkaJE93skkd49WXUeMEt6iKTIQ+uXA==
+"@triadica/touch-control@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@triadica/touch-control/-/touch-control-0.0.3.tgz#91e7ecb8fd2a36309180eada58f843b1dd44d876"
+  integrity sha512-P6E+MJYmN6EJim0MjhK2kf99OjTZJwAXI7clJz6DDsaf/HCIbyYnVPWyMC7jgc6bPG2I5PAnLga5gHTR1lbUzA==
 
 "@webgpu/types@^0.1.31":
   version "0.1.31"

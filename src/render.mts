@@ -10,7 +10,19 @@ import { vCross, vLength, vNormalize } from "./quaternion.mjs";
 import { coneBackScale } from "./config.mjs";
 import { atomDepthTexture, atomDevice } from "./globals.mjs";
 
-export let createRenderer = async (canvas: HTMLCanvasElement) => {
+export let createRenderer = async (
+  canvas: HTMLCanvasElement,
+  makeSeed: () => {
+    size: number;
+    data: Float32Array;
+  },
+  loadParams: () => number[],
+  loadVertex: () => number[]
+) => {
+  let { size: numParticles, data: initialParticleData } = makeSeed();
+  let paramsData = loadParams();
+  let vertexData = loadVertex();
+
   let device = atomDevice.deref();
   const context = canvas.getContext("webgpu") as GPUCanvasContext;
   const presentationFormat = navigator.gpu.getPreferredCanvasFormat();
@@ -125,27 +137,8 @@ export let createRenderer = async (canvas: HTMLCanvasElement) => {
     },
   };
 
-  let spriteVertexBuffer = buildSpriteVertexBuffer();
-  let simParamBuffer = buildSimParamBuffer();
-
-  const numParticles = 200;
-  const initialParticleData = new Float32Array(numParticles * 8);
-  for (let i = 0; i < numParticles; ++i) {
-    initialParticleData[6 * i + 0] = 2 * (Math.random() - 0.5);
-    initialParticleData[6 * i + 1] = 2 * (Math.random() - 0.5);
-    // initialParticleData[6 * i + 0] = 0.0;
-    // initialParticleData[6 * i + 1] = 0.0;
-    initialParticleData[6 * i + 2] = 0;
-    initialParticleData[6 * i + 3] = 0;
-    // initialParticleData[6 * i + 2] = 2 * (Math.random() - 0.5);
-    initialParticleData[6 * i + 4] = 2 * (Math.random() - 0.5) * 0.1;
-    initialParticleData[6 * i + 5] = 2 * (Math.random() - 0.5) * 0.1;
-    // initialParticleData[6 * i + 4] = 0.0;
-    // initialParticleData[6 * i + 5] = 0.0;
-    // initialParticleData[6 * i + 6] = 2 * (Math.random() - 0.5) * 0.1;
-    initialParticleData[6 * i + 6] = 0;
-    initialParticleData[6 * i + 7] = 0;
-  }
+  let spriteVertexBuffer = buildSpriteVertexBuffer(vertexData);
+  let simParamBuffer = buildSimParamBuffer(paramsData);
 
   const particleBuffers: GPUBuffer[] = new Array(2);
   for (let i = 0; i < 2; ++i) {
@@ -257,15 +250,11 @@ let loadUniformBuffer = () => {
   return uniformBuffer;
 };
 
-let buildSpriteVertexBuffer = () => {
+let buildSpriteVertexBuffer = (data: number[]) => {
   let device = atomDevice.deref();
 
   // prettier-ignore
-  const vertexBufferData = new Float32Array([
-    -0.01, -0.02,
-    0.01, -0.02,
-    0.0, 0.02,
-  ]);
+  const vertexBufferData = new Float32Array(data);
 
   const spriteVertexBuffer = device.createBuffer({
     size: vertexBufferData.byteLength,
@@ -278,18 +267,8 @@ let buildSpriteVertexBuffer = () => {
   return spriteVertexBuffer;
 };
 
-let buildSimParamBuffer = () => {
+let buildSimParamBuffer = (data: number[]) => {
   let device = atomDevice.deref();
-
-  const simParams = {
-    deltaT: 0.04,
-    rule1Distance: 0.1,
-    rule2Distance: 0.025,
-    rule3Distance: 0.025,
-    rule1Scale: 0.02,
-    rule2Scale: 0.05,
-    rule3Scale: 0.005,
-  };
 
   const simParamBufferSize = 7 * Float32Array.BYTES_PER_ELEMENT;
   const simParamBuffer = device.createBuffer({
@@ -298,19 +277,7 @@ let buildSimParamBuffer = () => {
   });
 
   function updateSimParams() {
-    device.queue.writeBuffer(
-      simParamBuffer,
-      0,
-      new Float32Array([
-        simParams.deltaT,
-        simParams.rule1Distance,
-        simParams.rule2Distance,
-        simParams.rule3Distance,
-        simParams.rule1Scale,
-        simParams.rule2Scale,
-        simParams.rule3Scale,
-      ])
-    );
+    device.queue.writeBuffer(simParamBuffer, 0, new Float32Array(data));
   }
 
   updateSimParams();

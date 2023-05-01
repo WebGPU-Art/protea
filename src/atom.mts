@@ -2,7 +2,7 @@
  * trying to simultate a Clojure Atom
  */
 export class Atom<T> {
-  value: T;
+  private value: T;
   listeners: { [name: string]: Array<(prev: T, next: T) => void> } = {};
   constructor(value: T) {
     this.value = value;

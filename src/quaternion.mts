@@ -1,4 +1,5 @@
-import { V3 } from "./primes.mjs";
+/** 3D point */
+export type V3 = [number, number, number];
 
 /// calculate the cross product of two vectors
 export let vCross = (a: V3, b: V3): V3 => {

@@ -23,15 +23,22 @@ window.onload = async () => {
 
   atomDepthTexture.reset(createDepthTexture());
 
+  let seedSize = 400;
+
   let renderFrame = await createRenderer(
     canvas,
-    makeSeed,
-    loadParams,
-    loadVertex,
-    vertexBufferLayout,
-    updateSpritesWGSL,
-    spriteWGSL,
-    3
+    {
+      seedSize,
+      seedData: makeSeed(seedSize),
+      params: loadParams(),
+      computeShader: updateSpritesWGSL,
+    },
+    {
+      vertexCount: 3,
+      vertexData: loadVertex(),
+      vertexBufferLayout: vertexBufferLayout,
+      renderShader: spriteWGSL,
+    }
   );
 
   let t = 0;
@@ -52,33 +59,22 @@ window.onload = async () => {
   };
 };
 
-function makeSeed(): {
-  size: number;
-  data: Float32Array;
-} {
-  const numParticles = 400;
+function makeSeed(numParticles: number): Float32Array {
   const initialParticleData = new Float32Array(numParticles * 8);
   for (let i = 0; i < numParticles; ++i) {
     initialParticleData[6 * i + 0] = 2 * (Math.random() - 0.5);
     initialParticleData[6 * i + 1] = 2 * (Math.random() - 0.5);
-    // initialParticleData[6 * i + 0] = 0.0;
-    // initialParticleData[6 * i + 1] = 0.0;
-    initialParticleData[6 * i + 2] = 0;
+    // initialParticleData[6 * i + 2] = 0;
+    initialParticleData[6 * i + 2] = 2 * (Math.random() - 0.5);
     initialParticleData[6 * i + 3] = 0;
-    // initialParticleData[6 * i + 2] = 2 * (Math.random() - 0.5);
     initialParticleData[6 * i + 4] = 2 * (Math.random() - 0.5) * 0.1;
     initialParticleData[6 * i + 5] = 2 * (Math.random() - 0.5) * 0.1;
-    // initialParticleData[6 * i + 4] = 0.0;
-    // initialParticleData[6 * i + 5] = 0.0;
-    // initialParticleData[6 * i + 6] = 2 * (Math.random() - 0.5) * 0.1;
-    initialParticleData[6 * i + 6] = 0;
+    // initialParticleData[6 * i + 6] = 0;
+    initialParticleData[6 * i + 6] = 2 * (Math.random() - 0.5) * 0.1;
     initialParticleData[6 * i + 7] = 0;
   }
 
-  return {
-    size: numParticles,
-    data: initialParticleData,
-  };
+  return initialParticleData;
 }
 
 function loadParams(): number[] {

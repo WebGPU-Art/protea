@@ -10,20 +10,28 @@ import { atomDepthTexture, atomDevice } from "./globals.mjs";
 
 export let createRenderer = async (
   canvas: HTMLCanvasElement,
-  makeSeed: () => {
-    size: number;
-    data: Float32Array;
+  computeOptions: {
+    seedSize: number;
+    seedData: Float32Array;
+    params: number[];
+    computeShader: string;
   },
-  loadParams: () => number[],
-  loadVertex: () => number[],
-  vertexBufferlayout: GPUVertexBufferLayout[],
-  updateSpritesWGSL: string,
-  spriteWGSL: string,
-  vertexCount: number
+  renderOptions: {
+    vertexCount: number;
+    vertexData: number[];
+    vertexBufferLayout: GPUVertexBufferLayout[];
+    renderShader: string;
+  }
 ) => {
-  let { size: numParticles, data: initialParticleData } = makeSeed();
-  let paramsData = loadParams();
-  let vertexData = loadVertex();
+  let numParticles = computeOptions.seedSize;
+  let initialParticleData = computeOptions.seedData;
+  let updateSpritesWGSL = computeOptions.computeShader;
+
+  let vertexCount = renderOptions.vertexCount;
+  let paramsData = computeOptions.params;
+  let vertexData = renderOptions.vertexData;
+  let vertexBufferlayout = renderOptions.vertexBufferLayout;
+  let spriteWGSL = renderOptions.renderShader;
 
   let device = atomDevice.deref();
   const context = canvas.getContext("webgpu") as GPUCanvasContext;

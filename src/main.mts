@@ -32,8 +32,8 @@ window.onload = async () => {
       seedSize,
       seedData: makeSeed(seedSize),
       params: loadParams(),
-      // computeShader: updateSpritesWGSL,
-      computeShader: computeGravityWgsl,
+      computeShader: updateSpritesWGSL,
+      // computeShader: computeGravityWgsl,
     },
     {
       vertexCount: 3,

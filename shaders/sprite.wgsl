@@ -57,16 +57,17 @@ struct VertexOutput {
 fn vert_main(
   @location(0) a_particle_pos: vec3<f32>,
   @location(1) a_particle_vel: vec3<f32>,
-  @location(2) a_pos: vec2<f32>
+  @location(2) a_pos: vec3<f32>
 ) -> VertexOutput {
   let angle = -atan2(a_particle_vel.x, a_particle_vel.y);
-  let pos = vec2(
+  let pos = vec3(
     (a_pos.x * cos(angle)) - (a_pos.y * sin(angle)),
-    (a_pos.x * sin(angle)) + (a_pos.y * cos(angle))
+    (a_pos.x * sin(angle)) + (a_pos.y * cos(angle)),
+    a_pos.z * 1.0,
   );
 
   var output: VertexOutput;
-  let p0 = vec4((vec3(pos, 0.0) + a_particle_pos) * 1000.0, 1.0);
+  let p0 = vec4((pos + a_particle_pos) * 1000.0, 1.0);
 
   let p = transform_perspective(p0.xyz).point_position;
   let scale: f32 = 0.002;
@@ -82,5 +83,6 @@ fn vert_main(
 
 @fragment
 fn frag_main(@location(4) color: vec4<f32>) -> @location(0) vec4<f32> {
-  return color;
+  // return color;
+  return vec4<f32>(0.7, 0.7, 0.7, 1.0);
 }

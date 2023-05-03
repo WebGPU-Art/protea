@@ -44,14 +44,14 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
 
     pos = vec3<f32>(particles_a.particles[i].pos.xy, 0.);
     vel = vec3<f32>(particles_a.particles[i].vel.xy, 0.);
-    if (distance(pos, xy0(v_pos)) < params.rule1_distance) {
+    if (distance(pos, v_pos) < params.rule1_distance) {
       c_mass += pos;
       c_mass_count++;
     }
-    if (distance(pos, xy0(v_pos)) < params.rule2_distance) {
-      col_vel -= pos - xy0(v_pos);
+    if (distance(pos, v_pos) < params.rule2_distance) {
+      col_vel -= pos - v_pos;
     }
-    if (distance(pos, xy0(v_pos)) < params.rule3_distance) {
+    if (distance(pos, v_pos) < params.rule3_distance) {
       c_vel += vel;
       c_vel_count++;
     }
@@ -91,8 +91,4 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
   // particles_b.particles[index].pos = vec3(0.5, 0.1, 0.2);
   // particles_b.particles[index].pos = vec3(0.2, 0.1, 0.1);
   // particles_b.particles[index].vel = vec3(0.5, 0.1, 0.1);
-}
-
-fn xy0(v: vec3<f32>) -> vec3<f32> {
-  return vec3<f32>(v.x, v.y, 0.0);
 }

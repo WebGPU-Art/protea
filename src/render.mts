@@ -20,6 +20,7 @@ export let createRenderer = async (
     vertexCount: number;
     vertexData: number[];
     vertexBufferLayout: GPUVertexBufferLayout[];
+    indexData?: number[];
     renderShader: string;
   }
 ) => {
@@ -32,6 +33,12 @@ export let createRenderer = async (
   let vertexData = renderOptions.vertexData;
   let vertexBufferlayout = renderOptions.vertexBufferLayout;
   let spriteWGSL = renderOptions.renderShader;
+  let indexBuffer = renderOptions.indexData
+    ? createBuffer(
+        new Uint32Array(renderOptions.indexData),
+        GPUBufferUsage.INDEX
+      )
+    : null;
 
   let device = atomDevice.deref();
   const context = canvas.getContext("webgpu") as GPUCanvasContext;
@@ -199,7 +206,17 @@ export let createRenderer = async (
     passEncoder.setVertexBuffer(0, particleBuffers[(t + 1) % 2]);
     passEncoder.setVertexBuffer(1, spriteVertexBuffer);
     passEncoder.setBindGroup(0, uniformBindGroup);
-    passEncoder.draw(vertexCount, numParticles, 0, 0);
+    if (indexBuffer != null) {
+      passEncoder.setIndexBuffer(indexBuffer, "uint32");
+      passEncoder.drawIndexed(
+        renderOptions.indexData.length,
+        numParticles,
+        0,
+        0
+      );
+    } else {
+      passEncoder.draw(vertexCount, numParticles, 0, 0);
+    }
     passEncoder.end();
 
     device.queue.submit([commandEncoder.finish()]);

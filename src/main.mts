@@ -23,7 +23,7 @@ window.onload = async () => {
 
   atomDepthTexture.reset(createDepthTexture());
 
-  let seedSize = 400;
+  let seedSize = 40;
 
   let renderFrame = await createRenderer(
     canvas,
@@ -36,7 +36,8 @@ window.onload = async () => {
     {
       vertexCount: 3,
       vertexData: loadVertex(),
-      vertexBufferLayout: vertexBufferLayout,
+      indexData: [0, 1, 2, 0, 1, 3, 0, 2, 3, 1, 2, 3],
+      vertexBufferLayout,
       renderShader: spriteWGSL,
     }
   );
@@ -99,7 +100,13 @@ function loadParams(): number[] {
 }
 
 function loadVertex(): number[] {
-  return [-0.01, -0.02, 0.01, -0.02, 0.0, 0.02];
+  // prettier-ignore
+  return [
+    -0.01, -0.05, -0.01,
+    0.01, -0.05, -0.01,
+    0.0, 0.03, 0,
+    0.0, -0.05, 0.01,
+  ];
 }
 
 let vertexBufferLayout: GPUVertexBufferLayout[] = [
@@ -114,9 +121,9 @@ let vertexBufferLayout: GPUVertexBufferLayout[] = [
   },
   {
     // vertex buffer
-    arrayStride: 2 * 4,
+    arrayStride: 3 * 4,
     stepMode: "vertex",
-    attributes: [{ shaderLocation: 2, offset: 0, format: "float32x2" }],
+    attributes: [{ shaderLocation: 2, offset: 0, format: "float32x3" }],
   },
 ];
 

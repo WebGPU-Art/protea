@@ -5,7 +5,7 @@ export let coneBackScale = 0.5;
 
 export let atomViewerForward = new Atom<V3>([0, 0, -1]);
 
-export let atomViewerPosition = new Atom<V3>([0, 0, 600]);
+export let atomViewerPosition = new Atom<V3>([0, 0, 1200]);
 
 export let atomViewerUpward = new Atom<V3>([0, 1, 0]);
 

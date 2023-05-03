@@ -1,5 +1,3 @@
-import spriteWGSL from "../shaders/sprite.wgsl?raw";
-import updateSpritesWGSL from "../shaders/update-sprites.wgsl?raw";
 import { createBuffer, createDepthTexture } from "./buffer.mjs";
 import {
   atomViewerPosition,
@@ -17,7 +15,11 @@ export let createRenderer = async (
     data: Float32Array;
   },
   loadParams: () => number[],
-  loadVertex: () => number[]
+  loadVertex: () => number[],
+  vertexBufferlayout: GPUVertexBufferLayout[],
+  updateSpritesWGSL: string,
+  spriteWGSL: string,
+  vertexCount: number
 ) => {
   let { size: numParticles, data: initialParticleData } = makeSeed();
   let paramsData = loadParams();
@@ -50,23 +52,7 @@ export let createRenderer = async (
     vertex: {
       module: spriteShaderModule,
       entryPoint: "vert_main",
-      buffers: [
-        {
-          // instanced particles buffer
-          arrayStride: 8 * 4,
-          stepMode: "instance",
-          attributes: [
-            { shaderLocation: 0, offset: 0, format: "float32x3" },
-            { shaderLocation: 1, offset: 4 * 4, format: "float32x3" },
-          ],
-        },
-        {
-          // vertex buffer
-          arrayStride: 2 * 4,
-          stepMode: "vertex",
-          attributes: [{ shaderLocation: 2, offset: 0, format: "float32x2" }],
-        },
-      ],
+      buffers: vertexBufferlayout,
     },
     fragment: {
       module: spriteShaderModule,
@@ -205,7 +191,7 @@ export let createRenderer = async (
     passEncoder.setVertexBuffer(0, particleBuffers[(t + 1) % 2]);
     passEncoder.setVertexBuffer(1, spriteVertexBuffer);
     passEncoder.setBindGroup(0, uniformBindGroup);
-    passEncoder.draw(3, numParticles, 0, 0);
+    passEncoder.draw(vertexCount, numParticles, 0, 0);
     passEncoder.end();
 
     device.queue.submit([commandEncoder.finish()]);

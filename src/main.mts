@@ -3,6 +3,8 @@ import { renderControl, startControlLoop } from "@triadica/touch-control";
 import { createDepthTexture } from "./buffer.mjs";
 import { atomDepthTexture, atomDevice } from "./globals.mjs";
 import { createRenderer, resetCanvasSize } from "./render.mjs";
+import spriteWGSL from "../shaders/sprite.wgsl?raw";
+import updateSpritesWGSL from "../shaders/update-sprites.wgsl?raw";
 
 window.onload = async () => {
   if (navigator.gpu == null) {
@@ -25,7 +27,11 @@ window.onload = async () => {
     canvas,
     makeSeed,
     loadParams,
-    loadVertex
+    loadVertex,
+    vertexBufferLayout,
+    updateSpritesWGSL,
+    spriteWGSL,
+    3
   );
 
   let t = 0;
@@ -99,6 +105,24 @@ function loadParams(): number[] {
 function loadVertex(): number[] {
   return [-0.01, -0.02, 0.01, -0.02, 0.0, 0.02];
 }
+
+let vertexBufferLayout: GPUVertexBufferLayout[] = [
+  {
+    // instanced particles buffer
+    arrayStride: 8 * 4,
+    stepMode: "instance",
+    attributes: [
+      { shaderLocation: 0, offset: 0, format: "float32x3" },
+      { shaderLocation: 1, offset: 4 * 4, format: "float32x3" },
+    ],
+  },
+  {
+    // vertex buffer
+    arrayStride: 2 * 4,
+    stepMode: "vertex",
+    attributes: [{ shaderLocation: 2, offset: 0, format: "float32x2" }],
+  },
+];
 
 declare global {
   /** dirty hook for extracting error messages */

@@ -5,6 +5,7 @@ import { atomDepthTexture, atomDevice } from "./globals.mjs";
 import { createRenderer, resetCanvasSize } from "./render.mjs";
 import spriteWGSL from "../shaders/sprite.wgsl?raw";
 import updateSpritesWGSL from "../shaders/update-sprites.wgsl?raw";
+import computeGravityWgsl from "../shaders/compute-gravity.wgsl?raw";
 
 window.onload = async () => {
   if (navigator.gpu == null) {
@@ -23,7 +24,7 @@ window.onload = async () => {
 
   atomDepthTexture.reset(createDepthTexture());
 
-  let seedSize = 40;
+  let seedSize = 10000;
 
   let renderFrame = await createRenderer(
     canvas,
@@ -31,7 +32,8 @@ window.onload = async () => {
       seedSize,
       seedData: makeSeed(seedSize),
       params: loadParams(),
-      computeShader: updateSpritesWGSL,
+      // computeShader: updateSpritesWGSL,
+      computeShader: computeGravityWgsl,
     },
     {
       vertexCount: 3,
@@ -47,7 +49,7 @@ window.onload = async () => {
     t++;
     setTimeout(() => {
       requestAnimationFrame(renderer);
-    }, 20);
+    }, 2);
     renderFrame(t);
   };
 
@@ -63,16 +65,16 @@ window.onload = async () => {
 function makeSeed(numParticles: number): Float32Array {
   const initialParticleData = new Float32Array(numParticles * 8);
   for (let i = 0; i < numParticles; ++i) {
-    initialParticleData[6 * i + 0] = 2 * (Math.random() - 0.5);
-    initialParticleData[6 * i + 1] = 2 * (Math.random() - 0.5);
-    // initialParticleData[6 * i + 2] = 0;
-    initialParticleData[6 * i + 2] = 2 * (Math.random() - 0.5);
-    initialParticleData[6 * i + 3] = 0;
-    initialParticleData[6 * i + 4] = 2 * (Math.random() - 0.5) * 0.1;
-    initialParticleData[6 * i + 5] = 2 * (Math.random() - 0.5) * 0.1;
-    // initialParticleData[6 * i + 6] = 0;
-    initialParticleData[6 * i + 6] = 2 * (Math.random() - 0.5) * 0.1;
-    initialParticleData[6 * i + 7] = 0;
+    initialParticleData[8 * i + 0] = 2 * (Math.random() - 0.5);
+    initialParticleData[8 * i + 1] = 2 * (Math.random() - 0.5);
+    initialParticleData[8 * i + 2] = 2 * (Math.random() - 0.5);
+    // initialParticleData[8 * i + 2] = 0;
+    initialParticleData[8 * i + 3] = 0;
+    initialParticleData[8 * i + 4] = 20 * (Math.random() - 0.5);
+    initialParticleData[8 * i + 5] = 20 * (Math.random() - 0.5);
+    initialParticleData[8 * i + 6] = 20 * (Math.random() - 0.5);
+    // initialParticleData[8 * i + 6] = 0;
+    initialParticleData[8 * i + 7] = 0;
   }
 
   return initialParticleData;

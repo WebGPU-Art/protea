@@ -281,7 +281,7 @@ let buildSpriteVertexBuffer = (data: number[]) => {
 let buildSimParamBuffer = (data: number[]) => {
   let device = atomDevice.deref();
 
-  const simParamBufferSize = 7 * Float32Array.BYTES_PER_ELEMENT;
+  const simParamBufferSize = data.length * Float32Array.BYTES_PER_ELEMENT;
   const simParamBuffer = device.createBuffer({
     size: simParamBufferSize,
     usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,

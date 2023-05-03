@@ -67,7 +67,7 @@ fn vert_main(
   );
 
   var output: VertexOutput;
-  let p0 = vec4((pos + a_particle_pos) * 1000.0, 1.0);
+  let p0 = vec4((pos + a_particle_pos) * 100.0, 1.0);
 
   let p = transform_perspective(p0.xyz).point_position;
   let scale: f32 = 0.002;

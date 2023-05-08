@@ -1,330 +1,11 @@
 import { onControlEvent } from "./control.mjs";
+import { renderControl, startControlLoop } from "@triadica/touch-control";
+import { createDepthTexture } from "./buffer.mjs";
+import { atomDepthTexture, atomDevice } from "./globals.mjs";
+import { createRenderer, resetCanvasSize } from "./render.mjs";
 import spriteWGSL from "../shaders/sprite.wgsl?raw";
 import updateSpritesWGSL from "../shaders/update-sprites.wgsl?raw";
-import { renderControl, startControlLoop } from "@triadica/touch-control";
-import { createBuffer, createDepthTexture } from "./render.mjs";
-import {
-  atomViewerPosition,
-  atomViewerUpward,
-  newLookatPoint,
-} from "./perspective.mjs";
-import { vCross, vLength, vNormalize } from "./quaternion.mjs";
-import { coneBackScale } from "./config.mjs";
-import { atomDepthTexture, atomDevice } from "./globals.mjs";
-
-let main = async (canvas: HTMLCanvasElement) => {
-  let device = atomDevice.deref();
-  const context = canvas.getContext("webgpu") as GPUCanvasContext;
-  const devicePixelRatio = window.devicePixelRatio || 1;
-  canvas.width = canvas.clientWidth * devicePixelRatio;
-  canvas.height = canvas.clientHeight * devicePixelRatio;
-  const presentationFormat = navigator.gpu.getPreferredCanvasFormat();
-
-  context.configure({
-    device,
-    format: presentationFormat,
-    alphaMode: "premultiplied",
-  });
-
-  let uniformBindGroupLayout = device.createBindGroupLayout({
-    entries: [
-      {
-        binding: 0,
-        visibility: GPUShaderStage.VERTEX,
-        buffer: {}, // TODO don't know why, but fixes, https://programmer.ink/think/several-best-practices-of-webgpu.html
-      },
-    ],
-  });
-
-  const pipelineLayoutDesc = { bindGroupLayouts: [uniformBindGroupLayout] };
-  let renderLayout = device.createPipelineLayout(pipelineLayoutDesc);
-
-  const spriteShaderModule = device.createShaderModule({ code: spriteWGSL });
-  const renderPipeline = device.createRenderPipeline({
-    layout: renderLayout,
-    vertex: {
-      module: spriteShaderModule,
-      entryPoint: "vert_main",
-      buffers: [
-        {
-          // instanced particles buffer
-          arrayStride: 4 * 4,
-          stepMode: "instance",
-          attributes: [
-            {
-              // instance position
-              shaderLocation: 0,
-              offset: 0,
-              format: "float32x2",
-            },
-            {
-              // instance velocity
-              shaderLocation: 1,
-              offset: 2 * 4,
-              format: "float32x2",
-            },
-          ],
-        },
-        {
-          // vertex buffer
-          arrayStride: 2 * 4,
-          stepMode: "vertex",
-          attributes: [
-            {
-              // vertex positions
-              shaderLocation: 2,
-              offset: 0,
-              format: "float32x2",
-            },
-          ],
-        },
-      ],
-    },
-    fragment: {
-      module: spriteShaderModule,
-      entryPoint: "frag_main",
-      targets: [
-        {
-          format: presentationFormat,
-          // TODO need to learn more details
-          // https://github.com/takahirox/webgpu-trial/blob/master/cube_alpha_blend.html#L273
-          // https://github.com/kdashg/webgpu-js/blob/master/hello-blend.html#L98
-          blend: {
-            color: {
-              srcFactor: "src-alpha",
-              dstFactor: "one-minus-src-alpha",
-              operation: "add",
-            },
-            alpha: {
-              srcFactor: "one",
-              dstFactor: "one-minus-src-alpha",
-              operation: "add",
-            },
-          },
-        },
-      ],
-    },
-    primitive: {
-      topology: "triangle-list",
-    },
-    depthStencil: {
-      depthWriteEnabled: true,
-      depthCompare: "less",
-      format: "depth24plus-stencil8",
-    },
-  });
-
-  const computePipeline = device.createComputePipeline({
-    layout: "auto",
-    compute: {
-      module: device.createShaderModule({
-        code: updateSpritesWGSL,
-      }),
-      entryPoint: "main",
-    },
-  });
-
-  let needClear = true;
-
-  let depthTexture = atomDepthTexture.deref();
-
-  const renderPassDescriptor: GPURenderPassDescriptor = {
-    colorAttachments: [
-      {
-        view: context.getCurrentTexture().createView(), // Assigned later
-        clearValue: { r: 0.0, g: 0.0, b: 0.0, a: 1.0 },
-        loadOp: (needClear ? "clear" : "load") as GPULoadOp,
-        storeOp: "store",
-      },
-    ],
-
-    depthStencilAttachment: {
-      view: depthTexture.createView(),
-      depthClearValue: 1,
-      depthLoadOp: (needClear ? "clear" : "load") as GPULoadOp,
-      depthStoreOp: "store" as GPUStoreOp,
-      stencilLoadOp: "clear" as GPULoadOp,
-      stencilStoreOp: "store" as GPUStoreOp,
-    },
-  };
-
-  // prettier-ignore
-  const vertexBufferData = new Float32Array([
-    -0.01, -0.02, 0.01,
-    -0.02, 0.0, 0.02,
-  ]);
-
-  const spriteVertexBuffer = device.createBuffer({
-    size: vertexBufferData.byteLength,
-    usage: GPUBufferUsage.VERTEX,
-    mappedAtCreation: true,
-  });
-  new Float32Array(spriteVertexBuffer.getMappedRange()).set(vertexBufferData);
-  spriteVertexBuffer.unmap();
-
-  const simParams = {
-    deltaT: 0.04,
-    rule1Distance: 0.1,
-    rule2Distance: 0.025,
-    rule3Distance: 0.025,
-    rule1Scale: 0.02,
-    rule2Scale: 0.05,
-    rule3Scale: 0.005,
-  };
-
-  const simParamBufferSize = 7 * Float32Array.BYTES_PER_ELEMENT;
-  const simParamBuffer = device.createBuffer({
-    size: simParamBufferSize,
-    usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
-  });
-
-  function updateSimParams() {
-    device.queue.writeBuffer(
-      simParamBuffer,
-      0,
-      new Float32Array([
-        simParams.deltaT,
-        simParams.rule1Distance,
-        simParams.rule2Distance,
-        simParams.rule3Distance,
-        simParams.rule1Scale,
-        simParams.rule2Scale,
-        simParams.rule3Scale,
-      ])
-    );
-  }
-
-  updateSimParams();
-
-  const numParticles = 1500;
-  const initialParticleData = new Float32Array(numParticles * 4);
-  for (let i = 0; i < numParticles; ++i) {
-    initialParticleData[4 * i + 0] = 2 * (Math.random() - 0.5);
-    initialParticleData[4 * i + 1] = 2 * (Math.random() - 0.5);
-    initialParticleData[4 * i + 2] = 2 * (Math.random() - 0.5) * 0.1;
-    initialParticleData[4 * i + 3] = 2 * (Math.random() - 0.5) * 0.1;
-  }
-
-  const particleBuffers: GPUBuffer[] = new Array(2);
-  const particleBindGroups: GPUBindGroup[] = new Array(2);
-  for (let i = 0; i < 2; ++i) {
-    particleBuffers[i] = device.createBuffer({
-      size: initialParticleData.byteLength,
-      usage: GPUBufferUsage.VERTEX | GPUBufferUsage.STORAGE,
-      mappedAtCreation: true,
-    });
-    new Float32Array(particleBuffers[i].getMappedRange()).set(
-      initialParticleData
-    );
-    particleBuffers[i].unmap();
-  }
-
-  for (let i = 0; i < 2; ++i) {
-    particleBindGroups[i] = device.createBindGroup({
-      layout: computePipeline.getBindGroupLayout(0),
-      entries: [
-        {
-          binding: 0,
-          resource: {
-            buffer: simParamBuffer,
-          },
-        },
-        {
-          binding: 1,
-          resource: {
-            buffer: particleBuffers[i],
-            offset: 0,
-            size: initialParticleData.byteLength,
-          },
-        },
-        {
-          binding: 2,
-          resource: {
-            buffer: particleBuffers[(i + 1) % 2],
-            offset: 0,
-            size: initialParticleData.byteLength,
-          },
-        },
-      ],
-    });
-  }
-
-  let t = 0;
-  function frame() {
-    let lookAt = newLookatPoint();
-    let forward = vNormalize(lookAt);
-    let rightward = vCross(forward, atomViewerUpward.deref());
-    // 👔 Uniform Data
-    const uniformData = new Float32Array([
-      // coneBackScale
-      coneBackScale,
-      // viewport_ratio
-      window.innerHeight / window.innerWidth,
-      vLength(lookAt),
-      // alignment
-      0,
-      // lookpoint
-      ...forward,
-      // alignment
-      0,
-      // upwardDirection
-      ...atomViewerUpward.deref(),
-      // alignment
-      0,
-      ...rightward,
-      // alignment
-      0,
-      // cameraPosition
-      ...atomViewerPosition.deref(),
-      0,
-      // alignment
-      // ...(info.addUniform?.() || []),
-    ]);
-
-    let uniformBuffer = createBuffer(
-      uniformData,
-      GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
-    );
-
-    let uniformBindGroup: GPUBindGroup = device.createBindGroup({
-      layout: uniformBindGroupLayout,
-      entries: [{ binding: 0, resource: { buffer: uniformBuffer } }],
-    });
-
-    // Sample is no longer the active page.
-
-    (
-      renderPassDescriptor.colorAttachments as GPURenderPassColorAttachment[]
-    )[0].view = context.getCurrentTexture().createView();
-
-    renderPassDescriptor.depthStencilAttachment.view = atomDepthTexture
-      .deref()
-      .createView();
-
-    const commandEncoder = device.createCommandEncoder();
-    {
-      const passEncoder = commandEncoder.beginComputePass();
-      passEncoder.setPipeline(computePipeline);
-      passEncoder.setBindGroup(0, particleBindGroups[t % 2]);
-      passEncoder.dispatchWorkgroups(Math.ceil(numParticles / 64));
-      passEncoder.end();
-    }
-    {
-      const passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
-      passEncoder.setPipeline(renderPipeline);
-      passEncoder.setVertexBuffer(0, particleBuffers[(t + 1) % 2]);
-      passEncoder.setVertexBuffer(1, spriteVertexBuffer);
-      passEncoder.setBindGroup(0, uniformBindGroup);
-      passEncoder.draw(3, numParticles, 0, 0);
-      passEncoder.end();
-    }
-    device.queue.submit([commandEncoder.finish()]);
-
-    ++t;
-    requestAnimationFrame(frame);
-  }
-  requestAnimationFrame(frame);
-};
+import computeGravityWgsl from "../shaders/compute-gravity.wgsl?raw";
 
 window.onload = async () => {
   if (navigator.gpu == null) {
@@ -343,7 +24,37 @@ window.onload = async () => {
 
   atomDepthTexture.reset(createDepthTexture());
 
-  main(canvas as HTMLCanvasElement);
+  let seedSize = 10000;
+
+  let renderFrame = await createRenderer(
+    canvas,
+    {
+      seedSize,
+      seedData: makeSeed(seedSize),
+      params: loadParams(),
+      computeShader: updateSpritesWGSL,
+      // computeShader: computeGravityWgsl,
+    },
+    {
+      vertexCount: 3,
+      vertexData: loadVertex(),
+      indexData: [0, 1, 2, 0, 1, 3, 0, 2, 3, 1, 2, 3],
+      vertexBufferLayout,
+      renderShader: spriteWGSL,
+    }
+  );
+
+  let t = 0;
+  let renderer = () => {
+    t++;
+    setTimeout(() => {
+      requestAnimationFrame(renderer);
+    }, 2);
+    renderFrame(t);
+  };
+
+  renderer();
+  window["rrr"] = renderer;
 
   window.onresize = () => {
     resetCanvasSize(canvas);
@@ -351,13 +62,72 @@ window.onload = async () => {
   };
 };
 
-export function resetCanvasSize(canvas: HTMLCanvasElement) {
-  // canvas height not accurate on Android Pad, use innerHeight
-  canvas.style.height = `${window.innerHeight}px`;
-  canvas.style.width = `${window.innerWidth}px`;
-  canvas.height = window.innerHeight * devicePixelRatio;
-  canvas.width = window.innerWidth * devicePixelRatio;
+function makeSeed(numParticles: number): Float32Array {
+  const initialParticleData = new Float32Array(numParticles * 8);
+  for (let i = 0; i < numParticles; ++i) {
+    initialParticleData[8 * i + 0] = 2 * (Math.random() - 0.5);
+    initialParticleData[8 * i + 1] = 2 * (Math.random() - 0.5);
+    initialParticleData[8 * i + 2] = 2 * (Math.random() - 0.5);
+    // initialParticleData[8 * i + 2] = 0;
+    initialParticleData[8 * i + 3] = 0;
+    initialParticleData[8 * i + 4] = 20 * (Math.random() - 0.5);
+    initialParticleData[8 * i + 5] = 20 * (Math.random() - 0.5);
+    initialParticleData[8 * i + 6] = 20 * (Math.random() - 0.5);
+    // initialParticleData[8 * i + 6] = 0;
+    initialParticleData[8 * i + 7] = 0;
+  }
+
+  return initialParticleData;
 }
+
+function loadParams(): number[] {
+  const simParams = {
+    deltaT: 0.04,
+    rule1Distance: 0.1,
+    rule2Distance: 0.025,
+    rule3Distance: 0.025,
+    rule1Scale: 0.02,
+    rule2Scale: 0.05,
+    rule3Scale: 0.005,
+  };
+  return [
+    simParams.deltaT,
+    simParams.rule1Distance,
+    simParams.rule2Distance,
+    simParams.rule3Distance,
+    simParams.rule1Scale,
+    simParams.rule2Scale,
+    simParams.rule3Scale,
+  ];
+}
+
+function loadVertex(): number[] {
+  // prettier-ignore
+  return [
+    -0.01, -0.05, -0.01,
+    0.01, -0.05, -0.01,
+    0.0, 0.03, 0,
+    0.0, -0.05, 0.01,
+  ];
+}
+
+let vertexBufferLayout: GPUVertexBufferLayout[] = [
+  {
+    // instanced particles buffer
+    arrayStride: 8 * 4,
+    stepMode: "instance",
+    attributes: [
+      { shaderLocation: 0, offset: 0, format: "float32x3" },
+      { shaderLocation: 1, offset: 4 * 4, format: "float32x3" },
+    ],
+  },
+  {
+    // vertex buffer
+    arrayStride: 3 * 4,
+    stepMode: "vertex",
+    attributes: [{ shaderLocation: 2, offset: 0, format: "float32x3" }],
+  },
+];
 
 declare global {
   /** dirty hook for extracting error messages */
@@ -365,4 +135,7 @@ declare global {
     info: GPUCompilationInfo,
     code: string
   ) => void;
+
+  // to be triggered from command
+  var rrr: () => void;
 }

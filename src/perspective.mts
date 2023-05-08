@@ -1,7 +1,7 @@
-import { vCross, vDot, vScale, vAdd, vSub } from "./quaternion.mjs";
-import { coneBackScale } from "./config.mjs";
-import { Atom } from "./atom.mjs";
-import { V3 } from "./primes.mjs";
+import { vCross, vDot, vScale, vAdd, vSub, V3 } from "@triadica/touch-control";
+import { Atom } from "@triadica/touch-control";
+
+export let coneBackScale = 0.5;
 
 export let atomViewerForward = new Atom<V3>([0, 0, -1]);
 

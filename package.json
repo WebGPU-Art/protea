@@ -5,7 +5,7 @@
     "vite": "^4.3.3"
   },
   "dependencies": {
-    "@triadica/touch-control": "^0.0.2",
+    "@triadica/touch-control": "^0.0.3",
     "ismobilejs": "^1.1.1"
   }
 }

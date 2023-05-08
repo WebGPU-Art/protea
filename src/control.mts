@@ -1,6 +1,8 @@
 import { moveViewerBy, rotateGlanceBy, spinGlanceBy } from "./perspective.mjs";
-import { V2 } from "./primes.mjs";
 import { ControlStates } from "@triadica/touch-control";
+
+/** 2D point */
+export type V2 = [number, number];
 
 export let onControlEvent = (
   elapsed: number,

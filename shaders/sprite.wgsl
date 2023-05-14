@@ -83,6 +83,6 @@ fn vert_main(
 
 @fragment
 fn frag_main(@location(4) color: vec4<f32>) -> @location(0) vec4<f32> {
-  return color;
-  // return vec4<f32>(0.7, 0.7, 0.7, 1.0);
+  // return color;
+  return vec4<f32>(0., 0., 0., 1.0);
 }

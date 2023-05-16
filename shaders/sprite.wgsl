@@ -48,6 +48,50 @@ fn transform_perspective(p: vec3f) -> PointResult {
   );
 }
 
+
+fn hue2rgb(f1: f32, f2: f32, hue0: f32) -> f32 {
+  var hue = hue0;
+  if hue < 0.0 {
+    hue += 1.0;
+  } else if hue > 1.0 {
+    hue -= 1.0;
+  }
+  var res: f32;
+  if (6.0 * hue) < 1.0 {
+    res = f1 + (f2 - f1) * 6.0 * hue;
+  } else if (2.0 * hue) < 1.0 {
+    res = f2;
+  } else if (3.0 * hue) < 2.0 {
+    res = f1 + (f2 - f1) * ((2.0 / 3.0) - hue) * 6.0;
+  } else {
+    res = f1;
+  }
+  return res;
+}
+
+fn hsl2rgb(hsl: vec3f) -> vec3f {
+  var rgb = vec3f(0.0, 0.0, 0.0);
+  if (hsl.y == 0.0) {
+    rgb = vec3f(hsl.z); // Luminance
+  } else {
+    var f2: f32;
+    if (hsl.z < 0.5) {
+      f2 = hsl.z * (1.0 + hsl.y);
+    } else {
+      f2 = hsl.z + hsl.y - hsl.y * hsl.z;
+    }
+    let f1 = 2.0 * hsl.z - f2;
+    rgb.r = hue2rgb(f1, f2, hsl.x + (1.0/3.0));
+    rgb.g = hue2rgb(f1, f2, hsl.x);
+    rgb.b = hue2rgb(f1, f2, hsl.x - (1.0/3.0));
+  }
+  return rgb;
+}
+
+fn hsl(h: f32, s: f32, l: f32) -> vec3f {
+  return hsl2rgb(vec3f(h, s, l));
+}
+
 struct VertexOutput {
   @builtin(position) position: vec4<f32>,
   @location(4) color: vec4<f32>,
@@ -55,34 +99,37 @@ struct VertexOutput {
 
 @vertex
 fn vert_main(
-  @location(0) a_particle_pos: vec3<f32>,
-  @location(1) a_particle_vel: vec3<f32>,
-  @location(2) a_pos: vec3<f32>
+  @location(0) position: vec3<f32>,
+  @location(1) velocity: vec3<f32>,
+  @location(2) distance: f32,
+  @location(3) idx: f32,
 ) -> VertexOutput {
-  let angle = -atan2(a_particle_vel.x, a_particle_vel.y);
-  let pos = vec3(
-    (a_pos.x * cos(angle)) - (a_pos.y * sin(angle)),
-    (a_pos.x * sin(angle)) + (a_pos.y * cos(angle)),
-    a_pos.z * 1.0,
-  );
+  var pos: vec3<f32>;
+
+  if (idx < 1f) {
+    pos += velocity * 0.02;
+    // pos += vec3(1.,1.,1.) * 100.0;
+  } else if (idx < 2f) {
+    pos += vec3(1.,0.,0.) * 0.05;
+  } else if (idx < 3f) {
+    pos += vec3(0.,1.,0.) * 0.05;
+  } else if (idx < 4f ) {
+    pos += vec3(0.,0.,1.) * 0.05;
+  }
 
   var output: VertexOutput;
-  let p0 = vec4((pos + a_particle_pos) * 100.0, 1.0);
+  let p0 = vec4((pos + position) * 100.0, 1.0);
 
   let p = transform_perspective(p0.xyz).point_position;
   let scale: f32 = 0.002;
 
   output.position = vec4(p[0]*scale, p[1]*scale, p[2]*scale, 1.0);
-  output.color = vec4(
-    1.0 - sin(angle + 1.0) - a_particle_vel.y,
-    pos.x * 100.0 - a_particle_vel.y + 0.1,
-    a_particle_vel.x + cos(angle + 0.5),
-    1.0);
+  output.color = vec4(hsl(fract(distance/100.), 0.8, 0.6), 0.3);
   return output;
 }
 
 @fragment
 fn frag_main(@location(4) color: vec4<f32>) -> @location(0) vec4<f32> {
-  // return color;
-  return vec4<f32>(0., 0., 0., 1.0);
+  return color;
+  // return vec4<f32>(0., 0., 0., 0.3);
 }

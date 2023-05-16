@@ -5,7 +5,7 @@ import computeGravityWgsl from "../shaders/compute-gravity.wgsl?raw";
 import computeLorenz from "../shaders/compute-lorenz.wgsl?raw";
 
 export let loadRenderer = async (canvas: HTMLCanvasElement) => {
-  let seedSize = 140000;
+  let seedSize = 50000;
 
   let renderFrame = await createRenderer(
     canvas,
@@ -18,11 +18,12 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
       computeShader: computeLorenz,
     },
     {
-      vertexCount: 3,
+      vertexCount: 1,
       vertexData: loadVertex(),
       indexData: [0, 1, 2, 0, 1, 3, 0, 2, 3, 1, 2, 3],
-      vertexBufferLayout,
+      vertexBufferLayout: vertexBufferLayout,
       renderShader: spriteWGSL,
+      // topology: "line-list",
     }
   );
 
@@ -71,10 +72,11 @@ function loadParams(): number[] {
 function loadVertex(): number[] {
   // prettier-ignore
   return [
-    -0.03, -0.06, -0.03,
-    0.03, -0.06, -0.03,
-    0.0, 0.06, 0,
-    0.0, -0.06, 0.03,
+    0, 1, 2, 3
+    // -0.06, -0.06, -0.03,
+    // 0.06, -0.06, -0.03,
+    // 0.0, 0.06, 0,
+    // 0.0, -0.06, 0.03,
   ];
 }
 
@@ -86,13 +88,14 @@ let vertexBufferLayout: GPUVertexBufferLayout[] = [
     attributes: [
       { shaderLocation: 0, offset: 0, format: "float32x3" },
       { shaderLocation: 1, offset: 4 * 4, format: "float32x3" },
+      { shaderLocation: 2, offset: 7 * 4, format: "float32" },
     ],
   },
   {
     // vertex buffer
-    arrayStride: 3 * 4,
+    arrayStride: 1 * 4,
     stepMode: "vertex",
-    attributes: [{ shaderLocation: 2, offset: 0, format: "float32x3" }],
+    attributes: [{ shaderLocation: 3, offset: 0, format: "float32" }],
   },
 ];
 

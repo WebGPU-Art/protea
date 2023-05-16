@@ -22,6 +22,7 @@ export let createRenderer = async (
     vertexBufferLayout: GPUVertexBufferLayout[];
     indexData?: number[];
     renderShader: string;
+    topology?: GPUPrimitiveTopology;
   }
 ) => {
   let numParticles = computeOptions.seedSize;
@@ -75,7 +76,7 @@ export let createRenderer = async (
       targets: [{ format: presentationFormat, blend: blendState }],
     },
     primitive: {
-      topology: "triangle-list",
+      topology: renderOptions.topology ?? "triangle-list",
     },
     depthStencil: {
       depthWriteEnabled: true,

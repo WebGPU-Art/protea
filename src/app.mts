@@ -5,7 +5,7 @@ import computeGravityWgsl from "../shaders/compute-gravity.wgsl?raw";
 import computeLorenz from "../shaders/compute-lorenz.wgsl?raw";
 
 export let loadRenderer = async (canvas: HTMLCanvasElement) => {
-  let seedSize = 50000;
+  let seedSize = 40000;
 
   let renderFrame = await createRenderer(
     canvas,
@@ -24,6 +24,7 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
       vertexBufferLayout: vertexBufferLayout,
       renderShader: spriteWGSL,
       // topology: "line-list",
+      bgColor: [0.1, 0.1, 0.4, 1.0],
     }
   );
 
@@ -33,14 +34,14 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
 function makeSeed(numParticles: number, scale: number): Float32Array {
   const initialParticleData = new Float32Array(numParticles * 8);
   for (let i = 0; i < numParticles; ++i) {
-    initialParticleData[8 * i + 0] = 2 * (Math.random() - 0.5) * scale;
-    initialParticleData[8 * i + 1] = 2 * (Math.random() - 0.5) * scale;
-    initialParticleData[8 * i + 2] = 2 * (Math.random() - 0.5) * scale;
+    initialParticleData[8 * i + 0] = 0.4 * (Math.random() - 0.5) * scale;
+    initialParticleData[8 * i + 1] = 0.4 * (Math.random() - 0.5) * scale;
+    initialParticleData[8 * i + 2] = 0.4 * (Math.random() - 0.5) * scale;
     // initialParticleData[8 * i + 2] = 0 * scale;
     initialParticleData[8 * i + 3] = 0 * scale;
-    initialParticleData[8 * i + 4] = 20 * (Math.random() - 0.5) * scale;
-    initialParticleData[8 * i + 5] = 20 * (Math.random() - 0.5) * scale;
-    initialParticleData[8 * i + 6] = 20 * (Math.random() - 0.5) * scale;
+    initialParticleData[8 * i + 4] = 0 * (Math.random() - 0.5) * scale;
+    initialParticleData[8 * i + 5] = 0 * (Math.random() - 0.5) * scale;
+    initialParticleData[8 * i + 6] = 0 * (Math.random() - 0.5) * scale;
     // initialParticleData[8 * i + 6] = 0 * scale;
     initialParticleData[8 * i + 7] = 0 * scale;
   }

@@ -54,7 +54,8 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
   var v_pos = particles_a.particles[index].pos;
   var v_vel = particles_a.particles[index].vel;
 
-  let ret = lorenz(v_pos, params.delta_t * 0.02 * (2. + 4. * rand(f32(index))));
+  // let ret = lorenz(v_pos, params.delta_t * 0.02 * (2. + 4. * rand(f32(index))));
+  let ret = lorenz(v_pos, 0.005);
 
   // Write back
   particles_b.particles[index].pos = ret.position;

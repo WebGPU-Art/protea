@@ -23,6 +23,7 @@ export let createRenderer = async (
     indexData?: number[];
     renderShader: string;
     topology?: GPUPrimitiveTopology;
+    bgColor?: number[];
   }
 ) => {
   let numParticles = computeOptions.seedSize;
@@ -124,7 +125,7 @@ export let createRenderer = async (
     colorAttachments: [
       {
         view: context.getCurrentTexture().createView(), // Assigned later
-        clearValue: { r: 0.9, g: 0.9, b: 0.9, a: 1.0 },
+        clearValue: renderOptions.bgColor ?? [0.9, 0.9, 0.9, 1.0],
         loadOp: loadOp,
         storeOp: "store",
       },

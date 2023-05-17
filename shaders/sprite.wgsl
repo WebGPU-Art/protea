@@ -105,16 +105,26 @@ fn vert_main(
   @location(3) idx: f32,
 ) -> VertexOutput {
   var pos: vec3<f32>;
+  let up = vec3(0., 1., 0.);
+  let v0 = normalize(velocity);
+  let right = cross(v0, up);
+
+  let front = 1.2;
+  let width = 0.12;
 
   if (idx < 1f) {
-    pos += velocity * 0.02;
+    pos += v0 * front;
+    let forward = cross(right, v0);
+    pos += forward * width;
     // pos += vec3(1.,1.,1.) * 100.0;
   } else if (idx < 2f) {
-    pos += vec3(1.,0.,0.) * 0.05;
+    pos += v0 * front;
+    let forward = cross(right, v0);
+    pos -= forward * width;
   } else if (idx < 3f) {
-    pos += vec3(0.,1.,0.) * 0.05;
+    pos += right * width;
   } else if (idx < 4f ) {
-    pos += vec3(0.,0.,1.) * 0.05;
+    pos -= right * width;
   }
 
   var output: VertexOutput;
@@ -124,7 +134,7 @@ fn vert_main(
   let scale: f32 = 0.002;
 
   output.position = vec4(p[0]*scale, p[1]*scale, p[2]*scale, 1.0);
-  output.color = vec4(hsl(fract(distance/100.), 0.8, 0.6), 0.3);
+  output.color = vec4(hsl(fract(distance/100.), 0.8, 0.6), 0.5);
   return output;
 }
 

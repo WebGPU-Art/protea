@@ -35,3 +35,7 @@ There are two phases running Protea demos:
 The pipelines are reused, while parameters can be passed from main function.
 
 This project is still in early stage and I used it for drawing interesting patterns.
+
+### Shaders
+
+- `{{colors}}` to import `hsl` function for intuitive color definition.

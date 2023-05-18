@@ -7,6 +7,7 @@ import {
 } from "./perspective.mjs";
 import { vCross, vLength, vNormalize } from "@triadica/touch-control";
 import { atomDepthTexture, atomDevice } from "./globals.mjs";
+import wgslColors from "../shaders/protea-colors.wgsl?raw";
 
 export let createRenderer = async (
   canvas: HTMLCanvasElement,
@@ -34,7 +35,7 @@ export let createRenderer = async (
   let paramsData = computeOptions.params;
   let vertexData = renderOptions.vertexData;
   let vertexBufferlayout = renderOptions.vertexBufferLayout;
-  let spriteWGSL = renderOptions.renderShader;
+  let spriteWGSL = renderOptions.renderShader.replace("{{colors}}", wgslColors);
   let indexBuffer = renderOptions.indexData
     ? createBuffer(
         new Uint32Array(renderOptions.indexData),

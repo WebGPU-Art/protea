@@ -3,9 +3,10 @@ import spriteWGSL from "../shaders/sprite.wgsl?raw";
 import updateSpritesWGSL from "../shaders/update-sprites.wgsl?raw";
 import computeGravityWgsl from "../shaders/compute-gravity.wgsl?raw";
 import computeLorenz from "../shaders/compute-lorenz.wgsl?raw";
+import computeSprott from "../shaders/compute-sprott.wgsl?raw";
 
 export let loadRenderer = async (canvas: HTMLCanvasElement) => {
-  let seedSize = 40000;
+  let seedSize = 80000;
 
   let renderFrame = await createRenderer(
     canvas,
@@ -15,7 +16,8 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
       params: loadParams(),
       // computeShader: updateSpritesWGSL,
       // computeShader: computeGravityWgsl,
-      computeShader: computeLorenz,
+      // computeShader: computeLorenz,
+      computeShader: computeSprott,
     },
     {
       vertexCount: 1,
@@ -24,7 +26,7 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
       vertexBufferLayout: vertexBufferLayout,
       renderShader: spriteWGSL,
       // topology: "line-list",
-      bgColor: [0.1, 0.1, 0.4, 1.0],
+      bgColor: [0.1, 0.0, 0.2, 1.0],
     }
   );
 

@@ -3,7 +3,6 @@ import spriteWGSL from "../shaders/sprite.wgsl?raw";
 import updateSpritesWGSL from "../shaders/update-sprites.wgsl?raw";
 import computeGravityWgsl from "../shaders/compute-gravity.wgsl?raw";
 import computeLorenz from "../shaders/compute-lorenz.wgsl?raw";
-import computeSprott from "../shaders/compute-sprott.wgsl?raw";
 
 export let loadRenderer = async (canvas: HTMLCanvasElement) => {
   let seedSize = 800000;
@@ -16,8 +15,7 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
       params: loadParams(),
       // computeShader: updateSpritesWGSL,
       // computeShader: computeGravityWgsl,
-      // computeShader: computeLorenz,
-      computeShader: computeSprott,
+      computeShader: computeLorenz,
     },
     {
       vertexCount: 1,
@@ -35,15 +33,16 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
 
 function makeSeed(numParticles: number, scale: number): Float32Array {
   const initialParticleData = new Float32Array(numParticles * 8);
+  let offset = 0.0;
   for (let i = 0; i < numParticles; ++i) {
-    initialParticleData[8 * i + 0] = 0.4 * (Math.random() - 0.5) * scale;
-    initialParticleData[8 * i + 1] = 0.4 * (Math.random() - 0.5) * scale;
-    initialParticleData[8 * i + 2] = 0.4 * (Math.random() - 0.5) * scale;
+    initialParticleData[8 * i + 0] = 0.4 * (Math.random() - offset) * scale;
+    initialParticleData[8 * i + 1] = 0.4 * (Math.random() - offset) * scale;
+    initialParticleData[8 * i + 2] = 0.4 * (Math.random() - offset) * scale;
     // initialParticleData[8 * i + 2] = 0 * scale;
     initialParticleData[8 * i + 3] = 0 * scale;
-    initialParticleData[8 * i + 4] = 0 * (Math.random() - 0.5) * scale;
-    initialParticleData[8 * i + 5] = 0 * (Math.random() - 0.5) * scale;
-    initialParticleData[8 * i + 6] = 0 * (Math.random() - 0.5) * scale;
+    initialParticleData[8 * i + 4] = 0 * (Math.random() - offset) * scale;
+    initialParticleData[8 * i + 5] = 0 * (Math.random() - offset) * scale;
+    initialParticleData[8 * i + 6] = 0 * (Math.random() - offset) * scale;
     // initialParticleData[8 * i + 6] = 0 * scale;
     initialParticleData[8 * i + 7] = 0 * scale;
   }

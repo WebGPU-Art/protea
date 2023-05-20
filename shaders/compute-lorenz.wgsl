@@ -44,6 +44,44 @@ fn lorenz(p: vec3f, dt: f32) -> LorenzResult {
   );
 }
 
+
+fn sprott(p: vec3f, dt: f32) -> LorenzResult {
+  const a = 2.07;
+  const b = 1.79;
+  let x = p.x;
+  let y = p.y;
+  let z = p.z;
+  let dx = y + a*x*y + x*z;
+  let dy = 1.0 - b*x*x + y*z;
+  let dz = x - x*x - y * y;
+  let d = vec3<f32>(dx, dy, dz) * dt;
+  return LorenzResult(
+    p + d,
+    vec3(dx,dy,dz),
+    length(d) * 10.1
+  );
+}
+
+/// https://www.dynamicmath.xyz/strange-attractors/
+fn four_wing(p: vec3f, dt: f32) -> LorenzResult {
+  const a = 0.2;
+  const b = 0.01;
+  const c = -0.4;
+  let x = p.x;
+  let y = p.y;
+  let z = p.z;
+  let dx = a * x + y * z;
+  let dy = b * x + c*y - x*z;
+  let dz = - z - x*y;
+  let d = vec3<f32>(dx, dy, dz) * dt;
+  return LorenzResult(
+    p + d,
+    vec3(dx,dy,dz),
+    length(d) * 8.8
+  );
+}
+
+
 fn rand(n: f32) -> f32 { return fract(sin(n) * 43758.5453123); }
 
 // https://github.com/austinEng/Project6-Vulkan-Flocking/blob/master/data/shaders/computeparticles/particle.comp
@@ -54,8 +92,8 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
   var v_pos = particles_a.particles[index].pos;
   var v_vel = particles_a.particles[index].vel;
 
-  // let ret = lorenz(v_pos, params.delta_t * 0.02 * (2. + 4. * rand(f32(index))));
-  let ret = lorenz(v_pos, 0.005);
+  // let ret = lorenz(v_pos, params.delta_t * 0.01 * (2. + 2. * rand(f32(index))));
+  let ret = four_wing(v_pos, params.delta_t * 0.01 * (20. + 2. * rand(f32(index))));
 
   // Write back
   particles_b.particles[index].pos = ret.position;

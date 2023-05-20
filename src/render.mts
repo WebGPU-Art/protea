@@ -35,7 +35,9 @@ export let createRenderer = async (
   let paramsData = computeOptions.params;
   let vertexData = renderOptions.vertexData;
   let vertexBufferlayout = renderOptions.vertexBufferLayout;
-  let spriteWGSL = renderOptions.renderShader.replace("{{colors}}", wgslColors);
+  let spriteWGSL = renderOptions.renderShader
+    .replace("//!{{colors}}", wgslColors)
+    .replace("{{colors}}", wgslColors);
   let indexBuffer = renderOptions.indexData
     ? createBuffer(
         new Uint32Array(renderOptions.indexData),

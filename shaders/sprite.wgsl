@@ -48,7 +48,7 @@ fn transform_perspective(p: vec3f) -> PointResult {
   );
 }
 
-{{colors}}
+//!{{colors}}
 
 struct VertexOutput {
   @builtin(position) position: vec4<f32>,
@@ -67,8 +67,8 @@ fn vert_main(
   let v0 = normalize(velocity);
   let right = cross(v0, up);
 
-  let front = 0.8;
-  let width = 0.03;
+  let front = 1.2;
+  let width = 0.06;
 
   if (idx < 1f) {
     pos += v0 * front;
@@ -86,13 +86,14 @@ fn vert_main(
   }
 
   var output: VertexOutput;
-  let p0 = vec4((pos + position * 10.0) * 100.0, 1.0);
+  let p0 = vec4((pos + position * 40.0) * 100.0, 1.0);
 
   let p = transform_perspective(p0.xyz).point_position;
   let scale: f32 = 0.002;
 
   output.position = vec4(p[0]*scale, p[1]*scale, p[2]*scale, 1.0);
-  output.color = vec4(hsl(fract(distance/100.), 0.8, 0.6), 0.5);
+  let c3: vec3<f32> = hsl(fract(distance/100.), 0.8, 0.6);
+  output.color = vec4(c3, 0.5);
   return output;
 }
 

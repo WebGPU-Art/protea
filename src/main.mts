@@ -1,10 +1,11 @@
+import queryString from "query-string";
 import { onControlEvent } from "./control.mjs";
 import { renderControl, startControlLoop } from "@triadica/touch-control";
 import { createDepthTexture } from "./buffer.mjs";
 import { atomDepthTexture, atomDevice } from "./globals.mjs";
-import { createRenderer, resetCanvasSize } from "./render.mjs";
-
+import { resetCanvasSize } from "./render.mjs";
 import { loadRenderer } from "./app.mjs";
+import { setupRemoteControl } from "./remote-control.mjs";
 
 let instanceRenderer: (t: number) => void;
 
@@ -43,6 +44,12 @@ window.onload = async () => {
     resetCanvasSize(canvas);
     atomDepthTexture.reset(createDepthTexture());
   };
+
+  const parsed = queryString.parse(location.search);
+
+  if (parsed["remote-control"]) {
+    setupRemoteControl();
+  }
 };
 
 declare global {

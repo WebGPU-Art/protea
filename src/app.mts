@@ -6,7 +6,7 @@ import computeLorenz from "../shaders/compute-lorenz.wgsl?raw";
 import computeSprott from "../shaders/compute-sprott.wgsl?raw";
 
 export let loadRenderer = async (canvas: HTMLCanvasElement) => {
-  let seedSize = 80000;
+  let seedSize = 800000;
 
   let renderFrame = await createRenderer(
     canvas,

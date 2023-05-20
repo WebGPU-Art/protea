@@ -77,7 +77,7 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
   var v_vel = particles_a.particles[index].vel;
 
   let ret = four_wing(v_pos, params.delta_t * 0.01 * (20. + 2. * rand(f32(index))));
-  // let ret = four_wing(v_pos, 0.005);
+  // let ret = sprott(v_pos, 0.005);
 
   // Write back
   particles_b.particles[index].pos = ret.position;

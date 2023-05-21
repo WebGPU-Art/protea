@@ -14,7 +14,7 @@ struct SimParams {
   delta_t: f32,
   length: f32,
   width: f32,
-  rule3_distance: f32,
+  opacity: f32,
   rule1_scale: f32,
   rule2_scale: f32,
   rule3_scale: f32,
@@ -105,7 +105,7 @@ fn vert_main(
 
   output.position = vec4(p[0]*scale, p[1]*scale, p[2]*scale, 1.0);
   let c3: vec3<f32> = hsl(fract(distance/100.), 0.8, 0.6);
-  output.color = vec4(c3, 0.5);
+  output.color = vec4(c3, params.opacity);
   return output;
 }
 

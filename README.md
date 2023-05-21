@@ -54,5 +54,12 @@ This project is still in early stage and I used it for drawing interesting patte
 To hot replace spin speed:
 
 ```js
-window.__hotUpdateParams([0.1, 1.6, 0.12]);
+window.__hotUpdateParams([0.1, 1.6, 0.12, 0.7]);
 ```
+
+4 paramters are:
+
+- `speed`
+- `length` of stroke
+- `width` of stroke
+- `opacity`

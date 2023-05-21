@@ -59,6 +59,8 @@ declare global {
     code: string
   ) => void;
 
+  var __hotUpdateParams: (partial: number[]) => void;
+
   // to be triggered from command
   var rrr: () => void;
 }

@@ -74,8 +74,12 @@ fn four_wing(p: vec3f, dt: f32) -> LorenzResult {
   let dy = b * x + c*y - x*z;
   let dz = - z - x*y;
   let d = vec3<f32>(dx, dy, dz) * dt;
+  var next = p + d;
+  if (length(next) > 10.0) {
+    next = vec3(0.1);
+  }
   return LorenzResult(
-    p + d,
+    next,
     vec3(dx,dy,dz),
     length(d) * 8.8
   );

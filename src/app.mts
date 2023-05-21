@@ -53,8 +53,8 @@ function makeSeed(numParticles: number, scale: number): Float32Array {
 function loadParams(): number[] {
   const simParams = {
     deltaT: 0.04,
-    rule1Distance: 0.1,
-    rule2Distance: 0.025,
+    height: 1.2,
+    width: 0.06,
     rule3Distance: 0.025,
     rule1Scale: 0.02,
     rule2Scale: 0.05,
@@ -62,8 +62,8 @@ function loadParams(): number[] {
   };
   return [
     simParams.deltaT,
-    simParams.rule1Distance,
-    simParams.rule2Distance,
+    simParams.height,
+    simParams.width,
     simParams.rule3Distance,
     simParams.rule1Scale,
     simParams.rule2Scale,

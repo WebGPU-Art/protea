@@ -57,13 +57,21 @@ export let createRenderer = async (
 
   /** TODO don't know why, but fixes, https://programmer.ink/think/several-best-practices-of-webgpu.html */
   let emtpyBuffer = {};
+
   let uniformBindGroupLayout = device.createBindGroupLayout({
     entries: [
       { binding: 0, visibility: GPUShaderStage.VERTEX, buffer: emtpyBuffer },
     ],
   });
+  let paramsBindGroupLayout = device.createBindGroupLayout({
+    entries: [
+      { binding: 0, visibility: GPUShaderStage.VERTEX, buffer: emtpyBuffer },
+    ],
+  });
 
-  const pipelineLayoutDesc = { bindGroupLayouts: [uniformBindGroupLayout] };
+  const pipelineLayoutDesc = {
+    bindGroupLayouts: [uniformBindGroupLayout, paramsBindGroupLayout],
+  };
   let renderLayout = device.createPipelineLayout(pipelineLayoutDesc);
 
   const spriteShaderModule = device.createShaderModule({ code: spriteWGSL });
@@ -144,6 +152,7 @@ export let createRenderer = async (
   };
 
   let spriteVertexBuffer = buildSpriteVertexBuffer(vertexData);
+
   let simParamBuffer = buildSimParamBuffer(paramsData);
 
   const particleBuffers: GPUBuffer[] = new Array(2);
@@ -160,25 +169,51 @@ export let createRenderer = async (
   }
 
   const particleBindGroups: GPUBindGroup[] = new Array(2);
-  for (let i = 0; i < 2; ++i) {
-    let byteLength = initialParticleData.byteLength;
-    let fromBuffer = particleBuffers[i % 2];
-    let toBuffer = particleBuffers[(i + 1) % 2];
-    particleBindGroups[i] = device.createBindGroup({
-      layout: computePipeline.getBindGroupLayout(0),
-      entries: [
-        { binding: 0, resource: { buffer: simParamBuffer } },
-        {
-          binding: 1,
-          resource: { buffer: fromBuffer, offset: 0, size: byteLength },
-        },
-        {
-          binding: 2,
-          resource: { buffer: toBuffer, offset: 0, size: byteLength },
-        },
-      ],
+  let setupBindGroups = () => {
+    for (let i = 0; i < 2; ++i) {
+      let byteLength = initialParticleData.byteLength;
+      let fromBuffer = particleBuffers[i % 2];
+      let toBuffer = particleBuffers[(i + 1) % 2];
+      particleBindGroups[i] = device.createBindGroup({
+        layout: computePipeline.getBindGroupLayout(0),
+        entries: [
+          { binding: 0, resource: { buffer: simParamBuffer } },
+          {
+            binding: 1,
+            resource: { buffer: fromBuffer, offset: 0, size: byteLength },
+          },
+          {
+            binding: 2,
+            resource: { buffer: toBuffer, offset: 0, size: byteLength },
+          },
+        ],
+      });
+      console.log("set groups");
+    }
+  };
+  setupBindGroups();
+
+  let paramsBindingGroup: GPUBindGroup;
+
+  let setBindGroupForParams = () => {
+    paramsBindingGroup = device.createBindGroup({
+      layout: paramsBindGroupLayout,
+      entries: [{ binding: 0, resource: { buffer: simParamBuffer } }],
     });
-  }
+  };
+  setBindGroupForParams();
+
+  let buildParamsBuffer = (partial: number[]) => {
+    let data = paramsData.slice();
+    partial.forEach((n, idx) => {
+      data[idx] = n;
+    });
+    simParamBuffer = buildSimParamBuffer(data);
+    setupBindGroups();
+    setBindGroupForParams();
+  };
+
+  window.__hotUpdateParams = buildParamsBuffer;
 
   return async function render(t: number) {
     let uniformBuffer = loadUniformBuffer();
@@ -211,6 +246,7 @@ export let createRenderer = async (
     passEncoder.setVertexBuffer(0, particleBuffers[(t + 1) % 2]);
     passEncoder.setVertexBuffer(1, spriteVertexBuffer);
     passEncoder.setBindGroup(0, uniformBindGroup);
+    passEncoder.setBindGroup(1, paramsBindingGroup);
     if (indexBuffer != null) {
       passEncoder.setIndexBuffer(indexBuffer, "uint32");
       passEncoder.drawIndexed(

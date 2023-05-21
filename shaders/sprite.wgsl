@@ -9,7 +9,19 @@ struct UBO {
   camera_position: vec3f,
 };
 
+
+struct SimParams {
+  delta_t: f32,
+  length: f32,
+  width: f32,
+  rule3_distance: f32,
+  rule1_scale: f32,
+  rule2_scale: f32,
+  rule3_scale: f32,
+}
+
 @group(0) @binding(0) var<uniform> uniforms: UBO;
+@group(1) @binding(0) var<uniform> params: SimParams;
 
 // perspective
 
@@ -67,8 +79,8 @@ fn vert_main(
   let v0 = normalize(velocity);
   let right = cross(v0, up);
 
-  let front = 1.2;
-  let width = 0.06;
+  let front = params.length;
+  let width = params.width;
 
   if (idx < 1f) {
     pos += v0 * front;

@@ -48,3 +48,11 @@ This project is still in early stage and I used it for drawing interesting patte
 
 - `{{colors}}` to import `hsl` function for intuitive color definition.
   - `//!{{colors}}` as an alternative to reduce analyzer errors
+
+### Replace Parameters
+
+To hot replace spin speed:
+
+```js
+window.__hotUpdateParams([0.1, 1.6, 0.12]);
+```

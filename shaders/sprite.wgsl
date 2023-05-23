@@ -9,7 +9,19 @@ struct UBO {
   camera_position: vec3f,
 };
 
+
+struct SimParams {
+  delta_t: f32,
+  length: f32,
+  width: f32,
+  opacity: f32,
+  rule1_scale: f32,
+  rule2_scale: f32,
+  rule3_scale: f32,
+}
+
 @group(0) @binding(0) var<uniform> uniforms: UBO;
+@group(1) @binding(0) var<uniform> params: SimParams;
 
 // perspective
 
@@ -48,6 +60,8 @@ fn transform_perspective(p: vec3f) -> PointResult {
   );
 }
 
+//!{{colors}}
+
 struct VertexOutput {
   @builtin(position) position: vec4<f32>,
   @location(4) color: vec4<f32>,
@@ -55,34 +69,48 @@ struct VertexOutput {
 
 @vertex
 fn vert_main(
-  @location(0) a_particle_pos: vec3<f32>,
-  @location(1) a_particle_vel: vec3<f32>,
-  @location(2) a_pos: vec3<f32>
+  @location(0) position: vec3<f32>,
+  @location(1) velocity: vec3<f32>,
+  @location(2) distance: f32,
+  @location(3) idx: f32,
 ) -> VertexOutput {
-  let angle = -atan2(a_particle_vel.x, a_particle_vel.y);
-  let pos = vec3(
-    (a_pos.x * cos(angle)) - (a_pos.y * sin(angle)),
-    (a_pos.x * sin(angle)) + (a_pos.y * cos(angle)),
-    a_pos.z * 1.0,
-  );
+  var pos: vec3<f32>;
+  let up = vec3(0., 1., 0.);
+  let v0 = normalize(velocity);
+  let right = cross(v0, up);
+
+  let front = params.length;
+  let width = params.width;
+
+  if (idx < 1f) {
+    pos += v0 * front;
+    let forward = cross(right, v0);
+    pos += forward * width;
+    // pos += vec3(1.,1.,1.) * 100.0;
+  } else if (idx < 2f) {
+    pos += v0 * front;
+    let forward = cross(right, v0);
+    pos -= forward * width;
+  } else if (idx < 3f) {
+    pos += right * width;
+  } else if (idx < 4f ) {
+    pos -= right * width;
+  }
 
   var output: VertexOutput;
-  let p0 = vec4((pos + a_particle_pos) * 100.0, 1.0);
+  let p0 = vec4((pos + position * 40.0) * 100.0, 1.0);
 
   let p = transform_perspective(p0.xyz).point_position;
   let scale: f32 = 0.002;
 
   output.position = vec4(p[0]*scale, p[1]*scale, p[2]*scale, 1.0);
-  output.color = vec4(
-    1.0 - sin(angle + 1.0) - a_particle_vel.y,
-    pos.x * 100.0 - a_particle_vel.y + 0.1,
-    a_particle_vel.x + cos(angle + 0.5),
-    1.0);
+  let c3: vec3<f32> = hsl(fract(distance/100.), 0.8, 0.6);
+  output.color = vec4(c3, params.opacity);
   return output;
 }
 
 @fragment
 fn frag_main(@location(4) color: vec4<f32>) -> @location(0) vec4<f32> {
   return color;
-  // return vec4<f32>(0.7, 0.7, 0.7, 1.0);
+  // return vec4<f32>(0., 0., 0., 0.3);
 }

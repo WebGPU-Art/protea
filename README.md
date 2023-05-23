@@ -6,6 +6,14 @@ Previews https://r.tiye.me/Triadica/protea/
 
 Based on https://webgpu.github.io/webgpu-samples/samples/computeBoids .
 
+Search parameters:
+
+- `remote-control` to enable remote control,
+- `control-host` to set remote control host,
+- `control-port` to set remote control port.
+
+### API
+
 Main API of Protea is a function to pass buffers and shaders:
 
 ```ts
@@ -35,3 +43,23 @@ There are two phases running Protea demos:
 The pipelines are reused, while parameters can be passed from main function.
 
 This project is still in early stage and I used it for drawing interesting patterns.
+
+### Shaders
+
+- `{{colors}}` to import `hsl` function for intuitive color definition.
+  - `//!{{colors}}` as an alternative to reduce analyzer errors
+
+### Replace Parameters
+
+To hot replace spin speed:
+
+```js
+window.__hotUpdateParams([0.1, 1.6, 0.12, 0.7]);
+```
+
+4 paramters are:
+
+- `speed`
+- `length` of stroke
+- `width` of stroke
+- `opacity`

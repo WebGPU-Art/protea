@@ -11,7 +11,7 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
     canvas,
     {
       seedSize,
-      seedData: makeSeed(seedSize, 10),
+      seedData: makeSeed(seedSize, 600),
       params: loadParams(),
       // computeShader: updateSpritesWGSL,
       // computeShader: computeGravityWgsl,
@@ -33,7 +33,7 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
 
 function makeSeed(numParticles: number, scale: number): Float32Array {
   const initialParticleData = new Float32Array(numParticles * 8);
-  let offset = 0.0;
+  let offset = 0.5;
   for (let i = 0; i < numParticles; ++i) {
     initialParticleData[8 * i + 0] = 0.4 * (Math.random() - offset) * scale;
     initialParticleData[8 * i + 1] = 0.4 * (Math.random() - offset) * scale;
@@ -52,9 +52,9 @@ function makeSeed(numParticles: number, scale: number): Float32Array {
 
 function loadParams(): number[] {
   const simParams = {
-    deltaT: 0.04,
+    deltaT: 0.0001,
     height: 0.6,
-    width: 0.02,
+    width: 0.2,
     opacity: 0.8,
     rule1Scale: 0.02,
     rule2Scale: 0.05,

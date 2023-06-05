@@ -11,7 +11,7 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
     canvas,
     {
       seedSize,
-      seedData: makeSeed(seedSize, 10),
+      seedData: makeSeed(seedSize, 600),
       params: loadParams(),
       // computeShader: updateSpritesWGSL,
       // computeShader: computeGravityWgsl,
@@ -20,7 +20,7 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
     {
       vertexCount: 1,
       vertexData: loadVertex(),
-      indexData: [0, 1, 2, 0, 1, 3, 0, 2, 3, 1, 2, 3],
+      indexData: [0, 1, 2, 1, 2, 3],
       vertexBufferLayout: vertexBufferLayout,
       renderShader: spriteWGSL,
       // topology: "line-list",
@@ -33,7 +33,7 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
 
 function makeSeed(numParticles: number, scale: number): Float32Array {
   const initialParticleData = new Float32Array(numParticles * 8);
-  let offset = 0.0;
+  let offset = 0.5;
   for (let i = 0; i < numParticles; ++i) {
     initialParticleData[8 * i + 0] = 0.4 * (Math.random() - offset) * scale;
     initialParticleData[8 * i + 1] = 0.4 * (Math.random() - offset) * scale;
@@ -52,9 +52,9 @@ function makeSeed(numParticles: number, scale: number): Float32Array {
 
 function loadParams(): number[] {
   const simParams = {
-    deltaT: 0.04,
-    height: 1.2,
-    width: 0.06,
+    deltaT: 0.0001,
+    height: 0.6,
+    width: 0.2,
     opacity: 0.8,
     rule1Scale: 0.02,
     rule2Scale: 0.05,
@@ -97,7 +97,7 @@ let vertexBufferLayout: GPUVertexBufferLayout[] = [
     // vertex buffer
     arrayStride: 1 * 4,
     stepMode: "vertex",
-    attributes: [{ shaderLocation: 3, offset: 0, format: "float32" }],
+    attributes: [{ shaderLocation: 3, offset: 0, format: "uint32" }],
   },
 ];
 

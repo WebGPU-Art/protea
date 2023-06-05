@@ -1,6 +1,6 @@
 struct Particle {
   pos: vec3<f32>,
-  vel: vec3<f32>,
+  prev_pos: vec3<f32>,
   distance: f32,
 }
 
@@ -73,9 +73,15 @@ fn four_wing(p: vec3f, dt: f32) -> LorenzResult {
   let dx = a * x + y * z;
   let dy = b * x + c*y - x*z;
   let dz = - z - x*y;
-  let d = vec3<f32>(dx, dy, dz) * dt;
+  var d = vec3<f32>(dx, dy, dz) * dt;
+  let dl = length(d);
+  if (dl > 0.2) {
+    d = d / dl * 0.2;
+  } else if (dl < 0.01) {
+    d = d / dl * 0.01;
+  }
   var next = p + d;
-  if (length(next) > 10.0) {
+  if (length(next) > 100.0) {
     next = vec3(0.1);
   }
   return LorenzResult(
@@ -94,14 +100,23 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
   var index = GlobalInvocationID.x;
 
   var v_pos = particles_a.particles[index].pos;
-  var v_vel = particles_a.particles[index].vel;
+  // let dd = floor(f32(index) / 80.0);
+
+  if (index % 2000u != 0u) {
+    let prev = index - 1u;
+    particles_b.particles[index].pos = particles_a.particles[prev].pos;
+    particles_b.particles[index].prev_pos = particles_a.particles[prev].prev_pos;
+    particles_b.particles[index].distance = particles_a.particles[prev].distance;
+    return;
+  }
 
   // let ret = lorenz(v_pos, params.delta_t * 0.01 * (2. + 2. * rand(f32(index))));
-  let ret = four_wing(v_pos, params.delta_t * 0.01 * (20. + 2. * rand(f32(index))));
+  // let ret = four_wing(v_pos, params.delta_t * 0.01 * (20. + 2. * rand(f32(index))));
+  let ret = lorenz(v_pos, params.delta_t * 0.2);
 
   // Write back
   particles_b.particles[index].pos = ret.position;
-  particles_b.particles[index].vel = ret.velocity;
+  particles_b.particles[index].prev_pos = v_pos;
   particles_b.particles[index].distance += ret.distance;
 
 }

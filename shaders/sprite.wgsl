@@ -70,35 +70,36 @@ struct VertexOutput {
 @vertex
 fn vert_main(
   @location(0) position: vec3<f32>,
-  @location(1) velocity: vec3<f32>,
+  @location(1) prev_pos: vec3<f32>,
   @location(2) distance: f32,
-  @location(3) idx: f32,
+  @location(3) idx: u32,
 ) -> VertexOutput {
   var pos: vec3<f32>;
-  let up = vec3(0., 1., 0.);
-  let v0 = normalize(velocity);
-  let right = cross(v0, up);
+  let v0 = position - prev_pos;
+  var prev_position = prev_pos;
+  if (prev_pos.x == 0.0 && prev_pos.y == 0.0 && prev_pos.z == 0.0) {
+    prev_position = position;
+  }
+  let right = normalize(cross(v0, uniforms.forward));
 
-  let front = params.length;
-  let width = params.width;
+  // let front = params.length;
+  let width = params.width * 0.6;
 
-  if (idx < 1f) {
-    pos += v0 * front;
-    let forward = cross(right, v0);
-    pos += forward * width;
+  if (idx == 0u) {
+    pos = position + right * width;
     // pos += vec3(1.,1.,1.) * 100.0;
-  } else if (idx < 2f) {
-    pos += v0 * front;
-    let forward = cross(right, v0);
-    pos -= forward * width;
-  } else if (idx < 3f) {
-    pos += right * width;
-  } else if (idx < 4f ) {
-    pos -= right * width;
+  } else if (idx == 1u) {
+    pos = position - right * width;
+  } else if (idx == 2u) {
+    pos = prev_position + right * width;
+  } else if (idx == 3u ) {
+    pos = prev_position - right * width;
+  } else {
+    pos = position;
   }
 
   var output: VertexOutput;
-  let p0 = vec4((pos + position * 40.0) * 100.0, 1.0);
+  let p0 = vec4(pos * 10.0, 1.0);
 
   let p = transform_perspective(p0.xyz).point_position;
   let scale: f32 = 0.002;
@@ -112,5 +113,5 @@ fn vert_main(
 @fragment
 fn frag_main(@location(4) color: vec4<f32>) -> @location(0) vec4<f32> {
   return color;
-  // return vec4<f32>(0., 0., 0., 0.3);
+  // return vec4<f32>(1., 0., 0., 1.0);
 }

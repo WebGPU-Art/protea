@@ -188,7 +188,6 @@ export let createRenderer = async (
           },
         ],
       });
-      console.log("set groups");
     }
   };
   setupBindGroups();
@@ -306,14 +305,14 @@ let buildSpriteVertexBuffer = (data: number[]) => {
   let device = atomDevice.deref();
 
   // prettier-ignore
-  const vertexBufferData = new Float32Array(data);
+  const vertexBufferData = new Uint32Array(data);
 
   const spriteVertexBuffer = device.createBuffer({
     size: vertexBufferData.byteLength,
     usage: GPUBufferUsage.VERTEX,
     mappedAtCreation: true,
   });
-  new Float32Array(spriteVertexBuffer.getMappedRange()).set(vertexBufferData);
+  new Uint32Array(spriteVertexBuffer.getMappedRange()).set(vertexBufferData);
   spriteVertexBuffer.unmap();
 
   return spriteVertexBuffer;

@@ -11,7 +11,7 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
     canvas,
     {
       seedSize,
-      seedData: makeSeed(seedSize, 600),
+      seedData: makeSeed(seedSize, 300),
       params: loadParams(),
       // computeShader: updateSpritesWGSL,
       // computeShader: computeGravityWgsl,
@@ -32,22 +32,21 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
 };
 
 function makeSeed(numParticles: number, scale: number): Float32Array {
-  const initialParticleData = new Float32Array(numParticles * 8);
+  const buf = new Float32Array(numParticles * 8);
   let offset = 0.5;
   for (let i = 0; i < numParticles; ++i) {
-    initialParticleData[8 * i + 0] = 0.4 * (Math.random() - offset) * scale;
-    initialParticleData[8 * i + 1] = 0.4 * (Math.random() - offset) * scale;
-    initialParticleData[8 * i + 2] = 0.4 * (Math.random() - offset) * scale;
-    // initialParticleData[8 * i + 2] = 0 * scale;
-    initialParticleData[8 * i + 3] = 0 * scale;
-    initialParticleData[8 * i + 4] = 0 * (Math.random() - offset) * scale;
-    initialParticleData[8 * i + 5] = 0 * (Math.random() - offset) * scale;
-    initialParticleData[8 * i + 6] = 0 * (Math.random() - offset) * scale;
-    // initialParticleData[8 * i + 6] = 0 * scale;
-    initialParticleData[8 * i + 7] = 0 * scale;
+    let b = 8 * i;
+    buf[b + 0] = (Math.random() - offset) * scale;
+    buf[b + 1] = (Math.random() - offset) * scale;
+    buf[b + 2] = (Math.random() - offset) * scale;
+    buf[b + 3] = 0; // ages
+    buf[b + 4] = 0;
+    buf[b + 5] = 0;
+    buf[b + 6] = 0;
+    buf[b + 7] = 0; // distance
   }
 
-  return initialParticleData;
+  return buf;
 }
 
 function loadParams(): number[] {
@@ -89,15 +88,16 @@ let vertexBufferLayout: GPUVertexBufferLayout[] = [
     stepMode: "instance",
     attributes: [
       { shaderLocation: 0, offset: 0, format: "float32x3" },
-      { shaderLocation: 1, offset: 4 * 4, format: "float32x3" },
-      { shaderLocation: 2, offset: 7 * 4, format: "float32" },
+      { shaderLocation: 1, offset: 3 * 4, format: "float32" },
+      { shaderLocation: 2, offset: 4 * 4, format: "float32x3" },
+      { shaderLocation: 3, offset: 7 * 4, format: "float32" },
     ],
   },
   {
     // vertex buffer
     arrayStride: 1 * 4,
     stepMode: "vertex",
-    attributes: [{ shaderLocation: 3, offset: 0, format: "uint32" }],
+    attributes: [{ shaderLocation: 4, offset: 0, format: "uint32" }],
   },
 ];
 

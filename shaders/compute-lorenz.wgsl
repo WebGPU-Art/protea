@@ -1,5 +1,6 @@
 struct Particle {
   pos: vec3<f32>,
+  ages: f32,
   prev_pos: vec3<f32>,
   distance: f32,
 }
@@ -152,7 +153,7 @@ fn chen(p: vec3f, dt: f32 ) -> LorenzResult {
   return LorenzResult(
     next,
     vec3(dx,dy,dz),
-    length(d) * 8.8
+    length(d) * 0.8
   );
 }
 
@@ -170,6 +171,7 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
   if (index % 2000u != 0u) {
     let prev = index - 1u;
     particles_b.particles[index].pos = particles_a.particles[prev].pos;
+    particles_b.particles[index].ages = particles_a.particles[prev].ages;
     particles_b.particles[index].prev_pos = particles_a.particles[prev].prev_pos;
     particles_b.particles[index].distance = particles_a.particles[prev].distance;
     return;
@@ -182,6 +184,7 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
 
   // Write back
   particles_b.particles[index].pos = ret.position;
+  particles_b.particles[index].ages += 1.0;
   particles_b.particles[index].prev_pos = v_pos;
   particles_b.particles[index].distance += ret.distance;
 

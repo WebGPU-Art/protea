@@ -70,20 +70,27 @@ struct VertexOutput {
 @vertex
 fn vert_main(
   @location(0) position: vec3<f32>,
-  @location(1) prev_pos: vec3<f32>,
-  @location(2) distance: f32,
-  @location(3) idx: u32,
+  @location(1) ages: f32,
+  @location(2) prev_pos: vec3<f32>,
+  @location(3) travel: f32,
+  @location(4) idx: u32,
 ) -> VertexOutput {
   var pos: vec3<f32>;
   let v0 = position - prev_pos;
   var prev_position = prev_pos;
-  if (prev_pos.x == 0.0 && prev_pos.y == 0.0 && prev_pos.z == 0.0) {
-    prev_position = position;
-  }
   let right = normalize(cross(v0, uniforms.forward));
 
   // let front = params.length;
-  let width = params.width * 0.6;
+  var width = params.width * 0.6;
+
+  if (ages < 1.5) {
+    // prev_position = position;
+    width = 0.0;
+  }
+  // TODO hack
+  if (distance(position, prev_pos) > 10.0) {
+    width = 0.0;
+  }
 
   if (idx == 0u) {
     pos = position + right * width;
@@ -92,7 +99,7 @@ fn vert_main(
     pos = position - right * width;
   } else if (idx == 2u) {
     pos = prev_position + right * width;
-  } else if (idx == 3u ) {
+  } else if (idx == 3u) {
     pos = prev_position - right * width;
   } else {
     pos = position;
@@ -105,7 +112,7 @@ fn vert_main(
   let scale: f32 = 0.002;
 
   output.position = vec4(p[0]*scale, p[1]*scale, p[2]*scale, 1.0);
-  let c3: vec3<f32> = hsl(fract(distance/100.), 0.8, 0.6);
+  let c3: vec3<f32> = hsl(fract(travel/100.), 0.8, 0.6);
   output.color = vec4(c3, params.opacity);
   return output;
 }

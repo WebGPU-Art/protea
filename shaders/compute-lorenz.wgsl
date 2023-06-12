@@ -1,5 +1,6 @@
 struct Particle {
   pos: vec3<f32>,
+  ages: f32,
   prev_pos: vec3<f32>,
   distance: f32,
 }
@@ -91,6 +92,71 @@ fn four_wing(p: vec3f, dt: f32) -> LorenzResult {
   );
 }
 
+/// bad
+fn aizawa(p: vec3f, dt: f32) -> LorenzResult {
+  let a = 0.95;
+  let b = 0.7;
+  let c = 0.6;
+  let d0 = 3.5;
+  let e = 0.25;
+  let f = 0.1;
+
+  let x = p.x;
+  let y = p.y;
+  let z = p.z;
+
+  let dx = (z-b)*x - d0*y;
+  let dy = dx + (z-b)*y;
+  let dz = c + a*z - pow(z,3.0)/3.0 - (x*x+y*y)*(1.+e*z)+f*z*pow(x,3.0);
+
+  var d = vec3<f32>(dx, dy, dz) * dt;
+  let dl = length(d);
+  if (dl > 0.2) {
+    d = d / dl * 0.2;
+  } else if (dl < 0.01) {
+    d = d / dl * 0.01;
+  }
+  var next = p + d;
+  if (length(next) > 100.0) {
+    next = vec3(0.1);
+  }
+  return LorenzResult(
+    next,
+    vec3(dx,dy,dz),
+    length(d) * 8.8
+  );
+}
+
+fn chen(p: vec3f, dt: f32 ) -> LorenzResult {
+  let a = 5.0;
+  let b = -10.0;
+  let delta = -0.38;
+  let x = p.x;
+  let y = p.y;
+  let z = p.z;
+
+  let dx = a * x - y * z;
+  let dy = b * y + x * z;
+  let dz = delta * z + x * y / 3.0;
+
+  var d = vec3<f32>(dx, dy, dz) * dt;
+  let dl = length(d);
+  if (dl > 0.2) {
+    d = d / dl * 0.2;
+  } else if (dl < 0.01) {
+    d = d / dl * 0.01;
+  }
+  var next = p + d;
+  if (length(next) > 100.0) {
+    next = vec3(0.1);
+  }
+  return LorenzResult(
+    next,
+    vec3(dx,dy,dz),
+    length(d) * 0.8
+  );
+}
+
 
 fn rand(n: f32) -> f32 { return fract(sin(n) * 43758.5453123); }
 
@@ -105,6 +171,7 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
   if (index % 2000u != 0u) {
     let prev = index - 1u;
     particles_b.particles[index].pos = particles_a.particles[prev].pos;
+    particles_b.particles[index].ages = particles_a.particles[prev].ages;
     particles_b.particles[index].prev_pos = particles_a.particles[prev].prev_pos;
     particles_b.particles[index].distance = particles_a.particles[prev].distance;
     return;
@@ -112,10 +179,12 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
 
   // let ret = lorenz(v_pos, params.delta_t * 0.01 * (2. + 2. * rand(f32(index))));
   // let ret = four_wing(v_pos, params.delta_t * 0.01 * (20. + 2. * rand(f32(index))));
-  let ret = lorenz(v_pos, params.delta_t * 0.2);
+  // let ret = lorenz(v_pos, params.delta_t * 0.2);
+  let ret = chen(v_pos, params.delta_t * 0.8);
 
   // Write back
   particles_b.particles[index].pos = ret.position;
+  particles_b.particles[index].ages += 1.0;
   particles_b.particles[index].prev_pos = v_pos;
   particles_b.particles[index].distance += ret.distance;
 

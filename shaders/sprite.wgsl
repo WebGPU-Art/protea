@@ -2,6 +2,7 @@ struct UBO {
   cone_back_scale: f32,
   viewport_ratio: f32,
   look_distance: f32,
+  scale: f32,
   forward: vec3f,
   // direction up overhead, better unit vector
   upward: vec3f,
@@ -55,7 +56,7 @@ fn transform_perspective(p: vec3f) -> PointResult {
   let z_next: f32 = r;
 
   return PointResult(
-    vec3(x_next, y_next / uniforms.viewport_ratio, z_next),
+    vec3(x_next, y_next / uniforms.viewport_ratio, z_next) * uniforms.scale,
     r, s
   );
 }

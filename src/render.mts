@@ -4,6 +4,7 @@ import {
   atomViewerUpward,
   newLookatPoint,
   coneBackScale,
+  atomViewerScale,
 } from "./perspective.mjs";
 import { vCross, vLength, vNormalize } from "@triadica/touch-control";
 import { atomDepthTexture, atomDevice } from "./globals.mjs";
@@ -275,7 +276,7 @@ let loadUniformBuffer = () => {
     window.innerHeight / window.innerWidth,
     vLength(lookAt),
     // alignment
-    0,
+    atomViewerScale.deref(),
     // lookpoint
     ...forward,
     // alignment

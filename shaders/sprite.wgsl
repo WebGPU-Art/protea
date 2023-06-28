@@ -82,7 +82,7 @@ fn vert_main(
   let right = normalize(cross(v0, uniforms.forward));
 
   // let front = params.length;
-  var width = params.width * 0.6;
+  var width = params.width * 0.2;
 
   if (ages < 1.5) {
     // prev_position = position;

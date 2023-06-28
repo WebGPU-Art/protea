@@ -5,7 +5,7 @@ import computeGravityWgsl from "../shaders/compute-gravity.wgsl?raw";
 import computeLorenz from "../shaders/compute-lorenz.wgsl?raw";
 
 export let loadRenderer = async (canvas: HTMLCanvasElement) => {
-  let seedSize = 800000;
+  let seedSize = 4000000;
 
   let renderFrame = await createRenderer(
     canvas,

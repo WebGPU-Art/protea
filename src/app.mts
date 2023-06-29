@@ -5,8 +5,24 @@ import computeGravityWgsl from "../shaders/compute-gravity.wgsl?raw";
 import computeLorenz from "../shaders/compute-lorenz.wgsl?raw";
 import computeFireworks from "../shaders/compute-fireworks.wgsl?raw";
 
+function getPoint() {
+  var u = Math.random();
+  var v = Math.random();
+  var theta = u * 2.0 * Math.PI;
+  var phi = Math.acos(2.0 * v - 1.0);
+  var r = Math.cbrt(Math.random() + 4.0);
+  var sinTheta = Math.sin(theta);
+  var cosTheta = Math.cos(theta);
+  var sinPhi = Math.sin(phi);
+  var cosPhi = Math.cos(phi);
+  var x = r * sinPhi * cosTheta;
+  var y = r * sinPhi * sinTheta;
+  var z = r * cosPhi;
+  return { x: x, y: y, z: z };
+}
+
 export let loadRenderer = async (canvas: HTMLCanvasElement) => {
-  let seedSize = 400000;
+  let seedSize = 200000;
 
   let renderFrame = await createRenderer(
     canvas,
@@ -41,18 +57,20 @@ function makeSeed(numParticles: number, scale: number): Float32Array {
   let offset = 0.5;
   let base = 0;
   for (let i = 0; i < numParticles; ++i) {
+    let p = getPoint();
+    let q = getPoint();
     let b = 12 * i;
-    buf[b + 0] = base + rand_middle(scale);
-    buf[b + 1] = base + rand_middle(scale);
-    buf[b + 2] = base + rand_middle(scale);
+    buf[b + 0] = p.x * scale;
+    buf[b + 1] = p.y * scale;
+    buf[b + 2] = p.z * scale;
     buf[b + 3] = rand_middle(1000); // ages
     buf[b + 4] = 10;
     buf[b + 5] = 10;
     buf[b + 6] = 10;
-    buf[b + 7] = rand_middle(50); // distance
-    buf[b + 8] = rand_middle(100); // velocity
-    buf[b + 9] = 40 + rand_middle(100);
-    buf[b + 10] = rand_middle(100);
+    buf[b + 7] = rand_middle(50000); // distance
+    buf[b + 8] = q.x * 100; // velocity
+    buf[b + 9] = 40 + q.y * 100;
+    buf[b + 10] = q.z * 100;
     buf[b + 11] = 0;
   }
 

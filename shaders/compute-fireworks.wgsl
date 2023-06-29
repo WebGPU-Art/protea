@@ -60,7 +60,7 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
   let vol = particles_a.particles[index].velocity;
   // let vol = vec3(0.0, 20.1, 0.0);
 
-  if (index % 32u != 0u) {
+  if (index % 240u != 0u) {
     let prev = index - 1u;
     particles_b.particles[index].pos = particles_a.particles[prev].pos;
     particles_b.particles[index].ages = particles_a.particles[prev].ages;
@@ -69,7 +69,7 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
     particles_b.particles[index].velocity = particles_a.particles[prev].velocity;
     return;
   }
-  let ret = compute_move(v_pos, vol, params.delta_t * 1.1 * (0.1 + 2. * rand(f32(index))));
+  let ret = compute_move(v_pos, vol, params.delta_t * 2.2 * (0. + 4. * rand(f32(index))));
 
   // Write back
   particles_b.particles[index].pos = ret.position;

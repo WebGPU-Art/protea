@@ -31,9 +31,9 @@ window.onload = async () => {
   let t = 0;
   let renderer = () => {
     t++;
-    // setTimeout(() => {
-    requestAnimationFrame(renderer);
-    // }, 2);
+    setTimeout(() => {
+      requestAnimationFrame(renderer);
+    }, 20);
     instanceRenderer(t);
   };
 

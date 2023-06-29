@@ -74,7 +74,9 @@ fn vert_main(
   @location(1) ages: f32,
   @location(2) prev_pos: vec3<f32>,
   @location(3) travel: f32,
-  @location(4) idx: u32,
+  @location(4) _v: vec3<f32>,
+  @location(5) _p: f32,
+  @location(6) idx: u32,
 ) -> VertexOutput {
   var pos: vec3<f32>;
   let v0 = position - prev_pos;
@@ -82,7 +84,7 @@ fn vert_main(
   let right = normalize(cross(v0, uniforms.forward));
 
   // let front = params.length;
-  var width = params.width * 0.2;
+  var width = params.width * 0.8;
 
   if (ages < 1.5) {
     // prev_position = position;

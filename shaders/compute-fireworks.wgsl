@@ -60,7 +60,10 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
   let vol = particles_a.particles[index].velocity;
   // let vol = vec3(0.0, 20.1, 0.0);
 
-  if (index % 240u != 0u) {
+  let level_1 = 400u;
+  let level_2 = 40u;
+  if (index % level_1 != 0u) {
+    // inherit from previous poit
     let prev = index - 1u;
     particles_b.particles[index].pos = particles_a.particles[prev].pos;
     particles_b.particles[index].ages = particles_a.particles[prev].ages;
@@ -69,13 +72,47 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
     particles_b.particles[index].velocity = particles_a.particles[prev].velocity;
     return;
   }
-  let ret = compute_move(v_pos, vol, params.delta_t * 2.2 * (0. + 4. * rand(f32(index))));
 
-  // Write back
-  particles_b.particles[index].pos = ret.position;
-  particles_b.particles[index].velocity = ret.velocity;
-  particles_b.particles[index].prev_pos = v_pos;
-  particles_b.particles[index].ages += 1.0;
-  particles_b.particles[index].distance += ret.distance;
+  let small_index = index / level_1;
 
+  let age_limit = 3.0;
+
+  if (small_index % level_2 != 0u) {
+    // pick a common base point or (small_index / level_2)
+    let common_divider = small_index / level_2;
+    let common_index = common_divider * level_2 * level_1;
+    let common_particle = particles_a.particles[common_index];
+
+    if (common_particle.ages < age_limit) {
+      particles_b.particles[index].pos = common_particle.pos;
+      particles_b.particles[index].prev_pos = common_particle.prev_pos;
+      if (common_particle.ages + 0.01 >= age_limit) {
+        particles_b.particles[index].velocity = particles_a.particles[index].velocity * 0.4;
+      }
+      return;
+    } else {
+      let ret = compute_move(v_pos, vol, params.delta_t * 0.2 * (0. + 4. * rand(f32(index))));
+
+      particles_b.particles[index].pos = ret.position;
+      particles_b.particles[index].velocity = ret.velocity;
+      particles_b.particles[index].prev_pos = v_pos;
+      particles_b.particles[index].ages += 0.01;
+      particles_b.particles[index].distance += ret.distance;
+      return;
+
+    }
+
+  }
+
+  if (particles_a.particles[index].ages < age_limit) {
+    let ret = compute_move(v_pos, vol, params.delta_t * 0.2 * (0. + 4. * rand(f32(index))));
+    // Write back
+    particles_b.particles[index].pos = ret.position;
+    particles_b.particles[index].velocity = ret.velocity;
+    particles_b.particles[index].prev_pos = v_pos;
+    particles_b.particles[index].ages += 0.01;
+    particles_b.particles[index].distance += ret.distance;
+  } else {
+    particles_b.particles[index].ages += 0.01;
+  }
 }

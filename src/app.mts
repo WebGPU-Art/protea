@@ -22,7 +22,7 @@ function getPoint() {
 }
 
 export let loadRenderer = async (canvas: HTMLCanvasElement) => {
-  let seedSize = 200000;
+  let seedSize = 2000000;
 
   let renderFrame = await createRenderer(
     canvas,
@@ -63,7 +63,7 @@ function makeSeed(numParticles: number, scale: number): Float32Array {
     buf[b + 0] = p.x * scale;
     buf[b + 1] = p.y * scale;
     buf[b + 2] = p.z * scale;
-    buf[b + 3] = rand_middle(1000); // ages
+    buf[b + 3] = 0; // ages
     buf[b + 4] = 10;
     buf[b + 5] = 10;
     buf[b + 6] = 10;

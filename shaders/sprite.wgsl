@@ -84,14 +84,14 @@ fn vert_main(
   let right = normalize(cross(v0, uniforms.forward));
 
   // let front = params.length;
-  var width = params.width * 2.4;
+  var width = params.width * 1.4;
 
-  if (ages < 1.5) {
+  if (ages < 0.01) {
     // prev_position = position;
     width = 0.0;
   }
   // TODO hack
-  if (distance(position, prev_pos) > 10.0) {
+  if (distance(position, prev_pos) > 1000.0) {
     width = 0.0;
   }
 
@@ -115,7 +115,7 @@ fn vert_main(
   let scale: f32 = 0.002;
 
   output.position = vec4(p[0]*scale, p[1]*scale, p[2]*scale, 1.0);
-  let c3: vec3<f32> = hsl(fract(travel/100.), 0.8, 0.6);
+  let c3: vec3<f32> = hsl(fract(travel/1000.), 0.8, max(0.1, 0.9 - ages * 0.2));
   output.color = vec4(c3, params.opacity);
   return output;
 }

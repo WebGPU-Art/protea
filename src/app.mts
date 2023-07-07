@@ -1,4 +1,4 @@
-import { createRenderer, resetCanvasSize } from "./render.mjs";
+import { createRenderer, resetCanvasSize } from "./index.mjs";
 import spriteWGSL from "../shaders/sprite.wgsl?raw";
 import updateSpritesWGSL from "../shaders/update-sprites.wgsl?raw";
 import computeGravityWgsl from "../shaders/compute-gravity.wgsl?raw";

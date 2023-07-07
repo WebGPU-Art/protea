@@ -1,11 +1,16 @@
 import queryString from "query-string";
-import { onControlEvent } from "./control.mjs";
 import { renderControl, startControlLoop } from "@triadica/touch-control";
-import { createDepthTexture } from "./buffer.mjs";
-import { atomDepthTexture, atomDevice } from "./globals.mjs";
-import { resetCanvasSize } from "./render.mjs";
+
+import {
+  atomDepthTexture,
+  atomDevice,
+  onControlEvent,
+  createDepthTexture,
+  resetCanvasSize,
+  setupRemoteControl,
+} from "./index.mjs";
+
 import { loadRenderer } from "./app.mjs";
-import { setupRemoteControl } from "./remote-control.mjs";
 
 let instanceRenderer: (t: number) => void;
 

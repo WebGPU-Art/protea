@@ -3,21 +3,18 @@ struct Particle {
   vel: vec3<f32>,
 }
 
-struct SimParams {
+struct Params {
   delta_t: f32,
-  rule1_distance: f32,
-  rule2_distance: f32,
-  rule3_distance: f32,
-  rule1_scale: f32,
-  rule2_scale: f32,
-  rule3_scale: f32,
+  height: f32,
+  width: f32,
+  opacity: f32,
 }
 
 struct Particles {
   particles: array<Particle>,
 }
 
-@binding(0) @group(0) var<uniform> params: SimParams;
+@binding(0) @group(0) var<uniform> params: Params;
 @binding(1) @group(0) var<storage, read> particles_a: Particles;
 @binding(2) @group(0) var<storage, read_write> particles_b: Particles;
 
@@ -44,14 +41,14 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
 
     pos = vec3<f32>(particles_a.particles[i].pos.xyz);
     vel = vec3<f32>(particles_a.particles[i].vel.xyz);
-    if (distance(pos, v_pos) < params.rule1_distance) {
+    if (distance(pos, v_pos) < 0.02) {
       c_mass += pos;
       c_mass_count++;
     }
-    if (distance(pos, v_pos) < params.rule2_distance) {
+    if (distance(pos, v_pos) < 0.05) {
       col_vel -= pos - v_pos;
     }
-    if (distance(pos, v_pos) < params.rule3_distance) {
+    if (distance(pos, v_pos) < 0.005) {
       c_vel += vel;
       c_vel_count++;
     }
@@ -62,7 +59,7 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
   if (c_vel_count > 0u) {
     c_vel /= f32(c_vel_count);
   }
-  v_vel += (c_mass * params.rule1_scale) + (col_vel * params.rule2_scale) + (c_vel * params.rule3_scale);
+  v_vel += (c_mass * 0.02) + (col_vel * 0.05) + (c_vel * 0.005);
   // v_vel = vec3<f32>(0.05,0.0,0.0);
 
   // clamp velocity for a more pleasing simulation

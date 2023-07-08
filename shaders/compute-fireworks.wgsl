@@ -7,21 +7,18 @@ struct Particle {
   _pad: f32
 }
 
-struct SimParams {
+struct Params {
   delta_t: f32,
-  rule1_distance: f32,
-  rule2_distance: f32,
-  rule3_distance: f32,
-  rule1_scale: f32,
-  rule2_scale: f32,
-  rule3_scale: f32,
+  height: f32,
+  width: f32,
+  opacity: f32,
 }
 
 struct Particles {
   particles: array<Particle>,
 }
 
-@binding(0) @group(0) var<uniform> params: SimParams;
+@binding(0) @group(0) var<uniform> params: Params;
 @binding(1) @group(0) var<storage, read> particles_a: Particles;
 @binding(2) @group(0) var<storage, read_write> particles_b: Particles;
 

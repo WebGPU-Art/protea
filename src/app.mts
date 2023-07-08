@@ -4,22 +4,7 @@ import updateSpritesWGSL from "../shaders/update-sprites.wgsl?raw";
 import computeGravityWgsl from "../shaders/compute-gravity.wgsl?raw";
 import computeLorenz from "../shaders/compute-lorenz.wgsl?raw";
 import computeFireworks from "../shaders/compute-fireworks.wgsl?raw";
-
-function getPoint() {
-  var u = Math.random();
-  var v = Math.random();
-  var theta = u * 2.0 * Math.PI;
-  var phi = Math.acos(2.0 * v - 1.0);
-  var r = Math.cbrt(Math.random() + 4.0);
-  var sinTheta = Math.sin(theta);
-  var cosTheta = Math.cos(theta);
-  var sinPhi = Math.sin(phi);
-  var cosPhi = Math.cos(phi);
-  var x = r * sinPhi * cosTheta;
-  var y = r * sinPhi * sinTheta;
-  var z = r * cosPhi;
-  return { x: x, y: y, z: z };
-}
+import { randPointInSphere, rand_middle } from "./util.mjs";
 
 export let loadRenderer = async (canvas: HTMLCanvasElement) => {
   let seedSize = 2000000;
@@ -48,29 +33,25 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
   return renderFrame;
 };
 
-function rand_middle(n: number) {
-  return n * (Math.random() - 0.5);
-}
-
 function makeSeed(numParticles: number, scale: number): Float32Array {
   const buf = new Float32Array(numParticles * 12);
   let offset = 0.5;
   let base = 0;
   for (let i = 0; i < numParticles; ++i) {
-    let p = getPoint();
-    let q = getPoint();
+    let p = randPointInSphere(scale);
+    let q = randPointInSphere(100);
     let b = 12 * i;
-    buf[b + 0] = p.x * scale;
-    buf[b + 1] = p.y * scale;
-    buf[b + 2] = p.z * scale;
+    buf[b + 0] = p.x;
+    buf[b + 1] = p.y;
+    buf[b + 2] = p.z;
     buf[b + 3] = 0; // ages
     buf[b + 4] = 10;
     buf[b + 5] = 10;
     buf[b + 6] = 10;
     buf[b + 7] = rand_middle(50000); // distance
-    buf[b + 8] = q.x * 100; // velocity
-    buf[b + 9] = 40 + q.y * 100;
-    buf[b + 10] = q.z * 100;
+    buf[b + 8] = q.x; // velocity
+    buf[b + 9] = 40 + q.y;
+    buf[b + 10] = q.z;
     buf[b + 11] = 0;
   }
 
@@ -78,23 +59,11 @@ function makeSeed(numParticles: number, scale: number): Float32Array {
 }
 
 function loadParams(): number[] {
-  const simParams = {
-    deltaT: 0.004,
-    height: 0.6,
-    width: 0.2,
-    opacity: 0.8,
-    rule1Scale: 0.02,
-    rule2Scale: 0.05,
-    rule3Scale: 0.005,
-  };
   return [
-    simParams.deltaT,
-    simParams.height,
-    simParams.width,
-    simParams.opacity,
-    simParams.rule1Scale,
-    simParams.rule2Scale,
-    simParams.rule3Scale,
+    0.004, // deltaT
+    0.6, // height
+    0.2, // width
+    0.8, // opacity
   ];
 }
 

@@ -154,7 +154,7 @@ export let createRenderer = async (
 
   let spriteVertexBuffer = buildSpriteVertexBuffer(vertexData);
 
-  let simParamBuffer = buildSimParamBuffer(paramsData);
+  let paramBuffer = buildParamBuffer(paramsData);
 
   const particleBuffers: GPUBuffer[] = new Array(2);
   for (let i = 0; i < 2; ++i) {
@@ -178,7 +178,7 @@ export let createRenderer = async (
       particleBindGroups[i] = device.createBindGroup({
         layout: computePipeline.getBindGroupLayout(0),
         entries: [
-          { binding: 0, resource: { buffer: simParamBuffer } },
+          { binding: 0, resource: { buffer: paramBuffer } },
           {
             binding: 1,
             resource: { buffer: fromBuffer, offset: 0, size: byteLength },
@@ -198,7 +198,7 @@ export let createRenderer = async (
   let setBindGroupForParams = () => {
     paramsBindingGroup = device.createBindGroup({
       layout: paramsBindGroupLayout,
-      entries: [{ binding: 0, resource: { buffer: simParamBuffer } }],
+      entries: [{ binding: 0, resource: { buffer: paramBuffer } }],
     });
   };
   setBindGroupForParams();
@@ -208,14 +208,14 @@ export let createRenderer = async (
     partial.forEach((n, idx) => {
       data[idx] = n;
     });
-    simParamBuffer = buildSimParamBuffer(data);
+    paramBuffer = buildParamBuffer(data);
     setupBindGroups();
     setBindGroupForParams();
   };
 
   window.__hotUpdateParams = buildParamsBuffer;
 
-  return async function render(t: number) {
+  return async function render(t: number, skipComputing: boolean = false) {
     let uniformBuffer = loadUniformBuffer();
 
     let uniformBindGroup: GPUBindGroup = device.createBindGroup({
@@ -235,11 +235,13 @@ export let createRenderer = async (
 
     const commandEncoder = device.createCommandEncoder();
 
-    const computePassEncoder = commandEncoder.beginComputePass();
-    computePassEncoder.setPipeline(computePipeline);
-    computePassEncoder.setBindGroup(0, particleBindGroups[t % 2]);
-    computePassEncoder.dispatchWorkgroups(Math.ceil(numParticles / 64));
-    computePassEncoder.end();
+    if (!skipComputing) {
+      const computePassEncoder = commandEncoder.beginComputePass();
+      computePassEncoder.setPipeline(computePipeline);
+      computePassEncoder.setBindGroup(0, particleBindGroups[t % 2]);
+      computePassEncoder.dispatchWorkgroups(Math.ceil(numParticles / 64));
+      computePassEncoder.end();
+    }
 
     const passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
     passEncoder.setPipeline(renderPipeline);
@@ -319,22 +321,22 @@ let buildSpriteVertexBuffer = (data: number[]) => {
   return spriteVertexBuffer;
 };
 
-let buildSimParamBuffer = (data: number[]) => {
+let buildParamBuffer = (data: number[]) => {
   let device = atomDevice.deref();
 
-  const simParamBufferSize = data.length * Float32Array.BYTES_PER_ELEMENT;
-  const simParamBuffer = device.createBuffer({
-    size: simParamBufferSize,
+  const paramBufferSize = data.length * Float32Array.BYTES_PER_ELEMENT;
+  const paramBuffer = device.createBuffer({
+    size: paramBufferSize,
     usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
   });
 
-  function updateSimParams() {
-    device.queue.writeBuffer(simParamBuffer, 0, new Float32Array(data));
+  function updateParams() {
+    device.queue.writeBuffer(paramBuffer, 0, new Float32Array(data));
   }
 
-  updateSimParams();
+  updateParams();
 
-  return simParamBuffer;
+  return paramBuffer;
 };
 
 // TODO need to learn more details

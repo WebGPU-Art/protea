@@ -11,18 +11,15 @@ struct UBO {
 };
 
 
-struct SimParams {
+struct Params {
   delta_t: f32,
   length: f32,
   width: f32,
   opacity: f32,
-  rule1_scale: f32,
-  rule2_scale: f32,
-  rule3_scale: f32,
 }
 
 @group(0) @binding(0) var<uniform> uniforms: UBO;
-@group(1) @binding(0) var<uniform> params: SimParams;
+@group(1) @binding(0) var<uniform> params: Params;
 
 // perspective
 

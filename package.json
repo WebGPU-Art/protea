@@ -1,4 +1,7 @@
 {
+  "name": "@triadica/protea",
+  "version": "0.0.1-a2",
+  "main": "./lib/index.mjs",
   "devDependencies": {
     "@webgpu/types": "^0.1.31",
     "query-string": "^8.1.0",
@@ -9,10 +12,7 @@
     "@triadica/touch-control": "^0.0.3",
     "ismobilejs": "^1.1.1"
   },
-  "name": "@triadica/protea",
   "description": "> Compute boids with Triadica controls in WebGPU",
-  "version": "0.0.1-a1",
-  "main": "./lib/index.mjs",
   "scripts": {
     "compile": "tsc -d",
     "test": "echo \"Error: no test specified\" && exit 1"

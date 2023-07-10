@@ -6,5 +6,9 @@ js-out/
 node_modules/
 dist/
 
-lib/
+yarn.lock
+
 .vscode/
+
+.github/
+assets/

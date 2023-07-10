@@ -11,18 +11,15 @@ struct UBO {
 };
 
 
-struct SimParams {
+struct Params {
   delta_t: f32,
   length: f32,
   width: f32,
   opacity: f32,
-  rule1_scale: f32,
-  rule2_scale: f32,
-  rule3_scale: f32,
 }
 
 @group(0) @binding(0) var<uniform> uniforms: UBO;
-@group(1) @binding(0) var<uniform> params: SimParams;
+@group(1) @binding(0) var<uniform> params: Params;
 
 // perspective
 
@@ -74,7 +71,9 @@ fn vert_main(
   @location(1) ages: f32,
   @location(2) prev_pos: vec3<f32>,
   @location(3) travel: f32,
-  @location(4) idx: u32,
+  @location(4) _v: vec3<f32>,
+  @location(5) _p: f32,
+  @location(6) idx: u32,
 ) -> VertexOutput {
   var pos: vec3<f32>;
   let v0 = position - prev_pos;
@@ -82,14 +81,14 @@ fn vert_main(
   let right = normalize(cross(v0, uniforms.forward));
 
   // let front = params.length;
-  var width = params.width * 0.6;
+  var width = params.width * 1.4;
 
-  if (ages < 1.5) {
+  if (ages < 0.01) {
     // prev_position = position;
     width = 0.0;
   }
   // TODO hack
-  if (distance(position, prev_pos) > 10.0) {
+  if (distance(position, prev_pos) > 1000.0) {
     width = 0.0;
   }
 
@@ -113,7 +112,7 @@ fn vert_main(
   let scale: f32 = 0.002;
 
   output.position = vec4(p[0]*scale, p[1]*scale, p[2]*scale, 1.0);
-  let c3: vec3<f32> = hsl(fract(travel/100.), 0.8, 0.6);
+  let c3: vec3<f32> = hsl(fract(travel/1000.), 0.8, max(0.1, 0.9 - ages * 0.2));
   output.color = vec4(c3, params.opacity);
   return output;
 }

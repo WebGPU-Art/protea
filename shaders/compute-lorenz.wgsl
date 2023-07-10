@@ -5,21 +5,18 @@ struct Particle {
   distance: f32,
 }
 
-struct SimParams {
+struct Params {
   delta_t: f32,
-  rule1_distance: f32,
-  rule2_distance: f32,
-  rule3_distance: f32,
-  rule1_scale: f32,
-  rule2_scale: f32,
-  rule3_scale: f32,
+  height: f32,
+  width: f32,
+  opacity: f32,
 }
 
 struct Particles {
   particles: array<Particle>,
 }
 
-@binding(0) @group(0) var<uniform> params: SimParams;
+@binding(0) @group(0) var<uniform> params: Params;
 @binding(1) @group(0) var<storage, read> particles_a: Particles;
 @binding(2) @group(0) var<storage, read_write> particles_b: Particles;
 
@@ -168,7 +165,7 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
   var v_pos = particles_a.particles[index].pos;
   // let dd = floor(f32(index) / 80.0);
 
-  if (index % 2000u != 0u) {
+  if (index % 24u != 0u) {
     let prev = index - 1u;
     particles_b.particles[index].pos = particles_a.particles[prev].pos;
     particles_b.particles[index].ages = particles_a.particles[prev].ages;
@@ -178,9 +175,9 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
   }
 
   // let ret = lorenz(v_pos, params.delta_t * 0.01 * (2. + 2. * rand(f32(index))));
-  // let ret = four_wing(v_pos, params.delta_t * 0.01 * (20. + 2. * rand(f32(index))));
+  let ret = four_wing(v_pos, params.delta_t * 0.01 * (20. + 2. * rand(f32(index))));
   // let ret = lorenz(v_pos, params.delta_t * 0.2);
-  let ret = chen(v_pos, params.delta_t * 0.8);
+  // let ret = chen(v_pos, params.delta_t * 0.8);
 
   // Write back
   particles_b.particles[index].pos = ret.position;

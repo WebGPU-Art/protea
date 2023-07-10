@@ -1,4 +1,7 @@
 {
+  "name": "@triadica/protea",
+  "version": "0.0.1-a2",
+  "main": "./lib/index.mjs",
   "devDependencies": {
     "@webgpu/types": "^0.1.31",
     "query-string": "^8.1.0",
@@ -8,5 +11,23 @@
   "dependencies": {
     "@triadica/touch-control": "^0.0.3",
     "ismobilejs": "^1.1.1"
-  }
+  },
+  "description": "> Compute boids with Triadica controls in WebGPU",
+  "scripts": {
+    "compile": "tsc -d",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Triadica/protea.git"
+  },
+  "keywords": [
+    "webgpu"
+  ],
+  "author": "tiye",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Triadica/protea/issues"
+  },
+  "homepage": "https://github.com/Triadica/protea#readme"
 }

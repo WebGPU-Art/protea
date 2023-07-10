@@ -1,6 +1,8 @@
 import { Atom } from "@triadica/touch-control";
 
-console.log("loading globals.mts");
+if (navigator.gpu == null) {
+  alert("WebGPU is required to run this sample.");
+}
 
 export var atomDevice: Atom<GPUDevice> = new Atom(null);
 export var atomContext: Atom<GPUCanvasContext> = new Atom(null);

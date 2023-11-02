@@ -29,7 +29,7 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
   let l = length(v_pos);
 
   var pull = -v_pos / (l * l);
-  if (l < 0.3) {
+  if l < 0.3 {
     pull = vec3<f32>(0.0, 0.0, 0.0);
   }
   v_vel += 1.0 * pull;
@@ -37,7 +37,7 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
   var total = arrayLength(&particles_a.particles);
   let r = 1.0 / f32(total);
   for (var i = 0u; i < total; i++) {
-    if (i == index) {
+    if i == index {
       continue;
     }
 
@@ -58,5 +58,4 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
   particles_b.particles[index].vel = v_vel;
   // particles_b.particles[index].pos = particles_a.particles[index].pos;
   // particles_b.particles[index].vel = particles_a.particles[index].vel;
-
 }

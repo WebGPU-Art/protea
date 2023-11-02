@@ -41,22 +41,22 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
 
     pos = vec3<f32>(particles_a.particles[i].pos.xyz);
     vel = vec3<f32>(particles_a.particles[i].vel.xyz);
-    if (distance(pos, v_pos) < 0.02) {
+    if distance(pos, v_pos) < 0.02 {
       c_mass += pos;
       c_mass_count++;
     }
-    if (distance(pos, v_pos) < 0.05) {
+    if distance(pos, v_pos) < 0.05 {
       col_vel -= pos - v_pos;
     }
-    if (distance(pos, v_pos) < 0.005) {
+    if distance(pos, v_pos) < 0.005 {
       c_vel += vel;
       c_vel_count++;
     }
   }
-  if (c_mass_count > 0u) {
+  if c_mass_count > 0u {
     c_mass = (c_mass / vec3(f32(c_mass_count))) - v_pos;
   }
-  if (c_vel_count > 0u) {
+  if c_vel_count > 0u {
     c_vel /= f32(c_vel_count);
   }
   v_vel += (c_mass * 0.02) + (col_vel * 0.05) + (c_vel * 0.005);
@@ -67,22 +67,22 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
   // kinematic update
   v_pos = v_pos + (v_vel * params.delta_t);
   // Wrap around boundary
-  if (v_pos.x < -1.0) {
+  if v_pos.x < -1.0 {
     v_pos.x = 1.0;
   }
-  if (v_pos.x > 1.0) {
+  if v_pos.x > 1.0 {
     v_pos.x = -1.0;
   }
-  if (v_pos.y < -1.0) {
+  if v_pos.y < -1.0 {
     v_pos.y = 1.0;
   }
-  if (v_pos.y > 1.0) {
+  if v_pos.y > 1.0 {
     v_pos.y = -1.0;
   }
-  if (v_pos.z < -1.0) {
+  if v_pos.z < -1.0 {
     v_pos.z = 1.0;
   }
-  if (v_pos.z > 1.0) {
+  if v_pos.z > 1.0 {
     v_pos.z = -1.0;
   }
   // Write back

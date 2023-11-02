@@ -37,7 +37,7 @@ fn lorenz(p: vec3f, dt: f32) -> LorenzResult {
   let d = vec3<f32>(dx, dy, dz) * dt;
   return LorenzResult(
     p + d,
-    vec3(dx,dy,dz),
+    vec3(dx, dy, dz),
     length(d) * 2.1
   );
 }
@@ -49,13 +49,13 @@ fn sprott(p: vec3f, dt: f32) -> LorenzResult {
   let x = p.x;
   let y = p.y;
   let z = p.z;
-  let dx = y + a*x*y + x*z;
-  let dy = 1.0 - b*x*x + y*z;
-  let dz = x - x*x - y * y;
+  let dx = y + a * x * y + x * z;
+  let dy = 1.0 - b * x * x + y * z;
+  let dz = x - x * x - y * y;
   let d = vec3<f32>(dx, dy, dz) * dt;
   return LorenzResult(
     p + d,
-    vec3(dx,dy,dz),
+    vec3(dx, dy, dz),
     length(d) * 10.1
   );
 }
@@ -69,22 +69,22 @@ fn four_wing(p: vec3f, dt: f32) -> LorenzResult {
   let y = p.y;
   let z = p.z;
   let dx = a * x + y * z;
-  let dy = b * x + c*y - x*z;
-  let dz = - z - x*y;
+  let dy = b * x + c * y - x * z;
+  let dz = - z - x * y;
   var d = vec3<f32>(dx, dy, dz) * dt;
   let dl = length(d);
-  if (dl > 0.2) {
+  if dl > 0.2 {
     d = d / dl * 0.2;
-  } else if (dl < 0.01) {
+  } else if dl < 0.01 {
     d = d / dl * 0.01;
   }
   var next = p + d;
-  if (length(next) > 100.0) {
+  if length(next) > 100.0 {
     next = vec3(0.1);
   }
   return LorenzResult(
     next,
-    vec3(dx,dy,dz),
+    vec3(dx, dy, dz),
     length(d) * 8.8
   );
 }
@@ -102,29 +102,29 @@ fn aizawa(p: vec3f, dt: f32) -> LorenzResult {
   let y = p.y;
   let z = p.z;
 
-  let dx = (z-b)*x - d0*y;
-  let dy = dx + (z-b)*y;
-  let dz = c + a*z - pow(z,3.0)/3.0 - (x*x+y*y)*(1.+e*z)+f*z*pow(x,3.0);
+  let dx = (z - b) * x - d0 * y;
+  let dy = dx + (z - b) * y;
+  let dz = c + a * z - pow(z, 3.0) / 3.0 - (x * x + y * y) * (1. + e * z) + f * z * pow(x, 3.0);
 
   var d = vec3<f32>(dx, dy, dz) * dt;
   let dl = length(d);
-  if (dl > 0.2) {
+  if dl > 0.2 {
     d = d / dl * 0.2;
-  } else if (dl < 0.01) {
+  } else if dl < 0.01 {
     d = d / dl * 0.01;
   }
   var next = p + d;
-  if (length(next) > 100.0) {
+  if length(next) > 100.0 {
     next = vec3(0.1);
   }
   return LorenzResult(
     next,
-    vec3(dx,dy,dz),
+    vec3(dx, dy, dz),
     length(d) * 8.8
   );
 }
 
-fn chen(p: vec3f, dt: f32 ) -> LorenzResult {
+fn chen(p: vec3f, dt: f32) -> LorenzResult {
   let a = 5.0;
   let b = -10.0;
   let delta = -0.38;
@@ -138,18 +138,18 @@ fn chen(p: vec3f, dt: f32 ) -> LorenzResult {
 
   var d = vec3<f32>(dx, dy, dz) * dt;
   let dl = length(d);
-  if (dl > 0.2) {
+  if dl > 0.2 {
     d = d / dl * 0.2;
-  } else if (dl < 0.01) {
+  } else if dl < 0.01 {
     d = d / dl * 0.01;
   }
   var next = p + d;
-  if (length(next) > 100.0) {
+  if length(next) > 100.0 {
     next = vec3(0.1);
   }
   return LorenzResult(
     next,
-    vec3(dx,dy,dz),
+    vec3(dx, dy, dz),
     length(d) * 0.8
   );
 }
@@ -165,7 +165,7 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
   var v_pos = particles_a.particles[index].pos;
   // let dd = floor(f32(index) / 80.0);
 
-  if (index % 24u != 0u) {
+  if index % 24u != 0u {
     let prev = index - 1u;
     particles_b.particles[index].pos = particles_a.particles[prev].pos;
     particles_b.particles[index].ages = particles_a.particles[prev].ages;
@@ -184,5 +184,4 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
   particles_b.particles[index].ages += 1.0;
   particles_b.particles[index].prev_pos = v_pos;
   particles_b.particles[index].distance += ret.distance;
-
 }

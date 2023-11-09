@@ -21,7 +21,7 @@
                   when dev? $ comp-reel (>> states :reel) reel ({})
         |tabs $ %{} :CodeEntry (:doc |)
           :code $ quote
-            def tabs $ [] (:: :fireworks |Fireworks :dark)
+            def tabs $ [] (:: :fireworks |Fireworks :dark) (:: :attractor |Attractor :dark) (:: :fractal |Fractal :dark)
       :ns $ %{} :CodeEntry (:doc |)
         :code $ quote
           ns app.comp.container $ :require (respo-ui.css :as css)
@@ -60,6 +60,21 @@
                 and config/dev? $ not= op :states
                 js/console.log "\"Dispatch:" op
               reset! *reel $ reel-updater updater @*reel op
+              tag-match op
+                  :tab t
+                  load-renderer t
+                _ :ok
+        |load-renderer $ %{} :CodeEntry (:doc |)
+          :code $ quote
+            defn load-renderer (tab) (hint-fn async)
+              let
+                  renderer $ js-await
+                    case-default tab
+                      do (eprintln "\"unknown tab:" tab) (loadFireworksRenderer canvas)
+                      :fireworks $ loadFireworksRenderer canvas
+                      :attractor $ loadAttractorRenderer canvas
+                      :fractal $ loadFractalRenderer canvas
+                reset! *instance-renderer renderer
         |loop-renderer! $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn loop-renderer! () $ js/setTimeout
@@ -72,11 +87,9 @@
           :code $ quote
             defn main! () (hint-fn async)
               js-await $ setupInitials canvas
-              reset! *instance-renderer $ js-await (loadFireworksRenderer canvas)
               println "\"Running mode:" $ if config/dev? "\"dev" "\"release"
               if config/dev? $ load-console-formatter!
               render-app!
-              loop-renderer!
               add-watch *reel :changes $ fn (reel prev) (render-app!)
               listen-devtools! |k dispatch!
               js/window.addEventListener |beforeunload $ fn (event) (persist-storage!)
@@ -88,6 +101,9 @@
                 when (some? raw)
                   dispatch! $ :: :hydrate-storage (parse-cirru-edn raw)
               println "|App started."
+              ->
+                load-renderer $ :tab (:store @*reel)
+                .!then $ fn (r) (loop-renderer!)
         |mount-target $ %{} :CodeEntry (:doc |)
           :code $ quote
             def mount-target $ js/document.querySelector |.app
@@ -104,7 +120,8 @@
                 do (remove-watch *reel :changes) (clear-cache!)
                   add-watch *reel :changes $ fn (reel prev) (render-app!)
                   reset! *reel $ refresh-reel @*reel schema/store updater
-                  reset! *instance-renderer $ js-await (loadFireworksRenderer canvas)
+                  js-await $ load-renderer
+                    :tab $ :store @*reel
                   hud! "\"ok~" "\"Ok"
                 hud! "\"error" build-errors
         |render-app! $ %{} :CodeEntry (:doc |)
@@ -124,6 +141,8 @@
             "\"./calcit.build-errors" :default build-errors
             "\"bottom-tip" :default hud!
             "\"../src/apps/fireworks" :refer $ loadFireworksRenderer
+            "\"../src/apps/attractor" :refer $ loadAttractorRenderer
+            "\"../src/apps/fractal" :refer $ loadFractalRenderer
             "\"../src/index" :refer $ setupInitials
     |app.schema $ %{} :FileEntry
       :defs $ {}

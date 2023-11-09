@@ -122,6 +122,18 @@
                       |b $ %{} :Leaf (:at 1699548554126) (:by |rJG4IHzWf) (:text |:fireworks)
                       |h $ %{} :Leaf (:at 1699548557325) (:by |rJG4IHzWf) (:text ||Fireworks)
                       |l $ %{} :Leaf (:at 1699548558878) (:by |rJG4IHzWf) (:text |:dark)
+                  |h $ %{} :Expr (:at 1699548549247) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1699548549451) (:by |rJG4IHzWf) (:text |::)
+                      |b $ %{} :Leaf (:at 1699551242551) (:by |rJG4IHzWf) (:text |:attractor)
+                      |h $ %{} :Leaf (:at 1699551247426) (:by |rJG4IHzWf) (:text ||Attractor)
+                      |l $ %{} :Leaf (:at 1699548558878) (:by |rJG4IHzWf) (:text |:dark)
+                  |l $ %{} :Expr (:at 1699548549247) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1699548549451) (:by |rJG4IHzWf) (:text |::)
+                      |b $ %{} :Leaf (:at 1699551253672) (:by |rJG4IHzWf) (:text |:fractal)
+                      |h $ %{} :Leaf (:at 1699551256580) (:by |rJG4IHzWf) (:text ||Fractal)
+                      |l $ %{} :Leaf (:at 1699548558878) (:by |rJG4IHzWf) (:text |:dark)
       :ns $ %{} :CodeEntry (:doc |)
         :code $ %{} :Expr (:at 1499755354983) (:by nil)
           :data $ {}
@@ -295,6 +307,89 @@
                       |j $ %{} :Leaf (:at 1507399888500) (:by |root) (:text |updater)
                       |r $ %{} :Leaf (:at 1507399891576) (:by |root) (:text |@*reel)
                       |v $ %{} :Leaf (:at 1507399892687) (:by |root) (:text |op)
+              |w $ %{} :Expr (:at 1699551268289) (:by |rJG4IHzWf)
+                :data $ {}
+                  |T $ %{} :Leaf (:at 1699551273449) (:by |rJG4IHzWf) (:text |tag-match)
+                  |b $ %{} :Leaf (:at 1699551278048) (:by |rJG4IHzWf) (:text |op)
+                  |h $ %{} :Expr (:at 1699551278457) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Expr (:at 1699551278567) (:by |rJG4IHzWf)
+                        :data $ {}
+                          |T $ %{} :Leaf (:at 1699551280755) (:by |rJG4IHzWf) (:text |:tab)
+                          |b $ %{} :Leaf (:at 1699551281330) (:by |rJG4IHzWf) (:text |t)
+                      |b $ %{} :Expr (:at 1699551300543) (:by |rJG4IHzWf)
+                        :data $ {}
+                          |T $ %{} :Leaf (:at 1699551307868) (:by |rJG4IHzWf) (:text |load-renderer)
+                          |b $ %{} :Leaf (:at 1699551311669) (:by |rJG4IHzWf) (:text |t)
+                  |l $ %{} :Expr (:at 1699551284501) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1699551286230) (:by |rJG4IHzWf) (:text |_)
+                      |b $ %{} :Leaf (:at 1699551297337) (:by |rJG4IHzWf) (:text |:ok)
+        |load-renderer $ %{} :CodeEntry (:doc |)
+          :code $ %{} :Expr (:at 1699550466340) (:by |rJG4IHzWf)
+            :data $ {}
+              |T $ %{} :Leaf (:at 1699550466340) (:by |rJG4IHzWf) (:text |defn)
+              |b $ %{} :Leaf (:at 1699550466340) (:by |rJG4IHzWf) (:text |load-renderer)
+              |h $ %{} :Expr (:at 1699550466340) (:by |rJG4IHzWf)
+                :data $ {}
+                  |T $ %{} :Leaf (:at 1699550470192) (:by |rJG4IHzWf) (:text |tab)
+              |j $ %{} :Expr (:at 1699550484042) (:by |rJG4IHzWf)
+                :data $ {}
+                  |T $ %{} :Leaf (:at 1699550485488) (:by |rJG4IHzWf) (:text |hint-fn)
+                  |b $ %{} :Leaf (:at 1699550486264) (:by |rJG4IHzWf) (:text |async)
+              |l $ %{} :Expr (:at 1699550945415) (:by |rJG4IHzWf)
+                :data $ {}
+                  |D $ %{} :Leaf (:at 1699550946228) (:by |rJG4IHzWf) (:text |let)
+                  |T $ %{} :Expr (:at 1699550947779) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Expr (:at 1699550948118) (:by |rJG4IHzWf)
+                        :data $ {}
+                          |D $ %{} :Leaf (:at 1699550950768) (:by |rJG4IHzWf) (:text |renderer)
+                          |T $ %{} :Expr (:at 1699550952805) (:by |rJG4IHzWf)
+                            :data $ {}
+                              |D $ %{} :Leaf (:at 1699550954705) (:by |rJG4IHzWf) (:text |js-await)
+                              |T $ %{} :Expr (:at 1699550471071) (:by |rJG4IHzWf)
+                                :data $ {}
+                                  |T $ %{} :Leaf (:at 1699550473664) (:by |rJG4IHzWf) (:text |case-default)
+                                  |b $ %{} :Leaf (:at 1699550474814) (:by |rJG4IHzWf) (:text |tab)
+                                  |e $ %{} :Expr (:at 1699550494302) (:by |rJG4IHzWf)
+                                    :data $ {}
+                                      |T $ %{} :Leaf (:at 1699550494593) (:by |rJG4IHzWf) (:text |do)
+                                      |b $ %{} :Expr (:at 1699550499049) (:by |rJG4IHzWf)
+                                        :data $ {}
+                                          |T $ %{} :Leaf (:at 1699550501434) (:by |rJG4IHzWf) (:text |eprintln)
+                                          |b $ %{} :Leaf (:at 1699550506620) (:by |rJG4IHzWf) (:text "|\"unknown tab:")
+                                          |h $ %{} :Leaf (:at 1699550504685) (:by |rJG4IHzWf) (:text |tab)
+                                      |h $ %{} :Expr (:at 1699550589873) (:by |rJG4IHzWf)
+                                        :data $ {}
+                                          |T $ %{} :Leaf (:at 1699550589873) (:by |rJG4IHzWf) (:text |loadFireworksRenderer)
+                                          |b $ %{} :Leaf (:at 1699550589873) (:by |rJG4IHzWf) (:text |canvas)
+                                  |h $ %{} :Expr (:at 1699550475286) (:by |rJG4IHzWf)
+                                    :data $ {}
+                                      |T $ %{} :Leaf (:at 1699550478302) (:by |rJG4IHzWf) (:text |:fireworks)
+                                      |b $ %{} :Expr (:at 1699550479861) (:by |rJG4IHzWf)
+                                        :data $ {}
+                                          |T $ %{} :Leaf (:at 1699550479861) (:by |rJG4IHzWf) (:text |loadFireworksRenderer)
+                                          |b $ %{} :Leaf (:at 1699550479861) (:by |rJG4IHzWf) (:text |canvas)
+                                  |l $ %{} :Expr (:at 1699550508889) (:by |rJG4IHzWf)
+                                    :data $ {}
+                                      |T $ %{} :Leaf (:at 1699550510962) (:by |rJG4IHzWf) (:text |:attractor)
+                                      |b $ %{} :Expr (:at 1699550513811) (:by |rJG4IHzWf)
+                                        :data $ {}
+                                          |T $ %{} :Leaf (:at 1699550519537) (:by |rJG4IHzWf) (:text |loadAttractorRenderer)
+                                          |b $ %{} :Leaf (:at 1699550521292) (:by |rJG4IHzWf) (:text |canvas)
+                                  |o $ %{} :Expr (:at 1699550508889) (:by |rJG4IHzWf)
+                                    :data $ {}
+                                      |T $ %{} :Leaf (:at 1699550526454) (:by |rJG4IHzWf) (:text |:fractal)
+                                      |b $ %{} :Expr (:at 1699550513811) (:by |rJG4IHzWf)
+                                        :data $ {}
+                                          |T $ %{} :Leaf (:at 1699550534149) (:by |rJG4IHzWf) (:text |loadFractalRenderer)
+                                          |b $ %{} :Leaf (:at 1699550521292) (:by |rJG4IHzWf) (:text |canvas)
+                  |b $ %{} :Expr (:at 1699550963724) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1699550964403) (:by |rJG4IHzWf) (:text |reset!)
+                      |b $ %{} :Leaf (:at 1699550964403) (:by |rJG4IHzWf) (:text |*instance-renderer)
+                      |h $ %{} :Leaf (:at 1699550968711) (:by |rJG4IHzWf) (:text |renderer)
         |loop-renderer! $ %{} :CodeEntry (:doc |)
           :code $ %{} :Expr (:at 1699549258539) (:by |rJG4IHzWf)
             :data $ {}
@@ -351,17 +446,6 @@
                     :data $ {}
                       |T $ %{} :Leaf (:at 1699549084204) (:by |rJG4IHzWf) (:text |setupInitials)
                       |b $ %{} :Leaf (:at 1699549095308) (:by |rJG4IHzWf) (:text |canvas)
-              |sj $ %{} :Expr (:at 1699549121242) (:by |rJG4IHzWf)
-                :data $ {}
-                  |D $ %{} :Leaf (:at 1699549135443) (:by |rJG4IHzWf) (:text |reset!)
-                  |T $ %{} :Leaf (:at 1699549131170) (:by |rJG4IHzWf) (:text |*instance-renderer)
-                  |b $ %{} :Expr (:at 1699549146555) (:by |rJG4IHzWf)
-                    :data $ {}
-                      |D $ %{} :Leaf (:at 1699549148180) (:by |rJG4IHzWf) (:text |js-await)
-                      |T $ %{} :Expr (:at 1699549140906) (:by |rJG4IHzWf)
-                        :data $ {}
-                          |T $ %{} :Leaf (:at 1699549142481) (:by |rJG4IHzWf) (:text |loadFireworksRenderer)
-                          |b $ %{} :Leaf (:at 1699549144578) (:by |rJG4IHzWf) (:text |canvas)
               |t $ %{} :Expr (:at 1544874433785) (:by |rJG4IHzWf)
                 :data $ {}
                   |T $ %{} :Leaf (:at 1544874434638) (:by |rJG4IHzWf) (:text |println)
@@ -379,12 +463,9 @@
                   |r $ %{} :Expr (:at 1636914352112) (:by |rJG4IHzWf)
                     :data $ {}
                       |T $ %{} :Leaf (:at 1636914358071) (:by |rJG4IHzWf) (:text |load-console-formatter!)
-              |x $ %{} :Expr (:at 1499755354983) (:by nil)
+              |w $ %{} :Expr (:at 1699550910012) (:by |rJG4IHzWf)
                 :data $ {}
-                  |T $ %{} :Leaf (:at 1499755354983) (:by |root) (:text |render-app!)
-              |xT $ %{} :Expr (:at 1699549252188) (:by |rJG4IHzWf)
-                :data $ {}
-                  |T $ %{} :Leaf (:at 1699549258058) (:by |rJG4IHzWf) (:text |loop-renderer!)
+                  |T $ %{} :Leaf (:at 1699550910012) (:by |rJG4IHzWf) (:text |render-app!)
               |y $ %{} :Expr (:at 1499755354983) (:by nil)
                 :data $ {}
                   |T $ %{} :Leaf (:at 1499755354983) (:by |root) (:text |add-watch)
@@ -482,6 +563,31 @@
                 :data $ {}
                   |T $ %{} :Leaf (:at 1499755354983) (:by |root) (:text |println)
                   |j $ %{} :Leaf (:at 1499755354983) (:by |root) (:text "||App started.")
+              |zD $ %{} :Expr (:at 1699551078961) (:by |rJG4IHzWf)
+                :data $ {}
+                  |D $ %{} :Leaf (:at 1699551079688) (:by |rJG4IHzWf) (:text |->)
+                  |T $ %{} :Expr (:at 1699550835290) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1699550835290) (:by |rJG4IHzWf) (:text |load-renderer)
+                      |b $ %{} :Expr (:at 1699550835290) (:by |rJG4IHzWf)
+                        :data $ {}
+                          |T $ %{} :Leaf (:at 1699550835290) (:by |rJG4IHzWf) (:text |:tab)
+                          |b $ %{} :Expr (:at 1699550835290) (:by |rJG4IHzWf)
+                            :data $ {}
+                              |T $ %{} :Leaf (:at 1699550835290) (:by |rJG4IHzWf) (:text |:store)
+                              |b $ %{} :Leaf (:at 1699550835290) (:by |rJG4IHzWf) (:text |@*reel)
+                  |b $ %{} :Expr (:at 1699551080310) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1699551082678) (:by |rJG4IHzWf) (:text |.!then)
+                      |b $ %{} :Expr (:at 1699551083028) (:by |rJG4IHzWf)
+                        :data $ {}
+                          |T $ %{} :Leaf (:at 1699551083272) (:by |rJG4IHzWf) (:text |fn)
+                          |b $ %{} :Expr (:at 1699551083533) (:by |rJG4IHzWf)
+                            :data $ {}
+                              |T $ %{} :Leaf (:at 1699551086127) (:by |rJG4IHzWf) (:text |r)
+                          |h $ %{} :Expr (:at 1699551087579) (:by |rJG4IHzWf)
+                            :data $ {}
+                              |T $ %{} :Leaf (:at 1699551091520) (:by |rJG4IHzWf) (:text |loop-renderer!)
         |mount-target $ %{} :CodeEntry (:doc |)
           :code $ %{} :Expr (:at 1499755354983) (:by nil)
             :data $ {}
@@ -577,17 +683,19 @@
                               |j $ %{} :Leaf (:at 1507461719097) (:by |root) (:text |@*reel)
                               |r $ %{} :Leaf (:at 1507461721870) (:by |root) (:text |schema/store)
                               |v $ %{} :Leaf (:at 1507461722724) (:by |root) (:text |updater)
-                      |xT $ %{} :Expr (:at 1699549195947) (:by |rJG4IHzWf)
+                      |xT $ %{} :Expr (:at 1699549191878) (:by |rJG4IHzWf)
                         :data $ {}
-                          |D $ %{} :Leaf (:at 1699549203903) (:by |rJG4IHzWf) (:text |reset!)
-                          |L $ %{} :Leaf (:at 1699549207994) (:by |rJG4IHzWf) (:text |*instance-renderer)
-                          |T $ %{} :Expr (:at 1699549191878) (:by |rJG4IHzWf)
+                          |D $ %{} :Leaf (:at 1699549193749) (:by |rJG4IHzWf) (:text |js-await)
+                          |T $ %{} :Expr (:at 1699549182602) (:by |rJG4IHzWf)
                             :data $ {}
-                              |D $ %{} :Leaf (:at 1699549193749) (:by |rJG4IHzWf) (:text |js-await)
-                              |T $ %{} :Expr (:at 1699549182602) (:by |rJG4IHzWf)
+                              |T $ %{} :Leaf (:at 1699550677738) (:by |rJG4IHzWf) (:text |load-renderer)
+                              |b $ %{} :Expr (:at 1699550682257) (:by |rJG4IHzWf)
                                 :data $ {}
-                                  |T $ %{} :Leaf (:at 1699549188197) (:by |rJG4IHzWf) (:text |loadFireworksRenderer)
-                                  |b $ %{} :Leaf (:at 1699549190911) (:by |rJG4IHzWf) (:text |canvas)
+                                  |T $ %{} :Leaf (:at 1699550682884) (:by |rJG4IHzWf) (:text |:tab)
+                                  |b $ %{} :Expr (:at 1699550684772) (:by |rJG4IHzWf)
+                                    :data $ {}
+                                      |T $ %{} :Leaf (:at 1699550685268) (:by |rJG4IHzWf) (:text |:store)
+                                      |b $ %{} :Leaf (:at 1699550688397) (:by |rJG4IHzWf) (:text |@*reel)
                       |y $ %{} :Expr (:at 1626777542168) (:by |rJG4IHzWf)
                         :data $ {}
                           |T $ %{} :Leaf (:at 1626777542168) (:by |rJG4IHzWf) (:text |hud!)
@@ -691,6 +799,20 @@
                     |h $ %{} :Expr (:at 1699548935548) (:by |rJG4IHzWf)
                       :data $ {}
                         |T $ %{} :Leaf (:at 1699549057832) (:by |rJG4IHzWf) (:text |loadFireworksRenderer)
+                |z5 $ %{} :Expr (:at 1699548920367) (:by |rJG4IHzWf)
+                  :data $ {}
+                    |T $ %{} :Leaf (:at 1699550401011) (:by |rJG4IHzWf) (:text "|\"../src/apps/attractor")
+                    |b $ %{} :Leaf (:at 1699548935286) (:by |rJG4IHzWf) (:text |:refer)
+                    |h $ %{} :Expr (:at 1699548935548) (:by |rJG4IHzWf)
+                      :data $ {}
+                        |T $ %{} :Leaf (:at 1699550414051) (:by |rJG4IHzWf) (:text |loadAttractorRenderer)
+                |z9 $ %{} :Expr (:at 1699548920367) (:by |rJG4IHzWf)
+                  :data $ {}
+                    |T $ %{} :Leaf (:at 1699550419801) (:by |rJG4IHzWf) (:text "|\"../src/apps/fractal")
+                    |b $ %{} :Leaf (:at 1699548935286) (:by |rJG4IHzWf) (:text |:refer)
+                    |h $ %{} :Expr (:at 1699548935548) (:by |rJG4IHzWf)
+                      :data $ {}
+                        |T $ %{} :Leaf (:at 1699550424501) (:by |rJG4IHzWf) (:text |loadFractalRenderer)
                 |zD $ %{} :Expr (:at 1699549071462) (:by |rJG4IHzWf)
                   :data $ {}
                     |T $ %{} :Leaf (:at 1699549074912) (:by |rJG4IHzWf) (:text "|\"../src/index")

@@ -1,12 +1,12 @@
-import { createRenderer, resetCanvasSize } from "./index.mjs";
-import spriteWGSL from "../shaders/sprite.wgsl?raw";
-import updateSpritesWGSL from "../shaders/update-sprites.wgsl?raw";
-import computeGravityWgsl from "../shaders/compute-gravity.wgsl?raw";
-import computeLorenz from "../shaders/compute-lorenz.wgsl?raw";
-import computeFireworks from "../shaders/compute-fireworks.wgsl?raw";
-import { randPointInSphere, rand_middle } from "./util.mjs";
+import { createRenderer, resetCanvasSize } from "../index.mjs";
+import spriteWGSL from "../../shaders/sprite.wgsl?raw";
+import updateSpritesWGSL from "../../shaders/update-sprites.wgsl?raw";
+import computeGravityWgsl from "../../shaders/compute-gravity.wgsl?raw";
+import computeLorenz from "../../shaders/compute-lorenz.wgsl?raw";
+import computeFireworks from "../../shaders/compute-fireworks.wgsl?raw";
+import { randPointInSphere, rand_middle } from "../util.mjs";
 
-export let loadRenderer = async (canvas: HTMLCanvasElement) => {
+export let loadFireworksRenderer = async (canvas: HTMLCanvasElement) => {
   let seedSize = 2000000;
 
   let renderFrame = await createRenderer(
@@ -99,9 +99,3 @@ let vertexBufferLayout: GPUVertexBufferLayout[] = [
     attributes: [{ shaderLocation: 6, offset: 0, format: "uint32" }],
   },
 ];
-
-if (import.meta.hot) {
-  import.meta.hot.accept("./globals", (newModule) => {
-    // globals reloading
-  });
-}

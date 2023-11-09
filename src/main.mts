@@ -1,6 +1,6 @@
 import { setupInitials } from "./index.mjs";
 
-import { loadRenderer } from "./app.mjs";
+import { loadFireworksRenderer } from "./apps/fireworks.mjs";
 
 let instanceRenderer: (t: number, skipComputing: boolean) => void;
 let canvas = document.querySelector("#canvas-container") as HTMLCanvasElement;
@@ -9,7 +9,7 @@ window.__skipComputing = false;
 window.onload = async () => {
   await setupInitials(canvas);
 
-  instanceRenderer = await loadRenderer(canvas);
+  instanceRenderer = await loadFireworksRenderer(canvas);
 
   let t = 0;
   let renderer = () => {

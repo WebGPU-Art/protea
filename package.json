@@ -6,9 +6,11 @@
     "@webgpu/types": "^0.1.31",
     "query-string": "^8.1.0",
     "typescript": "^5.0.4",
+    "bottom-tip": "^0.1.5",
     "vite": "^4.3.3"
   },
   "dependencies": {
+    "@calcit/procs": "^0.8.9",
     "@triadica/touch-control": "^0.0.3",
     "ismobilejs": "^1.1.1"
   },

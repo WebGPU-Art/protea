@@ -125,8 +125,20 @@
                   |h $ %{} :Expr (:at 1699548549247) (:by |rJG4IHzWf)
                     :data $ {}
                       |T $ %{} :Leaf (:at 1699548549451) (:by |rJG4IHzWf) (:text |::)
-                      |b $ %{} :Leaf (:at 1699551242551) (:by |rJG4IHzWf) (:text |:attractor)
-                      |h $ %{} :Leaf (:at 1699551247426) (:by |rJG4IHzWf) (:text ||Attractor)
+                      |b $ %{} :Leaf (:at 1699553312026) (:by |rJG4IHzWf) (:text |:lorenz)
+                      |h $ %{} :Leaf (:at 1699553314825) (:by |rJG4IHzWf) (:text ||Lorenz)
+                      |l $ %{} :Leaf (:at 1699548558878) (:by |rJG4IHzWf) (:text |:dark)
+                  |j $ %{} :Expr (:at 1699548549247) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1699548549451) (:by |rJG4IHzWf) (:text |::)
+                      |b $ %{} :Leaf (:at 1699553321692) (:by |rJG4IHzWf) (:text |:aizawa)
+                      |h $ %{} :Leaf (:at 1699553325599) (:by |rJG4IHzWf) (:text ||Aizawa)
+                      |l $ %{} :Leaf (:at 1699548558878) (:by |rJG4IHzWf) (:text |:dark)
+                  |k $ %{} :Expr (:at 1699548549247) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1699548549451) (:by |rJG4IHzWf) (:text |::)
+                      |b $ %{} :Leaf (:at 1699553330156) (:by |rJG4IHzWf) (:text |:fourwing)
+                      |h $ %{} :Leaf (:at 1699553333120) (:by |rJG4IHzWf) (:text "||Four Wing")
                       |l $ %{} :Leaf (:at 1699548558878) (:by |rJG4IHzWf) (:text |:dark)
                   |l $ %{} :Expr (:at 1699548549247) (:by |rJG4IHzWf)
                     :data $ {}
@@ -373,10 +385,31 @@
                                           |b $ %{} :Leaf (:at 1699550479861) (:by |rJG4IHzWf) (:text |canvas)
                                   |l $ %{} :Expr (:at 1699550508889) (:by |rJG4IHzWf)
                                     :data $ {}
-                                      |T $ %{} :Leaf (:at 1699550510962) (:by |rJG4IHzWf) (:text |:attractor)
+                                      |T $ %{} :Leaf (:at 1699553264024) (:by |rJG4IHzWf) (:text |:lorenz)
                                       |b $ %{} :Expr (:at 1699550513811) (:by |rJG4IHzWf)
                                         :data $ {}
-                                          |T $ %{} :Leaf (:at 1699550519537) (:by |rJG4IHzWf) (:text |loadAttractorRenderer)
+                                          |T $ %{} :Leaf (:at 1699553273712) (:by |rJG4IHzWf) (:text |loadLorenzRenderer)
+                                          |b $ %{} :Leaf (:at 1699550521292) (:by |rJG4IHzWf) (:text |canvas)
+                                  |m $ %{} :Expr (:at 1699550508889) (:by |rJG4IHzWf)
+                                    :data $ {}
+                                      |T $ %{} :Leaf (:at 1699553264024) (:by |rJG4IHzWf) (:text |:lorenz)
+                                      |b $ %{} :Expr (:at 1699550513811) (:by |rJG4IHzWf)
+                                        :data $ {}
+                                          |T $ %{} :Leaf (:at 1699553273712) (:by |rJG4IHzWf) (:text |loadLorenzRenderer)
+                                          |b $ %{} :Leaf (:at 1699550521292) (:by |rJG4IHzWf) (:text |canvas)
+                                  |mT $ %{} :Expr (:at 1699550508889) (:by |rJG4IHzWf)
+                                    :data $ {}
+                                      |T $ %{} :Leaf (:at 1699553296547) (:by |rJG4IHzWf) (:text |:aizawa)
+                                      |b $ %{} :Expr (:at 1699550513811) (:by |rJG4IHzWf)
+                                        :data $ {}
+                                          |T $ %{} :Leaf (:at 1699553301405) (:by |rJG4IHzWf) (:text |loadAizawaRenderer)
+                                          |b $ %{} :Leaf (:at 1699550521292) (:by |rJG4IHzWf) (:text |canvas)
+                                  |n $ %{} :Expr (:at 1699550508889) (:by |rJG4IHzWf)
+                                    :data $ {}
+                                      |T $ %{} :Leaf (:at 1699553291395) (:by |rJG4IHzWf) (:text |:fourwing)
+                                      |b $ %{} :Expr (:at 1699550513811) (:by |rJG4IHzWf)
+                                        :data $ {}
+                                          |T $ %{} :Leaf (:at 1699553285590) (:by |rJG4IHzWf) (:text |loadFourwingRenderer)
                                           |b $ %{} :Leaf (:at 1699550521292) (:by |rJG4IHzWf) (:text |canvas)
                                   |o $ %{} :Expr (:at 1699550508889) (:by |rJG4IHzWf)
                                     :data $ {}
@@ -801,11 +834,25 @@
                         |T $ %{} :Leaf (:at 1699549057832) (:by |rJG4IHzWf) (:text |loadFireworksRenderer)
                 |z5 $ %{} :Expr (:at 1699548920367) (:by |rJG4IHzWf)
                   :data $ {}
-                    |T $ %{} :Leaf (:at 1699550401011) (:by |rJG4IHzWf) (:text "|\"../src/apps/attractor")
+                    |T $ %{} :Leaf (:at 1699553220765) (:by |rJG4IHzWf) (:text "|\"../src/apps/attractor-aizawa")
                     |b $ %{} :Leaf (:at 1699548935286) (:by |rJG4IHzWf) (:text |:refer)
                     |h $ %{} :Expr (:at 1699548935548) (:by |rJG4IHzWf)
                       :data $ {}
-                        |T $ %{} :Leaf (:at 1699550414051) (:by |rJG4IHzWf) (:text |loadAttractorRenderer)
+                        |T $ %{} :Leaf (:at 1699553226738) (:by |rJG4IHzWf) (:text |loadAizawaRenderer)
+                |z7 $ %{} :Expr (:at 1699548920367) (:by |rJG4IHzWf)
+                  :data $ {}
+                    |T $ %{} :Leaf (:at 1699553232943) (:by |rJG4IHzWf) (:text "|\"../src/apps/attractor-lorenz")
+                    |b $ %{} :Leaf (:at 1699548935286) (:by |rJG4IHzWf) (:text |:refer)
+                    |h $ %{} :Expr (:at 1699548935548) (:by |rJG4IHzWf)
+                      :data $ {}
+                        |T $ %{} :Leaf (:at 1699553237979) (:by |rJG4IHzWf) (:text |loadLorenzRenderer)
+                |z8 $ %{} :Expr (:at 1699548920367) (:by |rJG4IHzWf)
+                  :data $ {}
+                    |T $ %{} :Leaf (:at 1699553247355) (:by |rJG4IHzWf) (:text "|\"../src/apps/attractor-fourwing")
+                    |b $ %{} :Leaf (:at 1699548935286) (:by |rJG4IHzWf) (:text |:refer)
+                    |h $ %{} :Expr (:at 1699548935548) (:by |rJG4IHzWf)
+                      :data $ {}
+                        |T $ %{} :Leaf (:at 1699553280259) (:by |rJG4IHzWf) (:text |loadFourwingRenderer)
                 |z9 $ %{} :Expr (:at 1699548920367) (:by |rJG4IHzWf)
                   :data $ {}
                     |T $ %{} :Leaf (:at 1699550419801) (:by |rJG4IHzWf) (:text "|\"../src/apps/fractal")

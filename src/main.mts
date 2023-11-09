@@ -1,7 +1,9 @@
 import { setupInitials } from "./index.mjs";
 
 import { loadFireworksRenderer } from "./apps/fireworks.mjs";
-import {} from "./apps/attractor.mjs";
+import {} from "./apps/attractor-lorenz.mjs";
+import {} from "./apps/attractor-aizawa.mjs";
+import {} from "./apps/attractor-fourwing.mjs";
 import {} from "./apps/fractal.mjs";
 
 let instanceRenderer: (t: number, skipComputing: boolean) => void;

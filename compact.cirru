@@ -21,7 +21,7 @@
                   when dev? $ comp-reel (>> states :reel) reel ({})
         |tabs $ %{} :CodeEntry (:doc |)
           :code $ quote
-            def tabs $ [] (:: :fireworks |Fireworks :dark) (:: :attractor |Attractor :dark) (:: :fractal |Fractal :dark)
+            def tabs $ [] (:: :fireworks |Fireworks :dark) (:: :lorenz |Lorenz :dark) (:: :aizawa |Aizawa :dark) (:: :fourwing "|Four Wing" :dark) (:: :fractal |Fractal :dark)
       :ns $ %{} :CodeEntry (:doc |)
         :code $ quote
           ns app.comp.container $ :require (respo-ui.css :as css)
@@ -72,7 +72,10 @@
                     case-default tab
                       do (eprintln "\"unknown tab:" tab) (loadFireworksRenderer canvas)
                       :fireworks $ loadFireworksRenderer canvas
-                      :attractor $ loadAttractorRenderer canvas
+                      :lorenz $ loadLorenzRenderer canvas
+                      :lorenz $ loadLorenzRenderer canvas
+                      :aizawa $ loadAizawaRenderer canvas
+                      :fourwing $ loadFourwingRenderer canvas
                       :fractal $ loadFractalRenderer canvas
                 reset! *instance-renderer renderer
         |loop-renderer! $ %{} :CodeEntry (:doc |)
@@ -141,7 +144,9 @@
             "\"./calcit.build-errors" :default build-errors
             "\"bottom-tip" :default hud!
             "\"../src/apps/fireworks" :refer $ loadFireworksRenderer
-            "\"../src/apps/attractor" :refer $ loadAttractorRenderer
+            "\"../src/apps/attractor-aizawa" :refer $ loadAizawaRenderer
+            "\"../src/apps/attractor-lorenz" :refer $ loadLorenzRenderer
+            "\"../src/apps/attractor-fourwing" :refer $ loadFourwingRenderer
             "\"../src/apps/fractal" :refer $ loadFractalRenderer
             "\"../src/index" :refer $ setupInitials
     |app.schema $ %{} :FileEntry

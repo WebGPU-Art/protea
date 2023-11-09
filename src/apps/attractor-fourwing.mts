@@ -1,8 +1,8 @@
 import { createRenderer, resetCanvasSize } from "../index.mjs";
 import attractorSprite from "../../shaders/attractor-sprite.wgsl?raw";
-import attractorCompute from "../../shaders/attractor-compute.wgsl?raw";
+import attractorCompute from "../../shaders/attractor-compute-four-wing.wgsl?raw";
 
-export let loadAttractorRenderer = async (canvas: HTMLCanvasElement) => {
+export let loadFourwingRenderer = async (canvas: HTMLCanvasElement) => {
   let seedSize = 2000000;
 
   let renderFrame = await createRenderer(

@@ -36,11 +36,11 @@ fn quaternion_multiply(a: vec4<f32>, b: vec4<f32>) -> vec4<f32> {
 
 fn escaped(p: vec4<f32>) -> bool {
   var p1 = p;
-  let offset = vec4<f32>(0.4, 0.0, 0., 0.55);
+  let offset = vec4<f32>(0.2, 0.3, 0.2, 0.1);
   for (var idx = 0u; idx < 1000u; idx++) {
-    p1 = quaternion_multiply(p1, p1) - offset;
-    let l = length(p1);
-    if l > 100.0 {
+    p1 = quaternion_multiply(p1, p1) + offset;
+    let l = p1.x * p1.x + p1.y * p1.y + p1.z * p1.z + p1.w * p1.w;
+    if l > 1000.0 {
       return true;
     }
   }
@@ -61,7 +61,7 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
   let next_buffer = &particles_b.particles[index];
   let c = item.position != (*next_buffer).position;
 
-  if item.step_length > 0.00000000001 {
+  if item.step_length > 0.0000000001 {
     let q4_value = vec4(0.2, v.y, v.z, v.x);
 
     let go_inside = normalize(-item.position);

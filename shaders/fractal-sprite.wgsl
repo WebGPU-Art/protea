@@ -111,8 +111,8 @@ fn vert_main(
 @fragment
 fn frag_main(vtx_out: VertexOutput) -> @location(0) vec4<f32> {
   if vtx_out.inward > 0.5 {
-    return vec4<f32>(0.99, 0.0, 0., 1.0);
+    return vec4<f32>(0.99, 0.6, 0.3, 0.8);
   } else {
-    return vec4<f32>(0.4, 0.4, 0.9, 1.0);
+    return vec4<f32>(0.6, 0.6, 0.99, 0.8);
   }
 }

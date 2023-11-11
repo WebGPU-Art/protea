@@ -98,7 +98,6 @@
               js/window.addEventListener |beforeunload $ fn (event) (persist-storage!)
               js/window.addEventListener |visibilitychange $ fn (event)
                 if (= "\"hidden" js/document.visibilityState) (persist-storage!)
-              flipped js/setInterval 60000 persist-storage!
               let
                   raw $ js/localStorage.getItem (:storage-key config/site)
                 when (some? raw)

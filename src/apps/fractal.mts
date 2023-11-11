@@ -59,7 +59,7 @@ function makeSeed(numParticles: number): Float32Array {
     buf[b + 0] = x * scale;
     buf[b + 1] = y * scale;
     buf[b + 2] = z * scale;
-    buf[b + 3] = 0.0006;
+    buf[b + 3] = 0.001;
     buf[b + 4] = 1;
     buf[b + 5] = 0;
     buf[b + 6] = 0;

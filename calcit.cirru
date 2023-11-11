@@ -460,7 +460,7 @@
                           |T $ %{} :Leaf (:at 1699549320563) (:by |rJG4IHzWf) (:text |@*instance-renderer)
                           |b $ %{} :Leaf (:at 1699549349038) (:by |rJG4IHzWf) (:text |@*t)
                           |h $ %{} :Leaf (:at 1699549352196) (:by |rJG4IHzWf) (:text |false)
-                  |h $ %{} :Leaf (:at 1699549311751) (:by |rJG4IHzWf) (:text |40)
+                  |h $ %{} :Leaf (:at 1699707668516) (:by |rJG4IHzWf) (:text |20)
         |main! $ %{} :CodeEntry (:doc |)
           :code $ %{} :Expr (:at 1499755354983) (:by nil)
             :data $ {}
@@ -880,7 +880,7 @@
                   |b $ %{} :Expr (:at 1699548534602) (:by |rJG4IHzWf)
                     :data $ {}
                       |T $ %{} :Leaf (:at 1699548535371) (:by |rJG4IHzWf) (:text |:tab)
-                      |b $ %{} :Leaf (:at 1699548535985) (:by |rJG4IHzWf) (:text |nil)
+                      |b $ %{} :Leaf (:at 1699702439968) (:by |rJG4IHzWf) (:text |:fractal)
                   |j $ %{} :Expr (:at 1499755354983) (:by nil)
                     :data $ {}
                       |T $ %{} :Leaf (:at 1499755354983) (:by |root) (:text |:states)

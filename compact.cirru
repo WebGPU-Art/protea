@@ -85,7 +85,7 @@
                 js/requestAnimationFrame $ fn (_t) (loop-renderer!)
                 swap! *t inc
                 @*instance-renderer @*t false
-              , 40
+              , 20
         |main! $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn main! () (hint-fn async)
@@ -153,7 +153,7 @@
       :defs $ {}
         |store $ %{} :CodeEntry (:doc |)
           :code $ quote
-            def store $ {} (:tab nil)
+            def store $ {} (:tab :fractal)
               :states $ {}
                 :cursor $ []
       :ns $ %{} :CodeEntry (:doc |)

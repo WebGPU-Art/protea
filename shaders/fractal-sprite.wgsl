@@ -62,26 +62,27 @@ fn transform_perspective(p: vec3f) -> PointResult {
 
 struct VertexOutput {
   @builtin(position) position: vec4<f32>,
+  // inward
+  @location(1) inward: f32,
 }
 
 @vertex
 fn vert_main(
-  @location(0) position0: vec4<f32>,
-  @location(1) q4_value: vec4<f32>,
-  @location(2) idx: u32,
+  @location(0) position0: vec3<f32>,
+  @location(1) step_length: f32,
+  @location(2) inward: f32,
+  @location(3) p1: f32,
+  @location(4) p2: f32,
+  @location(5) p3: f32,
+  @location(6) idx: u32,
 ) -> VertexOutput {
   let position = position0.xyz * 8.;
   var pos: vec3<f32>;
   let right = normalize(uniforms.rightward);
   let up = normalize(uniforms.upward);
 
-  let convergent = length(q4_value) < 1.0;
-
   // let front = params.length;
-  var width = 0.004;
-  if !convergent {
-    width = 0.0;
-  }
+  var width = 0.001;
 
   if idx == 0u {
     pos = position + right * width - up * width;
@@ -103,10 +104,15 @@ fn vert_main(
   let scale: f32 = 0.002;
 
   output.position = vec4(p * scale, 1.0);
+  output.inward = inward;
   return output;
 }
 
 @fragment
-fn frag_main() -> @location(0) vec4<f32> {
-  return vec4<f32>(0.99, 0.0, 0., 0.7);
+fn frag_main(vtx_out: VertexOutput) -> @location(0) vec4<f32> {
+  if vtx_out.inward > 0.5 {
+    return vec4<f32>(0.99, 0.0, 0., 1.0);
+  } else {
+    return vec4<f32>(0.4, 0.4, 0.9, 1.0);
+  }
 }

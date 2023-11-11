@@ -1,6 +1,10 @@
 struct Particle {
-  position: vec4<f32>,
-  q4_value: vec4<f32>,
+  position: vec3<f32>,
+  step_length: f32,
+  inward: f32,
+  p1: f32,
+  p2: f32,
+  p3: f32
 }
 
 struct Params {
@@ -30,16 +34,63 @@ fn quaternion_multiply(a: vec4<f32>, b: vec4<f32>) -> vec4<f32> {
   );
 }
 
-fn rand(n: f32) -> f32 { return fract(sin(n) * 43758.5453123); }
+fn escaped(p: vec4<f32>) -> bool {
+  var p1 = p;
+  let offset = vec4<f32>(0.4, 0.0, 0., 0.55);
+  for (var idx = 0u; idx < 1000u; idx++) {
+    p1 = quaternion_multiply(p1, p1) - offset;
+    let l = length(p1);
+    if l > 100.0 {
+      return true;
+    }
+  }
+  return false;
+}
+
+// fn rand(n: f32) -> f32 { return fract(sin(n) * 43758.5453123); }
 
 // https://github.com/austinEng/Project6-Vulkan-Flocking/blob/master/data/shaders/computeparticles/particle.comp
 @compute @workgroup_size(64)
 fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
   var index = GlobalInvocationID.x;
 
-  // var v_pos = particles_a.particles[index].position;
-  let q4_value = particles_a.particles[index].q4_value;
-  let offset = vec4<f32>(0.0, 0.0, 0.0, 0.999);
-  let next = quaternion_multiply(q4_value, q4_value) - offset;
-  particles_b.particles[index].q4_value = next;
+  let item = particles_a.particles[index];
+  let v = item.position * 8.0;
+  let decay = 0.1;
+
+  let next_buffer = &particles_b.particles[index];
+  let c = item.position != (*next_buffer).position;
+
+  if item.step_length > 0.00000000001 {
+    let q4_value = vec4(0.2, v.y, v.z, v.x);
+
+    let go_inside = normalize(-item.position);
+    if item.inward > 0.5 {
+      if escaped(q4_value) {
+        let next = item.position + go_inside * item.step_length;
+        (*next_buffer).position = next;
+      } else {
+        (*next_buffer).inward = 0.;
+        (*next_buffer).step_length = item.step_length * decay;
+      }
+    } else {
+      if escaped(q4_value) {
+        (*next_buffer).inward = 1.;
+        (*next_buffer).step_length = item.step_length * decay;
+      } else {
+        let next = item.position - go_inside * item.step_length;
+        (*next_buffer).position = next;
+      }
+    }
+  } else {
+    (*next_buffer).inward = item.inward;
+    (*next_buffer).step_length = item.step_length;
+    (*next_buffer).position = item.position;
+  }
 }
+
+// const eps = 0.0000000000001;
+
+// fn point_equal(a: vec3<f32>, b: vec3<f32>) -> bool {
+//   return abs(a.x - b.x) < eps && abs(a.y - b.y) < eps && abs(a.z - b.z) < eps;
+// }

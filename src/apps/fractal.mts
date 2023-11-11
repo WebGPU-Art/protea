@@ -3,7 +3,7 @@ import fractalSprite from "../../shaders/fractal-sprite.wgsl?raw";
 import fractalCompute from "../../shaders/fractal-compute.wgsl?raw";
 
 export let loadFractalRenderer = async (canvas: HTMLCanvasElement) => {
-  let seedSize = 1000000;
+  let seedSize = 4110000;
 
   let renderFrame = await createRenderer(
     canvas,
@@ -38,33 +38,18 @@ let fiboGridN = (n: number, total: number): [number, number, number] => {
   return [x, y, z];
 };
 
-let fiboGridRange = (total: number) => {
-  let out: [number, number, number][] = [];
-  for (let i = 0; i < total; ++i) {
-    out.push(fiboGridN(i, total));
-  }
-  return out;
-};
-
 function makeSeed(numParticles: number): Float32Array {
-  const buf = new Float32Array(numParticles * 8);
+  const buf = new Float32Array(numParticles * 4);
 
-  let counted = 0;
   let scale = 0.2;
-  let v_scale = 2.5;
 
   for (let i = 0; i < numParticles; ++i) {
-    let b = 8 * counted;
-    let [x, y, z] = fiboGridN(i, numParticles);
+    let b = 4 * i;
+    let [x, y, z] = fiboGridN(i + 1, numParticles);
     buf[b + 0] = x * scale;
     buf[b + 1] = y * scale;
     buf[b + 2] = z * scale;
     buf[b + 3] = 0.001;
-    buf[b + 4] = 1;
-    buf[b + 5] = 0;
-    buf[b + 6] = 0;
-    buf[b + 7] = 0;
-    counted++;
   }
 
   return buf;
@@ -93,21 +78,17 @@ function loadVertex(): number[] {
 let vertexBufferLayout: GPUVertexBufferLayout[] = [
   {
     // instanced particles buffer
-    arrayStride: 8 * 4,
+    arrayStride: 4 * 4,
     stepMode: "instance",
     attributes: [
       { shaderLocation: 0, offset: 0, format: "float32x3" },
       { shaderLocation: 1, offset: 4 * 3, format: "float32" },
-      { shaderLocation: 2, offset: 4 * 4, format: "float32" },
-      { shaderLocation: 3, offset: 4 * 5, format: "float32" },
-      { shaderLocation: 4, offset: 4 * 6, format: "float32" },
-      { shaderLocation: 5, offset: 4 * 7, format: "float32" },
     ],
   },
   {
     // vertex buffer
     arrayStride: 1 * 4,
     stepMode: "vertex",
-    attributes: [{ shaderLocation: 6, offset: 0, format: "uint32" }],
+    attributes: [{ shaderLocation: 2, offset: 0, format: "uint32" }],
   },
 ];

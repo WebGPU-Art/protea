@@ -1,10 +1,6 @@
 struct Particle {
   position: vec3<f32>,
   step_length: f32,
-  inward: f32,
-  p1: f32,
-  p2: f32,
-  p3: f32
 }
 
 struct Params {
@@ -36,11 +32,11 @@ fn quaternion_multiply(a: vec4<f32>, b: vec4<f32>) -> vec4<f32> {
 
 fn escaped(p: vec4<f32>) -> bool {
   var p1 = p;
-  let offset = vec4<f32>(0.2, 0.3, 0.2, 0.1);
-  for (var idx = 0u; idx < 1000u; idx++) {
-    p1 = quaternion_multiply(p1, p1) + offset;
-    let l = p1.x * p1.x + p1.y * p1.y + p1.z * p1.z + p1.w * p1.w;
-    if l > 1000.0 {
+  let offset = vec4<f32>(0.34, 0.0, 0.0, 0.66);
+  for (var idx = 0u; idx < 800u; idx++) {
+    p1 = quaternion_multiply(p1, p1) - offset;
+    let l = length(p1);
+    if l > 100.0 {
       return true;
     }
   }
@@ -55,35 +51,32 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
   var index = GlobalInvocationID.x;
 
   let item = particles_a.particles[index];
-  let v = item.position * 8.0;
+  let v = item.position * 9.0;
   let decay = 0.1;
 
   let next_buffer = &particles_b.particles[index];
   let c = item.position != (*next_buffer).position;
 
   if item.step_length > 0.0000000001 {
-    let q4_value = vec4(0.2, v.y, v.z, v.x);
+    let q4_value = vec4(v.x, 0.00001, v.z, v.y);
 
     let go_inside = normalize(-item.position);
-    if item.inward > 0.5 {
+    if item.step_length > 0. {
       if escaped(q4_value) {
         let next = item.position + go_inside * item.step_length;
         (*next_buffer).position = next;
       } else {
-        (*next_buffer).inward = 0.;
-        (*next_buffer).step_length = item.step_length * decay;
+        (*next_buffer).step_length = -item.step_length * decay;
       }
     } else {
       if escaped(q4_value) {
-        (*next_buffer).inward = 1.;
-        (*next_buffer).step_length = item.step_length * decay;
+        (*next_buffer).step_length = -item.step_length * decay;
       } else {
-        let next = item.position - go_inside * item.step_length;
+        let next = item.position + go_inside * item.step_length;
         (*next_buffer).position = next;
       }
     }
   } else {
-    (*next_buffer).inward = item.inward;
     (*next_buffer).step_length = item.step_length;
     (*next_buffer).position = item.position;
   }

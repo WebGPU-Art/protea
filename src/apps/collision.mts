@@ -34,13 +34,14 @@ export let loadCollisionRenderer = async (canvas: HTMLCanvasElement) => {
 function makeSeed(numParticles: number, _s: number): Float32Array {
   const buf = new Float32Array(numParticles * 12);
   // let scale = 200 * (Math.random() * 0.5 + 0.5);
-  let scale = 40;
+  let scale_base = 50;
   for (let i = 0; i < numParticles; ++i) {
+    let scale = scale_base + 0.0 * i;
     let p = fiboGridN(i, numParticles);
     // let q = randPointInSphere(100);
     let b = 12 * i;
     buf[b + 0] = 0;
-    buf[b + 1] = 80;
+    buf[b + 1] = 100;
     buf[b + 2] = 0;
     buf[b + 3] = i; // index
     buf[b + 4] = p[0] * scale;

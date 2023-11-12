@@ -19,9 +19,6 @@
                   comp-hud-nav (:tab store) tabs $ fn (next d!)
                     d! $ :: :tab next
                   when dev? $ comp-reel (>> states :reel) reel ({})
-        |tabs $ %{} :CodeEntry (:doc |)
-          :code $ quote
-            def tabs $ [] (:: :fireworks |Fireworks :dark) (:: :lorenz |Lorenz :dark) (:: :aizawa |Aizawa :dark) (:: :fourwing "|Four Wing" :dark) (:: :fractal |Fractal :dark) (:: :collision |Collision :dark)
       :ns $ %{} :CodeEntry (:doc |)
         :code $ quote
           ns app.comp.container $ :require (respo-ui.css :as css)
@@ -30,20 +27,28 @@
             respo.comp.space :refer $ =<
             reel.comp.reel :refer $ comp-reel
             app.config :refer $ dev?
+            app.config :refer $ tabs
             hud-nav.comp :refer $ comp-hud-nav
     |app.config $ %{} :FileEntry
       :defs $ {}
         |default-tab $ %{} :CodeEntry (:doc |)
           :code $ quote
-            def default-tab $ turn-tag (get-env "\"tab" "\"collision")
+            def default-tab $ turn-tag
+              get-env "\"tab" $ turn-string
+                nth (last tabs) 0
         |dev? $ %{} :CodeEntry (:doc |)
           :code $ quote
             def dev? $ = "\"dev" (get-env "\"mode" "\"release")
         |site $ %{} :CodeEntry (:doc |)
           :code $ quote
             def site $ {} (:storage-key "\"workflow")
+        |tabs $ %{} :CodeEntry (:doc |)
+          :code $ quote
+            def tabs $ [] (:: :fireworks |Fireworks :dark) (:: :lorenz |Lorenz :dark) (:: :aizawa |Aizawa :dark) (:: :fourwing "|Four Wing" :dark) (:: :fractal |Fractal :dark) (:: :collision |Collision :dark)
       :ns $ %{} :CodeEntry (:doc |)
-        :code $ quote (ns app.config)
+        :code $ quote
+          ns app.config $ :require
+            app.schema :refer $ tabs
     |app.main $ %{} :FileEntry
       :defs $ {}
         |*instance-renderer $ %{} :CodeEntry (:doc |)

@@ -146,6 +146,12 @@
                       |b $ %{} :Leaf (:at 1699551253672) (:by |rJG4IHzWf) (:text |:fractal)
                       |h $ %{} :Leaf (:at 1699551256580) (:by |rJG4IHzWf) (:text ||Fractal)
                       |l $ %{} :Leaf (:at 1699548558878) (:by |rJG4IHzWf) (:text |:dark)
+                  |o $ %{} :Expr (:at 1699548549247) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1699548549451) (:by |rJG4IHzWf) (:text |::)
+                      |b $ %{} :Leaf (:at 1699776559502) (:by |rJG4IHzWf) (:text |:collision)
+                      |h $ %{} :Leaf (:at 1699776562972) (:by |rJG4IHzWf) (:text ||Collision)
+                      |l $ %{} :Leaf (:at 1699548558878) (:by |rJG4IHzWf) (:text |:dark)
       :ns $ %{} :CodeEntry (:doc |)
         :code $ %{} :Expr (:at 1499755354983) (:by nil)
           :data $ {}
@@ -211,6 +217,19 @@
                         |T $ %{} :Leaf (:at 1699548477878) (:by |rJG4IHzWf) (:text |comp-hud-nav)
     |app.config $ %{} :FileEntry
       :defs $ {}
+        |default-tab $ %{} :CodeEntry (:doc |)
+          :code $ %{} :Expr (:at 1699779561261) (:by |rJG4IHzWf)
+            :data $ {}
+              |T $ %{} :Leaf (:at 1699779563196) (:by |rJG4IHzWf) (:text |def)
+              |b $ %{} :Leaf (:at 1699779561261) (:by |rJG4IHzWf) (:text |default-tab)
+              |h $ %{} :Expr (:at 1699779573973) (:by |rJG4IHzWf)
+                :data $ {}
+                  |D $ %{} :Leaf (:at 1699779575542) (:by |rJG4IHzWf) (:text |turn-tag)
+                  |T $ %{} :Expr (:at 1699779561261) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1699779565260) (:by |rJG4IHzWf) (:text |get-env)
+                      |b $ %{} :Leaf (:at 1699779567944) (:by |rJG4IHzWf) (:text "|\"tab")
+                      |h $ %{} :Leaf (:at 1699779572184) (:by |rJG4IHzWf) (:text "|\"collision")
         |dev? $ %{} :CodeEntry (:doc |)
           :code $ %{} :Expr (:at 1544873875614) (:by |rJG4IHzWf)
             :data $ {}
@@ -418,6 +437,13 @@
                                         :data $ {}
                                           |T $ %{} :Leaf (:at 1699550534149) (:by |rJG4IHzWf) (:text |loadFractalRenderer)
                                           |b $ %{} :Leaf (:at 1699550521292) (:by |rJG4IHzWf) (:text |canvas)
+                                  |q $ %{} :Expr (:at 1699776632588) (:by |rJG4IHzWf)
+                                    :data $ {}
+                                      |D $ %{} :Leaf (:at 1699776636406) (:by |rJG4IHzWf) (:text |:collision)
+                                      |T $ %{} :Expr (:at 1699776630581) (:by |rJG4IHzWf)
+                                        :data $ {}
+                                          |T $ %{} :Leaf (:at 1699776631280) (:by |rJG4IHzWf) (:text |loadCollisionRenderer)
+                                          |b $ %{} :Leaf (:at 1699776638186) (:by |rJG4IHzWf) (:text |canvas)
                   |b $ %{} :Expr (:at 1699550963724) (:by |rJG4IHzWf)
                     :data $ {}
                       |T $ %{} :Leaf (:at 1699550964403) (:by |rJG4IHzWf) (:text |reset!)
@@ -521,6 +547,7 @@
                   |r $ %{} :Leaf (:at 1507461693919) (:by |root) (:text |dispatch!)
               |yL $ %{} :Expr (:at 1518157357847) (:by |root)
                 :data $ {}
+                  |L $ %{} :Leaf (:at 1699779623799) (:by |rJG4IHzWf) (:text |;)
                   |j $ %{} :Leaf (:at 1646150136497) (:by |rJG4IHzWf) (:text |js/window.addEventListener)
                   |r $ %{} :Leaf (:at 1518157458163) (:by |root) (:text ||beforeunload)
                   |v $ %{} :Expr (:at 1612344221583) (:by |rJG4IHzWf)
@@ -534,6 +561,7 @@
                           |T $ %{} :Leaf (:at 1533919515671) (:by |rJG4IHzWf) (:text |persist-storage!)
               |yM $ %{} :Expr (:at 1518157357847) (:by |root)
                 :data $ {}
+                  |L $ %{} :Leaf (:at 1699779623181) (:by |rJG4IHzWf) (:text |;)
                   |j $ %{} :Leaf (:at 1646150136497) (:by |rJG4IHzWf) (:text |js/window.addEventListener)
                   |r $ %{} :Leaf (:at 1695833113543) (:by |rJG4IHzWf) (:text ||visibilitychange)
                   |v $ %{} :Expr (:at 1612344221583) (:by |rJG4IHzWf)
@@ -555,6 +583,7 @@
                               |T $ %{} :Leaf (:at 1533919515671) (:by |rJG4IHzWf) (:text |persist-storage!)
               |yP $ %{} :Expr (:at 1518157492640) (:by |root)
                 :data $ {}
+                  |D $ %{} :Leaf (:at 1699779622204) (:by |rJG4IHzWf) (:text |;)
                   |T $ %{} :Leaf (:at 1518157495438) (:by |root) (:text |let)
                   |j $ %{} :Expr (:at 1518157495644) (:by |root)
                     :data $ {}
@@ -854,6 +883,13 @@
                     |h $ %{} :Expr (:at 1699548935548) (:by |rJG4IHzWf)
                       :data $ {}
                         |T $ %{} :Leaf (:at 1699550424501) (:by |rJG4IHzWf) (:text |loadFractalRenderer)
+                |zB $ %{} :Expr (:at 1699776611129) (:by |rJG4IHzWf)
+                  :data $ {}
+                    |T $ %{} :Leaf (:at 1699776617659) (:by |rJG4IHzWf) (:text "|\"../src/apps/collision")
+                    |b $ %{} :Leaf (:at 1699776619499) (:by |rJG4IHzWf) (:text |:refer)
+                    |h $ %{} :Expr (:at 1699776619727) (:by |rJG4IHzWf)
+                      :data $ {}
+                        |T $ %{} :Leaf (:at 1699776627338) (:by |rJG4IHzWf) (:text |loadCollisionRenderer)
                 |zD $ %{} :Expr (:at 1699549071462) (:by |rJG4IHzWf)
                   :data $ {}
                     |T $ %{} :Leaf (:at 1699549074912) (:by |rJG4IHzWf) (:text "|\"../src/index")
@@ -874,7 +910,7 @@
                   |b $ %{} :Expr (:at 1699548534602) (:by |rJG4IHzWf)
                     :data $ {}
                       |T $ %{} :Leaf (:at 1699548535371) (:by |rJG4IHzWf) (:text |:tab)
-                      |b $ %{} :Leaf (:at 1699702439968) (:by |rJG4IHzWf) (:text |:fractal)
+                      |b $ %{} :Leaf (:at 1699779583335) (:by |rJG4IHzWf) (:text |default-tab)
                   |j $ %{} :Expr (:at 1499755354983) (:by nil)
                     :data $ {}
                       |T $ %{} :Leaf (:at 1499755354983) (:by |root) (:text |:states)
@@ -892,6 +928,16 @@
           :data $ {}
             |T $ %{} :Leaf (:at 1499755354983) (:by |root) (:text |ns)
             |j $ %{} :Leaf (:at 1499755354983) (:by |root) (:text |app.schema)
+            |n $ %{} :Expr (:at 1699779585786) (:by |rJG4IHzWf)
+              :data $ {}
+                |T $ %{} :Leaf (:at 1699779586534) (:by |rJG4IHzWf) (:text |:require)
+                |b $ %{} :Expr (:at 1699779587458) (:by |rJG4IHzWf)
+                  :data $ {}
+                    |T $ %{} :Leaf (:at 1699779588732) (:by |rJG4IHzWf) (:text |app.config)
+                    |X $ %{} :Leaf (:at 1699779590528) (:by |rJG4IHzWf) (:text |:refer)
+                    |b $ %{} :Expr (:at 1699779591577) (:by |rJG4IHzWf)
+                      :data $ {}
+                        |T $ %{} :Leaf (:at 1699779589094) (:by |rJG4IHzWf) (:text |default-tab)
     |app.updater $ %{} :FileEntry
       :defs $ {}
         |updater $ %{} :CodeEntry (:doc |)

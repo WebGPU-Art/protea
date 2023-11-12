@@ -21,7 +21,7 @@
                   when dev? $ comp-reel (>> states :reel) reel ({})
         |tabs $ %{} :CodeEntry (:doc |)
           :code $ quote
-            def tabs $ [] (:: :fireworks |Fireworks :dark) (:: :lorenz |Lorenz :dark) (:: :aizawa |Aizawa :dark) (:: :fourwing "|Four Wing" :dark) (:: :fractal |Fractal :dark)
+            def tabs $ [] (:: :fireworks |Fireworks :dark) (:: :lorenz |Lorenz :dark) (:: :aizawa |Aizawa :dark) (:: :fourwing "|Four Wing" :dark) (:: :fractal |Fractal :dark) (:: :collision |Collision :dark)
       :ns $ %{} :CodeEntry (:doc |)
         :code $ quote
           ns app.comp.container $ :require (respo-ui.css :as css)
@@ -33,6 +33,9 @@
             hud-nav.comp :refer $ comp-hud-nav
     |app.config $ %{} :FileEntry
       :defs $ {}
+        |default-tab $ %{} :CodeEntry (:doc |)
+          :code $ quote
+            def default-tab $ turn-tag (get-env "\"tab" "\"collision")
         |dev? $ %{} :CodeEntry (:doc |)
           :code $ quote
             def dev? $ = "\"dev" (get-env "\"mode" "\"release")
@@ -77,6 +80,7 @@
                       :aizawa $ loadAizawaRenderer canvas
                       :fourwing $ loadFourwingRenderer canvas
                       :fractal $ loadFractalRenderer canvas
+                      :collision $ loadCollisionRenderer canvas
                 reset! *instance-renderer renderer
         |loop-renderer! $ %{} :CodeEntry (:doc |)
           :code $ quote
@@ -95,10 +99,10 @@
               render-app!
               add-watch *reel :changes $ fn (reel prev) (render-app!)
               listen-devtools! |k dispatch!
-              js/window.addEventListener |beforeunload $ fn (event) (persist-storage!)
-              js/window.addEventListener |visibilitychange $ fn (event)
+              ; js/window.addEventListener |beforeunload $ fn (event) (persist-storage!)
+              ; js/window.addEventListener |visibilitychange $ fn (event)
                 if (= "\"hidden" js/document.visibilityState) (persist-storage!)
-              let
+              ; let
                   raw $ js/localStorage.getItem (:storage-key config/site)
                 when (some? raw)
                   dispatch! $ :: :hydrate-storage (parse-cirru-edn raw)
@@ -147,16 +151,19 @@
             "\"../src/apps/attractor-lorenz" :refer $ loadLorenzRenderer
             "\"../src/apps/attractor-fourwing" :refer $ loadFourwingRenderer
             "\"../src/apps/fractal" :refer $ loadFractalRenderer
+            "\"../src/apps/collision" :refer $ loadCollisionRenderer
             "\"../src/index" :refer $ setupInitials
     |app.schema $ %{} :FileEntry
       :defs $ {}
         |store $ %{} :CodeEntry (:doc |)
           :code $ quote
-            def store $ {} (:tab :fractal)
+            def store $ {} (:tab default-tab)
               :states $ {}
                 :cursor $ []
       :ns $ %{} :CodeEntry (:doc |)
-        :code $ quote (ns app.schema)
+        :code $ quote
+          ns app.schema $ :require
+            app.config :refer $ default-tab
     |app.updater $ %{} :FileEntry
       :defs $ {}
         |updater $ %{} :CodeEntry (:doc |)

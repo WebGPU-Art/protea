@@ -273,6 +273,12 @@
                       |b $ %{} :Leaf (:at 1699776559502) (:by |rJG4IHzWf) (:text |:collision)
                       |h $ %{} :Leaf (:at 1699776562972) (:by |rJG4IHzWf) (:text ||Collision)
                       |l $ %{} :Leaf (:at 1699548558878) (:by |rJG4IHzWf) (:text |:dark)
+                  |q $ %{} :Expr (:at 1699548549247) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1699548549451) (:by |rJG4IHzWf) (:text |::)
+                      |b $ %{} :Leaf (:at 1699895717018) (:by |rJG4IHzWf) (:text |:bounce)
+                      |h $ %{} :Leaf (:at 1699895719384) (:by |rJG4IHzWf) (:text ||Bounce)
+                      |l $ %{} :Leaf (:at 1699548558878) (:by |rJG4IHzWf) (:text |:dark)
       :ns $ %{} :CodeEntry (:doc |)
         :code $ %{} :Expr (:at 1527788237503) (:by |root)
           :data $ {}
@@ -471,6 +477,13 @@
                                         :data $ {}
                                           |T $ %{} :Leaf (:at 1699776631280) (:by |rJG4IHzWf) (:text |loadCollisionRenderer)
                                           |b $ %{} :Leaf (:at 1699776638186) (:by |rJG4IHzWf) (:text |canvas)
+                                  |s $ %{} :Expr (:at 1699776632588) (:by |rJG4IHzWf)
+                                    :data $ {}
+                                      |D $ %{} :Leaf (:at 1699895770901) (:by |rJG4IHzWf) (:text |:bounce)
+                                      |T $ %{} :Expr (:at 1699776630581) (:by |rJG4IHzWf)
+                                        :data $ {}
+                                          |T $ %{} :Leaf (:at 1699895931796) (:by |rJG4IHzWf) (:text |loadBounceRenderer)
+                                          |b $ %{} :Leaf (:at 1699776638186) (:by |rJG4IHzWf) (:text |canvas)
                   |b $ %{} :Expr (:at 1699550963724) (:by |rJG4IHzWf)
                     :data $ {}
                       |T $ %{} :Leaf (:at 1699550964403) (:by |rJG4IHzWf) (:text |reset!)
@@ -512,7 +525,7 @@
                         :data $ {}
                           |T $ %{} :Leaf (:at 1699549320563) (:by |rJG4IHzWf) (:text |@*instance-renderer)
                           |b $ %{} :Leaf (:at 1699549349038) (:by |rJG4IHzWf) (:text |@*t)
-                          |h $ %{} :Leaf (:at 1699549352196) (:by |rJG4IHzWf) (:text |false)
+                          |h $ %{} :Leaf (:at 1699814570818) (:by |rJG4IHzWf) (:text |js/window.skipComputing)
                   |h $ %{} :Leaf (:at 1699707668516) (:by |rJG4IHzWf) (:text |20)
         |main! $ %{} :CodeEntry (:doc |)
           :code $ %{} :Expr (:at 1499755354983) (:by nil)
@@ -532,6 +545,11 @@
                     :data $ {}
                       |T $ %{} :Leaf (:at 1699549084204) (:by |rJG4IHzWf) (:text |setupInitials)
                       |b $ %{} :Leaf (:at 1699549095308) (:by |rJG4IHzWf) (:text |canvas)
+              |sj $ %{} :Expr (:at 1699814606394) (:by |rJG4IHzWf)
+                :data $ {}
+                  |D $ %{} :Leaf (:at 1699814609041) (:by |rJG4IHzWf) (:text |set!)
+                  |T $ %{} :Leaf (:at 1699814606871) (:by |rJG4IHzWf) (:text |js/window.skipComputing)
+                  |b $ %{} :Leaf (:at 1699895804181) (:by |rJG4IHzWf) (:text |true)
               |t $ %{} :Expr (:at 1544874433785) (:by |rJG4IHzWf)
                 :data $ {}
                   |T $ %{} :Leaf (:at 1544874434638) (:by |rJG4IHzWf) (:text |println)
@@ -917,6 +935,13 @@
                     |h $ %{} :Expr (:at 1699776619727) (:by |rJG4IHzWf)
                       :data $ {}
                         |T $ %{} :Leaf (:at 1699776627338) (:by |rJG4IHzWf) (:text |loadCollisionRenderer)
+                |zC $ %{} :Expr (:at 1699776611129) (:by |rJG4IHzWf)
+                  :data $ {}
+                    |T $ %{} :Leaf (:at 1699895923012) (:by |rJG4IHzWf) (:text "|\"../src/apps/bounce")
+                    |b $ %{} :Leaf (:at 1699776619499) (:by |rJG4IHzWf) (:text |:refer)
+                    |h $ %{} :Expr (:at 1699776619727) (:by |rJG4IHzWf)
+                      :data $ {}
+                        |T $ %{} :Leaf (:at 1699895927320) (:by |rJG4IHzWf) (:text |loadBounceRenderer)
                 |zD $ %{} :Expr (:at 1699549071462) (:by |rJG4IHzWf)
                   :data $ {}
                     |T $ %{} :Leaf (:at 1699549074912) (:by |rJG4IHzWf) (:text "|\"../src/index")

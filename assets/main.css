@@ -5,6 +5,7 @@ body {
   margin: 0;
   overscroll-behavior-y: none;
   overscroll-behavior-x: none;
+  background-color: black;
 }
 
 body * {

@@ -6,6 +6,7 @@ import {} from "./apps/attractor-aizawa.mjs";
 import {} from "./apps/attractor-fourwing.mjs";
 import {} from "./apps/fractal.mjs";
 import {} from "./apps/collision.mjs";
+import {} from "./apps/bounce.mjs";
 
 let instanceRenderer: (t: number, skipComputing: boolean) => void;
 let canvas = document.querySelector("#canvas-container") as HTMLCanvasElement;

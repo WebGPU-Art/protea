@@ -44,7 +44,7 @@
             def site $ {} (:storage-key "\"workflow")
         |tabs $ %{} :CodeEntry (:doc |)
           :code $ quote
-            def tabs $ [] (:: :fireworks |Fireworks :dark) (:: :lorenz |Lorenz :dark) (:: :aizawa |Aizawa :dark) (:: :fourwing "|Four Wing" :dark) (:: :fractal |Fractal :dark) (:: :collision |Collision :dark)
+            def tabs $ [] (:: :fireworks |Fireworks :dark) (:: :lorenz |Lorenz :dark) (:: :aizawa |Aizawa :dark) (:: :fourwing "|Four Wing" :dark) (:: :fractal |Fractal :dark) (:: :collision |Collision :dark) (:: :bounce |Bounce :dark)
       :ns $ %{} :CodeEntry (:doc |)
         :code $ quote
           ns app.config $ :require
@@ -86,6 +86,7 @@
                       :fourwing $ loadFourwingRenderer canvas
                       :fractal $ loadFractalRenderer canvas
                       :collision $ loadCollisionRenderer canvas
+                      :bounce $ loadBounceRenderer canvas
                 reset! *instance-renderer renderer
         |loop-renderer! $ %{} :CodeEntry (:doc |)
           :code $ quote
@@ -93,12 +94,13 @@
               fn ()
                 js/requestAnimationFrame $ fn (_t) (loop-renderer!)
                 swap! *t inc
-                @*instance-renderer @*t false
+                @*instance-renderer @*t js/window.skipComputing
               , 20
         |main! $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn main! () (hint-fn async)
               js-await $ setupInitials canvas
+              set! js/window.skipComputing true
               println "\"Running mode:" $ if config/dev? "\"dev" "\"release"
               if config/dev? $ load-console-formatter!
               render-app!
@@ -157,6 +159,7 @@
             "\"../src/apps/attractor-fourwing" :refer $ loadFourwingRenderer
             "\"../src/apps/fractal" :refer $ loadFractalRenderer
             "\"../src/apps/collision" :refer $ loadCollisionRenderer
+            "\"../src/apps/bounce" :refer $ loadBounceRenderer
             "\"../src/index" :refer $ setupInitials
     |app.schema $ %{} :FileEntry
       :defs $ {}

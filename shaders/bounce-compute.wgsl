@@ -36,18 +36,21 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
   let item = particles_a.particles[index];
   let write_target = &particles_b.particles[index];
 
-  let constraints = array<SphereConstraint, 3>(
-    SphereConstraint(vec3<f32>(0.0, 0.0, 0.0), 100.0, true),
-    SphereConstraint(vec3<f32>(0.0, 100.0, 0.0), 180.0, true),
-    SphereConstraint(vec3<f32>(0.0, -150.0, 0.0), 20.0, false)
+  let constraints = array<SphereConstraint, 5>(
+    SphereConstraint(vec3<f32>(0.0, 200.0, 0.0), 300.0, true),
+    SphereConstraint(vec3<f32>(100.0 * sqrt(3.), -200.0, 0.0), 200., false),
+    SphereConstraint(vec3<f32>(-100.0 * sqrt(3.), -200.0, 0.0), 200., false),
+    SphereConstraint(vec3<f32>(0.0, -200.0, 100.0 * sqrt(3.)), 200., false),
+    SphereConstraint(vec3<f32>(0.0, -200.0, -100.0 * sqrt(3.)), 200., false),
   );
 
   var v_pos = item.pos;
+  let decay = 1.7;
 
   let velocity = item.velocity;
   let next_pos = item.pos + velocity * params.delta_t;
 
-  for (var i = 0u; i < 3u; i = i + 1u) {
+  for (var i = 0u; i < 5u; i = i + 1u) {
     let constraint = constraints[i];
     let center = constraint.center;
     let radius = constraint.radius;
@@ -60,7 +63,7 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
     if inside {
       if length(next_distance) >= radius {
         let change_velocity = dot(direction, velocity) * direction;
-        let next_velocity = velocity - 2.0 * change_velocity;
+        let next_velocity = velocity - decay * change_velocity;
         (*write_target).velocity = next_velocity;
         (*write_target).pos = v_pos + next_velocity * params.delta_t;
         return;
@@ -68,7 +71,7 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
     } else {
       if length(next_distance) <= radius {
         let change_velocity = dot(direction, velocity) * direction;
-        let next_velocity = velocity - 2.0 * change_velocity;
+        let next_velocity = velocity - decay * change_velocity;
         (*write_target).velocity = next_velocity;
         (*write_target).pos = v_pos + next_velocity * params.delta_t;
         return;
@@ -76,5 +79,5 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
     }
   }
   (*write_target).pos = next_pos;
-  (*write_target).velocity = velocity;
+  (*write_target).velocity = velocity + vec3<f32>(0., -2., 0.);
 }

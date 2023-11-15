@@ -229,6 +229,20 @@
                     :data $ {}
                       |T $ %{} :Leaf (:at 1544956719115) (:by |rJG4IHzWf) (:text |:storage-key)
                       |j $ %{} :Leaf (:at 1544956719115) (:by |rJG4IHzWf) (:text "|\"workflow")
+        |skip-rendering? $ %{} :CodeEntry (:doc |)
+          :code $ %{} :Expr (:at 1700071264060) (:by |rJG4IHzWf)
+            :data $ {}
+              |T $ %{} :Leaf (:at 1700071264060) (:by |rJG4IHzWf) (:text |def)
+              |b $ %{} :Leaf (:at 1700071264060) (:by |rJG4IHzWf) (:text |skip-rendering?)
+              |h $ %{} :Expr (:at 1700071279332) (:by |rJG4IHzWf)
+                :data $ {}
+                  |D $ %{} :Leaf (:at 1700071279767) (:by |rJG4IHzWf) (:text |=)
+                  |L $ %{} :Leaf (:at 1700071281354) (:by |rJG4IHzWf) (:text "|\"true")
+                  |T $ %{} :Expr (:at 1700071264060) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1700071267174) (:by |rJG4IHzWf) (:text |get-env)
+                      |b $ %{} :Leaf (:at 1700071271992) (:by |rJG4IHzWf) (:text "|\"skip")
+                      |h $ %{} :Leaf (:at 1700071275246) (:by |rJG4IHzWf) (:text "|\"false")
         |tabs $ %{} :CodeEntry (:doc |)
           :code $ %{} :Expr (:at 1699548547107) (:by |rJG4IHzWf)
             :data $ {}
@@ -549,7 +563,7 @@
                 :data $ {}
                   |D $ %{} :Leaf (:at 1699814609041) (:by |rJG4IHzWf) (:text |set!)
                   |T $ %{} :Leaf (:at 1699814606871) (:by |rJG4IHzWf) (:text |js/window.skipComputing)
-                  |b $ %{} :Leaf (:at 1699895804181) (:by |rJG4IHzWf) (:text |true)
+                  |b $ %{} :Leaf (:at 1700071263640) (:by |rJG4IHzWf) (:text |config/skip-rendering?)
               |t $ %{} :Expr (:at 1544874433785) (:by |rJG4IHzWf)
                 :data $ {}
                   |T $ %{} :Leaf (:at 1544874434638) (:by |rJG4IHzWf) (:text |println)

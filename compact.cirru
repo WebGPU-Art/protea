@@ -42,6 +42,9 @@
         |site $ %{} :CodeEntry (:doc |)
           :code $ quote
             def site $ {} (:storage-key "\"workflow")
+        |skip-rendering? $ %{} :CodeEntry (:doc |)
+          :code $ quote
+            def skip-rendering? $ = "\"true" (get-env "\"skip" "\"false")
         |tabs $ %{} :CodeEntry (:doc |)
           :code $ quote
             def tabs $ [] (:: :fireworks |Fireworks :dark) (:: :lorenz |Lorenz :dark) (:: :aizawa |Aizawa :dark) (:: :fourwing "|Four Wing" :dark) (:: :fractal |Fractal :dark) (:: :collision |Collision :dark) (:: :bounce |Bounce :dark)
@@ -100,7 +103,7 @@
           :code $ quote
             defn main! () (hint-fn async)
               js-await $ setupInitials canvas
-              set! js/window.skipComputing true
+              set! js/window.skipComputing config/skip-rendering?
               println "\"Running mode:" $ if config/dev? "\"dev" "\"release"
               if config/dev? $ load-console-formatter!
               render-app!

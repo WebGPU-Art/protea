@@ -16,8 +16,9 @@
                   state $ or (:data states)
                     {} $ :content "\""
                 div ({})
-                  comp-hud-nav (:tab store) tabs $ fn (next d!)
-                    d! $ :: :tab next
+                  if-not hide-tabs? $ comp-hud-nav (:tab store) tabs
+                    fn (next d!)
+                      d! $ :: :tab next
                   when dev? $ comp-reel (>> states :reel) reel ({})
       :ns $ %{} :CodeEntry (:doc |)
         :code $ quote
@@ -26,7 +27,7 @@
             respo.core :refer $ defcomp defeffect <> >> div button textarea span input
             respo.comp.space :refer $ =<
             reel.comp.reel :refer $ comp-reel
-            app.config :refer $ dev?
+            app.config :refer $ dev? hide-tabs?
             app.config :refer $ tabs
             hud-nav.comp :refer $ comp-hud-nav
     |app.config $ %{} :FileEntry
@@ -39,6 +40,9 @@
         |dev? $ %{} :CodeEntry (:doc |)
           :code $ quote
             def dev? $ = "\"dev" (get-env "\"mode" "\"release")
+        |hide-tabs? $ %{} :CodeEntry (:doc |)
+          :code $ quote
+            def hide-tabs? $ = "\"true" (get-env "\"hide-tabs" false)
         |site $ %{} :CodeEntry (:doc |)
           :code $ quote
             def site $ {} (:storage-key "\"workflow")

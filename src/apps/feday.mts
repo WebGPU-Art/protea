@@ -40,8 +40,8 @@ function makeSeed(numParticles: number, _s: number): Float32Array {
     let p = fiboGridN(i, numParticles);
     // let q = randPointInSphere(100);
     let b = 12 * i;
-    buf[b + 0] = 0;
-    buf[b + 1] = 100;
+    buf[b + 0] = -100;
+    buf[b + 1] = 0;
     buf[b + 2] = 0;
     buf[b + 3] = i; // index
     buf[b + 4] = p[0] * scale;

@@ -43,10 +43,10 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
 
   let constraints = array<SphereConstraint, 5>(
     SphereConstraint(vec3<f32>(0.0, 50.0, 0.0), 150.0, true),
-    SphereConstraint(vec3<f32>(150.0 * sqrt(3.), -100.0, 0.0), 20., false),
-    SphereConstraint(vec3<f32>(140. - 100.0 * sqrt(3.), -100.0, 0.0), 50., false),
+    SphereConstraint(vec3<f32>(100.0 * sqrt(3.), -100.0, 0.0), 40., false),
+    SphereConstraint(vec3<f32>(-100.0 * sqrt(3.), -100.0, 0.0), 40., false),
     SphereConstraint(vec3<f32>(0.0, -100.0, 100.0 * sqrt(3.)), 40., false),
-    SphereConstraint(vec3<f32>(0.0, -100.0, -100.0 * sqrt(3.)), 30., false),
+    SphereConstraint(vec3<f32>(0.0, -100.0, -100.0 * sqrt(3.)), 40., false),
   );
 
   let xu = 10.0;
@@ -102,13 +102,16 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
       close = min(length(item.pos - p0), length(item.pos - p1));
     }
 
-    if close < 2.0 {
+    if close < 1.0 {
       velocity = vec3<f32>(0.0, 0.0, 0.0);
-          break;
+            break;
+    }
+    if close < 40.0 {
+      velocity = velocity - side_direction * 40.1 / pow(close, 2.);
     }
   }
 
-  for (var i = 0u; i < 5u; i = i + 1u) {
+  for (var i = 0u; i < 1u; i = i + 1u) {
     let constraint = constraints[i];
     let center = constraint.center;
     let radius = constraint.radius;

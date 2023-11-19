@@ -41,42 +41,39 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
   let item = particles_a.particles[index];
   let write_target = &particles_b.particles[index];
 
-  let constraints = array<SphereConstraint, 5>(
-    SphereConstraint(vec3<f32>(0.0, 50.0, 0.0), 150.0, true),
-    SphereConstraint(vec3<f32>(100.0 * sqrt(3.), -100.0, 0.0), 40., false),
-    SphereConstraint(vec3<f32>(-100.0 * sqrt(3.), -100.0, 0.0), 40., false),
-    SphereConstraint(vec3<f32>(0.0, -100.0, 100.0 * sqrt(3.)), 40., false),
-    SphereConstraint(vec3<f32>(0.0, -100.0, -100.0 * sqrt(3.)), 40., false),
+  let constraints = array<SphereConstraint, 1>(
+    SphereConstraint(vec3<f32>(0.0, 20.0, 0.0), 80.0, true),
   );
 
   let xu = 10.0;
   let yu = 15.0;
+  let offset = -6.;
 
   let strokes = array<Stroke, 15>(
-        // D
-    Stroke(vec3<f32>(-1. * xu, 1. * yu, 0.), vec3<f32>(1. * xu, 0. * yu, 0.0)),
-    Stroke(vec3<f32>(-1. * xu, -1. * yu, 0.), vec3<f32>(1. * xu, 0. * yu, 0.0)),
-    Stroke(vec3<f32>(-1. * xu, 1. * yu, 0.), vec3<f32>(-1. * xu, -1. * yu, 0.0)),
-        // A
-    Stroke(vec3<f32>(2. * xu, 1. * yu, 0.), vec3<f32>(3. * xu, -1. * yu, 0.0)),
-    Stroke(vec3<f32>(2. * xu, 1. * yu, 0.), vec3<f32>(1. * xu, -1. * yu, 0.0)),
-    Stroke(vec3<f32>(3. * xu, -1. * yu, 0.), vec3<f32>(1. * xu, -1. * yu, 0.0)),
-        // E
-    Stroke(vec3<f32>(-1. * xu, 1. * yu, 0.), vec3<f32>(-3. * xu, 0. * yu, 0.0)),
-    Stroke(vec3<f32>(-1. * xu, -1. * yu, 0.), vec3<f32>(-3. * xu, 0. * yu, 0.0)),
-    Stroke(vec3<f32>(-5. * xu, 0. * yu, 0.), vec3<f32>(-1. * xu, 0. * yu, 0.0)),
-        // F i
+    // F i
     Stroke(vec3<f32>(-3. * xu, 1. * yu, 0.), vec3<f32>(-5. * xu, 1. * yu, 0.0)),
     Stroke(vec3<f32>(-5. * xu, 1. * yu, 0.), vec3<f32>(-5. * xu, -1. * yu, 0.0)),
     Stroke(vec3<f32>(4. * xu, 0. * yu, 0.), vec3<f32>(4. * xu, -1. * yu, 0.0)),
-        // Y
+    // E
+    Stroke(vec3<f32>(-1. * xu + offset, 1. * yu, 0.), vec3<f32>(-3. * xu + offset, 0. * yu, 0.0)),
+    Stroke(vec3<f32>(-1. * xu + offset, -1. * yu, 0.), vec3<f32>(-3. * xu + offset, 0. * yu, 0.0)),
+    Stroke(vec3<f32>(-5. * xu, 0. * yu, 0.), vec3<f32>(-1. * xu + offset, 0. * yu, 0.0)),
+    // D
+    Stroke(vec3<f32>(-1. * xu, 1. * yu, 0.), vec3<f32>(1. * xu, 0. * yu, 0.0)),
+    Stroke(vec3<f32>(-1. * xu, -1. * yu, 0.), vec3<f32>(1. * xu, 0. * yu, 0.0)),
+    Stroke(vec3<f32>(-1. * xu, 1. * yu, 0.), vec3<f32>(-1. * xu, -1. * yu, 0.0)),
+    // A
+    Stroke(vec3<f32>(2. * xu, 1. * yu, 0.), vec3<f32>(3. * xu, -1. * yu, 0.0)),
+    Stroke(vec3<f32>(2. * xu, 1. * yu, 0.), vec3<f32>(1. * xu, -1. * yu, 0.0)),
+    Stroke(vec3<f32>(3. * xu, -1. * yu, 0.), vec3<f32>(1. * xu, -1. * yu, 0.0)),
+    // Y
     Stroke(vec3<f32>(4. * xu, 0. * yu, 0.), vec3<f32>(5. * xu, 1. * yu, 0.0)),
     Stroke(vec3<f32>(4. * xu, 0. * yu, 0.), vec3<f32>(3. * xu, 1. * yu, 0.0)),
     Stroke(vec3<f32>(5. * xu, 1. * yu, 0.), vec3<f32>(3. * xu, 1. * yu, 0.0)),
   );
 
   var v_pos = item.pos;
-  let decay = 2.0;
+  let decay = 1.8;
 
   var velocity = item.velocity;
   let next_pos = item.pos + velocity * params.delta_t;
@@ -102,12 +99,16 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
       close = min(length(item.pos - p0), length(item.pos - p1));
     }
 
-    if close < 1.0 {
+    if close < 2.0 {
       velocity = vec3<f32>(0.0, 0.0, 0.0);
-            break;
+      slow_down = true;
+      break;
+    }
+    if close < 8. {
+      slow_down = true;
     }
     if close < 40.0 {
-      velocity = velocity - side_direction * 40.1 / pow(close, 2.);
+      velocity = velocity - side_direction * 20.1 / pow(close, 2.);
     }
   }
 
@@ -143,6 +144,7 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
   if slow_down {
     (*write_target).velocity = velocity;
   } else {
-    (*write_target).velocity = velocity + vec3<f32>(0., -2., 0.);
+    // (*write_target).velocity = velocity;
+    (*write_target).velocity = velocity + vec3<f32>(0., -1.6, 0.);
   }
 }

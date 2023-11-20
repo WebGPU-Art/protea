@@ -318,6 +318,12 @@
                       |b $ %{} :Leaf (:at 1700242048779) (:by |rJG4IHzWf) (:text |:feday)
                       |h $ %{} :Leaf (:at 1700241890967) (:by |rJG4IHzWf) (:text ||FEDAY)
                       |l $ %{} :Leaf (:at 1699548558878) (:by |rJG4IHzWf) (:text |:dark)
+                  |t $ %{} :Expr (:at 1700503243366) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1700503243775) (:by |rJG4IHzWf) (:text |::)
+                      |b $ %{} :Leaf (:at 1700503244842) (:by |rJG4IHzWf) (:text |:bifurcation)
+                      |h $ %{} :Leaf (:at 1700503248729) (:by |rJG4IHzWf) (:text "|\"Bifurcation")
+                      |l $ %{} :Leaf (:at 1700503251549) (:by |rJG4IHzWf) (:text |:dark)
       :ns $ %{} :CodeEntry (:doc |)
         :code $ %{} :Expr (:at 1527788237503) (:by |root)
           :data $ {}
@@ -530,6 +536,13 @@
                                         :data $ {}
                                           |T $ %{} :Leaf (:at 1700242069139) (:by |rJG4IHzWf) (:text |loadFedayRenderer)
                                           |b $ %{} :Leaf (:at 1699776638186) (:by |rJG4IHzWf) (:text |canvas)
+                                  |u $ %{} :Expr (:at 1700503267636) (:by |rJG4IHzWf)
+                                    :data $ {}
+                                      |T $ %{} :Leaf (:at 1700503268160) (:by |rJG4IHzWf) (:text |:bifurcation)
+                                      |b $ %{} :Expr (:at 1700503269642) (:by |rJG4IHzWf)
+                                        :data $ {}
+                                          |T $ %{} :Leaf (:at 1700503289207) (:by |rJG4IHzWf) (:text |loadBifurcationRenderer)
+                                          |b $ %{} :Leaf (:at 1700503273226) (:by |rJG4IHzWf) (:text |canvas)
                   |b $ %{} :Expr (:at 1699550963724) (:by |rJG4IHzWf)
                     :data $ {}
                       |T $ %{} :Leaf (:at 1699550964403) (:by |rJG4IHzWf) (:text |reset!)
@@ -995,6 +1008,13 @@
                     |h $ %{} :Expr (:at 1699776619727) (:by |rJG4IHzWf)
                       :data $ {}
                         |T $ %{} :Leaf (:at 1700242075812) (:by |rJG4IHzWf) (:text |loadFedayRenderer)
+                |zCj $ %{} :Expr (:at 1699776611129) (:by |rJG4IHzWf)
+                  :data $ {}
+                    |T $ %{} :Leaf (:at 1700503278923) (:by |rJG4IHzWf) (:text "|\"../src/apps/bifurcation")
+                    |b $ %{} :Leaf (:at 1699776619499) (:by |rJG4IHzWf) (:text |:refer)
+                    |h $ %{} :Expr (:at 1699776619727) (:by |rJG4IHzWf)
+                      :data $ {}
+                        |T $ %{} :Leaf (:at 1700503283021) (:by |rJG4IHzWf) (:text |loadBifurcationRenderer)
                 |zD $ %{} :Expr (:at 1699549071462) (:by |rJG4IHzWf)
                   :data $ {}
                     |T $ %{} :Leaf (:at 1699549074912) (:by |rJG4IHzWf) (:text "|\"../src/index")

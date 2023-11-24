@@ -1,7 +1,6 @@
 import { createRenderer } from "../index.mjs";
 import spriteShader from "../../shaders/ball-spin-sprites.wgsl?raw";
 import computeShader from "../../shaders/ball-spin-compute.wgsl?raw";
-import { randPointInSphere, rand_middle } from "../util.mjs";
 import { fiboGridN } from "../math.mjs";
 
 export let loadBallSpinRenderer = async (canvas: HTMLCanvasElement) => {

@@ -8,3 +8,7 @@ export let fiboGridN = (n: number, total: number): [number, number, number] => {
   let y = t * Math.sin(t2);
   return [x, y, z];
 };
+
+export let rand_middle = (n: number) => {
+  return n * (Math.random() - 0.5);
+};

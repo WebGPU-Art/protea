@@ -1,6 +1,7 @@
-import { createRenderer, resetCanvasSize } from "../index.mjs";
+import { createRenderer } from "../index.mjs";
 import attractorSprite from "../../shaders/attractor-sprite.wgsl?raw";
 import attractorCompute from "../../shaders/attractor-compute-lorenz.wgsl?raw";
+import { rand_middle } from "../math.mjs";
 
 export let loadLorenzRenderer = async (canvas: HTMLCanvasElement) => {
   let seedSize = 2000000;
@@ -26,10 +27,6 @@ export let loadLorenzRenderer = async (canvas: HTMLCanvasElement) => {
 
   return renderFrame;
 };
-
-function rand_middle(n: number) {
-  return n * (Math.random() - 0.5);
-}
 
 let randPoint: [number, number, number] = [0, 0, 0];
 let area = 16.0;

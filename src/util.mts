@@ -13,7 +13,3 @@ export function randPointInSphere(a: number, shift: number = 2) {
   var z = r * cosPhi;
   return { x: x, y: y, z: z };
 }
-
-export function rand_middle(n: number) {
-  return n * (Math.random() - 0.5);
-}

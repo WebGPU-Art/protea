@@ -1,6 +1,7 @@
-import { createRenderer, resetCanvasSize } from "../index.mjs";
+import { createRenderer } from "../index.mjs";
 import attractorSprite from "../../shaders/attractor-sprite.wgsl?raw";
 import attractorCompute from "../../shaders/attractor-compute-four-wing.wgsl?raw";
+import { rand_middle } from "../math.mjs";
 
 export let loadFourwingRenderer = async (canvas: HTMLCanvasElement) => {
   let seedSize = 2000000;
@@ -27,12 +28,8 @@ export let loadFourwingRenderer = async (canvas: HTMLCanvasElement) => {
   return renderFrame;
 };
 
-function rand_middle(n: number) {
-  return n * (Math.random() - 0.5);
-}
-
 let randPoint: [number, number, number] = [0, 0, 0];
-let area = 16.0;
+let area = 11.0;
 
 function makeSeed(numParticles: number, scale: number): Float32Array {
   const buf = new Float32Array(numParticles * 8);

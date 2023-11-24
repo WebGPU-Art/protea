@@ -1,7 +1,6 @@
 import { createRenderer } from "../index.mjs";
 import spriteWGSL from "../../shaders/collision-sprites.wgsl?raw";
 import computeCollision from "../../shaders/collision-compute.wgsl?raw";
-import { randPointInSphere, rand_middle } from "../util.mjs";
 import { fiboGridN } from "../math.mjs";
 
 export let loadCollisionRenderer = async (canvas: HTMLCanvasElement) => {

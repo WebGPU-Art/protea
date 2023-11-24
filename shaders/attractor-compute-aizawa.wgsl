@@ -7,7 +7,7 @@ struct Particle {
 
 struct Params {
   delta_t: f32,
-  height: f32,
+  scale: f32,
   width: f32,
   opacity: f32,
 }

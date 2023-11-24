@@ -16,7 +16,7 @@ export let loadAizawaRenderer = async (canvas: HTMLCanvasElement) => {
     },
     {
       vertexCount: 1,
-      vertexData: loadVertex(),
+      vertexData: [0, 1, 2, 3],
       indexData: [0, 1, 2, 1, 2, 3],
       vertexBufferLayout: vertexBufferLayout,
       renderShader: attractorSprite,
@@ -29,7 +29,7 @@ export let loadAizawaRenderer = async (canvas: HTMLCanvasElement) => {
 };
 
 let randPoint: [number, number, number] = [0, 0, 0];
-let area = 10.0;
+let area = 1.0;
 
 function makeSeed(numParticles: number, scale: number): Float32Array {
   const buf = new Float32Array(numParticles * 8);
@@ -58,20 +58,9 @@ function makeSeed(numParticles: number, scale: number): Float32Array {
 function loadParams(): number[] {
   return [
     0.04, // deltaT
-    0.06, // height
-    0.004, // width
+    600.0, // scale
+    0.001, // width
     0.99, // opacity
-  ];
-}
-
-function loadVertex(): number[] {
-  // prettier-ignore
-  return [
-    0, 1, 2, 3
-    // -0.06, -0.06, -0.03,
-    // 0.06, -0.06, -0.03,
-    // 0.0, 0.06, 0,
-    // 0.0, -0.06, 0.03,
   ];
 }
 

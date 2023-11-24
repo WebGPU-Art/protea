@@ -16,7 +16,7 @@ export let loadLorenzRenderer = async (canvas: HTMLCanvasElement) => {
     },
     {
       vertexCount: 1,
-      vertexData: loadVertex(),
+      vertexData: [0, 1, 2, 3],
       indexData: [0, 1, 2, 1, 2, 3],
       vertexBufferLayout: vertexBufferLayout,
       renderShader: attractorSprite,
@@ -44,7 +44,7 @@ function makeSeed(numParticles: number, scale: number): Float32Array {
     buf[b + 0] = randPoint[0];
     buf[b + 1] = randPoint[1];
     buf[b + 2] = randPoint[2];
-    buf[b + 3] = rand_middle(0.8); // ages
+    buf[b + 3] = i / 24; // ages
     buf[b + 4] = randPoint[0];
     buf[b + 5] = randPoint[1];
     buf[b + 6] = randPoint[2];
@@ -57,20 +57,9 @@ function makeSeed(numParticles: number, scale: number): Float32Array {
 function loadParams(): number[] {
   return [
     0.04, // deltaT
-    0.06, // height
+    20.0, // scale
     0.004, // width
     0.99, // opacity
-  ];
-}
-
-function loadVertex(): number[] {
-  // prettier-ignore
-  return [
-    0, 1, 2, 3
-    // -0.06, -0.06, -0.03,
-    // 0.06, -0.06, -0.03,
-    // 0.0, 0.06, 0,
-    // 0.0, -0.06, 0.03,
   ];
 }
 

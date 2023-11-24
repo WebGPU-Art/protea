@@ -51,7 +51,7 @@
             def skip-rendering? $ = "\"true" (get-env "\"skip" "\"false")
         |tabs $ %{} :CodeEntry (:doc |)
           :code $ quote
-            def tabs $ [] (:: :fireworks |Fireworks :dark) (:: :lorenz |Lorenz :dark) (:: :aizawa |Aizawa :dark) (:: :fourwing "|Four Wing" :dark) (:: :fractal |Fractal :dark) (:: :collision |Collision :dark) (:: :bounce |Bounce :dark) (:: :feday |FEDAY :dark) (:: :bifurcation "\"Bifurcation" :dark)
+            def tabs $ [] (:: :fireworks |Fireworks :dark) (:: :lorenz |Lorenz :dark) (:: :aizawa |Aizawa :dark) (:: :fourwing "|Four Wing" :dark) (:: :fractal |Fractal :dark) (:: :collision |Collision :dark) (:: :bounce |Bounce :dark) (:: :feday |FEDAY :dark) (:: :bifurcation "\"Bifurcation" :dark) (:: :ball-spin "\"Ball Spin" :dark)
       :ns $ %{} :CodeEntry (:doc |)
         :code $ quote
           ns app.config $ :require
@@ -96,6 +96,7 @@
                       :bounce $ loadBounceRenderer canvas
                       :feday $ loadFedayRenderer canvas
                       :bifurcation $ loadBifurcationRenderer canvas
+                      :ball-spin $ loadBallSpinRenderer canvas
                 reset! *instance-renderer renderer
         |loop-renderer! $ %{} :CodeEntry (:doc |)
           :code $ quote
@@ -171,6 +172,7 @@
             "\"../src/apps/bounce" :refer $ loadBounceRenderer
             "\"../src/apps/feday" :refer $ loadFedayRenderer
             "\"../src/apps/bifurcation" :refer $ loadBifurcationRenderer
+            "\"../src/apps/ball-spin" :refer $ loadBallSpinRenderer
             "\"../src/index" :refer $ setupInitials
     |app.schema $ %{} :FileEntry
       :defs $ {}

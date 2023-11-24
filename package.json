@@ -3,14 +3,14 @@
   "version": "0.0.1-a2",
   "main": "./lib/index.mjs",
   "devDependencies": {
-    "@webgpu/types": "^0.1.39",
+    "@webgpu/types": "^0.1.40",
     "bottom-tip": "^0.1.5",
     "query-string": "^8.1.0",
-    "typescript": "^5.2.2",
-    "vite": "^5.0.0"
+    "typescript": "^5.3.2",
+    "vite": "^5.0.2"
   },
   "dependencies": {
-    "@calcit/procs": "^0.8.10",
+    "@calcit/procs": "^0.8.11",
     "@triadica/touch-control": "^0.0.4-a1",
     "ismobilejs": "^1.1.1"
   },

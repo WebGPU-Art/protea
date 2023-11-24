@@ -1,7 +1,7 @@
 import { createRenderer } from "../index.mjs";
 import attractorSprite from "../../shaders/attractor-sprite.wgsl?raw";
 import attractorCompute from "../../shaders/attractor-compute-aizawa.wgsl?raw";
-import { rand_middle } from "../math.mjs";
+import { fiboGridN, rand_middle } from "../math.mjs";
 
 export let loadAizawaRenderer = async (canvas: HTMLCanvasElement) => {
   let seedSize = 2000000;
@@ -36,9 +36,8 @@ function makeSeed(numParticles: number, scale: number): Float32Array {
 
   for (let i = 0; i < numParticles; ++i) {
     if (i % 24 == 0) {
-      randPoint[0] = rand_middle(area);
-      randPoint[1] = rand_middle(area);
-      randPoint[2] = rand_middle(area);
+      let p = fiboGridN(i, numParticles);
+      randPoint = p;
     }
 
     let b = 8 * i;

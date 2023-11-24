@@ -1,7 +1,7 @@
 import { createRenderer } from "../index.mjs";
 import attractorSprite from "../../shaders/attractor-sprite.wgsl?raw";
 import attractorCompute from "../../shaders/attractor-compute-four-wing.wgsl?raw";
-import { rand_middle } from "../math.mjs";
+import { fiboGridN, rand_middle } from "../math.mjs";
 
 export let loadFourwingRenderer = async (canvas: HTMLCanvasElement) => {
   let seedSize = 2000000;
@@ -33,22 +33,22 @@ let area = 12.0;
 
 function makeSeed(numParticles: number, scale: number): Float32Array {
   const buf = new Float32Array(numParticles * 8);
+  let x = numParticles;
 
   for (let i = 0; i < numParticles; ++i) {
     if (i % 24 == 0) {
-      randPoint[0] = rand_middle(area);
-      randPoint[1] = rand_middle(area);
-      randPoint[2] = rand_middle(area);
+      let p = fiboGridN(i, numParticles);
+      randPoint = p;
     }
     let b = 8 * i;
     buf[b + 0] = randPoint[0];
     buf[b + 1] = randPoint[1];
     buf[b + 2] = randPoint[2];
-    buf[b + 3] = rand_middle(0.8); // ages
+    buf[b + 3] = 0;
     buf[b + 4] = randPoint[0];
     buf[b + 5] = randPoint[1];
     buf[b + 6] = randPoint[2];
-    buf[b + 7] = 0; // distance
+    buf[b + 7] = 0;
   }
 
   return buf;

@@ -1,7 +1,7 @@
 import { createRenderer } from "../index.mjs";
 import attractorSprite from "../../shaders/attractor-sprite.wgsl?raw";
 import attractorCompute from "../../shaders/attractor-compute-lorenz.wgsl?raw";
-import { rand_middle } from "../math.mjs";
+import { fiboGridN, rand_middle } from "../math.mjs";
 
 export let loadLorenzRenderer = async (canvas: HTMLCanvasElement) => {
   let seedSize = 2000000;
@@ -36,18 +36,17 @@ function makeSeed(numParticles: number, scale: number): Float32Array {
 
   for (let i = 0; i < numParticles; ++i) {
     if (i % 24 == 0) {
-      randPoint[0] = rand_middle(area);
-      randPoint[1] = rand_middle(area);
-      randPoint[2] = rand_middle(area);
+      let p = fiboGridN(i, numParticles);
+      randPoint = p;
     }
     let b = 8 * i;
-    buf[b + 0] = randPoint[0];
-    buf[b + 1] = randPoint[1];
-    buf[b + 2] = randPoint[2];
+    buf[b + 0] = randPoint[0] * area;
+    buf[b + 1] = randPoint[1] * area;
+    buf[b + 2] = randPoint[2] * area;
     buf[b + 3] = i / 24; // ages
-    buf[b + 4] = randPoint[0];
-    buf[b + 5] = randPoint[1];
-    buf[b + 6] = randPoint[2];
+    buf[b + 4] = randPoint[0] * area;
+    buf[b + 5] = randPoint[1] * area;
+    buf[b + 6] = randPoint[2] * area;
     buf[b + 7] = 0; // distance
   }
 
@@ -58,7 +57,7 @@ function loadParams(): number[] {
   return [
     0.04, // deltaT
     20.0, // scale
-    0.004, // width
+    0.008, // width
     0.99, // opacity
   ];
 }

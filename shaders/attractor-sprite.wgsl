@@ -81,7 +81,7 @@ fn vert_main(
   let right = normalize(cross(v0, uniforms.forward));
 
   // let front = params.length;
-  var width = params.width * 1.4;
+  var width = params.width * 8.4;
 
   if ages < 0.01 {
     // prev_position = position;
@@ -106,7 +106,7 @@ fn vert_main(
   }
 
   var output: VertexOutput;
-  let p0 = vec4(pos * 1000.0, 1.0);
+  let p0 = vec4(pos * 20.0, 1.0);
 
   let p = transform_perspective(p0.xyz).point_position;
   let scale: f32 = 0.002;

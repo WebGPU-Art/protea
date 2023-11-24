@@ -10,7 +10,7 @@
     "vite": "^5.0.2"
   },
   "dependencies": {
-    "@calcit/procs": "^0.8.11",
+    "@calcit/procs": "^0.8.12",
     "@triadica/touch-control": "^0.0.4-a1",
     "ismobilejs": "^1.1.1"
   },

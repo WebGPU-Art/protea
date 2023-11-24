@@ -31,18 +31,27 @@ function rand_middle(n: number) {
   return n * (Math.random() - 0.5);
 }
 
+let randPoint: [number, number, number] = [0, 0, 0];
+let area = 10.0;
+
 function makeSeed(numParticles: number, scale: number): Float32Array {
   const buf = new Float32Array(numParticles * 8);
 
   for (let i = 0; i < numParticles; ++i) {
+    if (i % 24 == 0) {
+      randPoint[0] = rand_middle(area);
+      randPoint[1] = rand_middle(area);
+      randPoint[2] = rand_middle(area);
+    }
+
     let b = 8 * i;
-    buf[b + 0] = rand_middle(4.8);
-    buf[b + 1] = rand_middle(4.8);
-    buf[b + 2] = rand_middle(4.8);
+    buf[b + 0] = randPoint[0];
+    buf[b + 1] = randPoint[1];
+    buf[b + 2] = randPoint[2];
     buf[b + 3] = rand_middle(0.8); // ages
-    buf[b + 4] = 0;
-    buf[b + 5] = 0;
-    buf[b + 6] = 0;
+    buf[b + 4] = randPoint[0];
+    buf[b + 5] = randPoint[1];
+    buf[b + 6] = randPoint[2];
     buf[b + 7] = 0; // distance
   }
 

@@ -1,4 +1,7 @@
 
+#import protea::perspective
+#import protea::colors
+
 struct Params {
   delta_t: f32,
   length: f32,
@@ -7,10 +10,6 @@ struct Params {
 }
 
 @group(1) @binding(0) var<uniform> params: Params;
-
-//!{{perspective}}
-
-//!{{colors}}
 
 struct VertexOutput {
   @builtin(position) position: vec4<f32>,

@@ -38,8 +38,8 @@ export let createRenderer = async (
   let vertexData = renderOptions.vertexData;
   let vertexBufferlayout = renderOptions.vertexBufferLayout;
   let spriteWGSL = renderOptions.renderShader
-    .replace("//!{{perspective}}", proteaPerspective)
-    .replace("//!{{colors}}", proteaColors);
+    .replace("#import protea::perspective", proteaPerspective)
+    .replace("#import protea::colors", proteaColors);
   let indexBuffer = renderOptions.indexData
     ? createBuffer(
         new Uint32Array(renderOptions.indexData),

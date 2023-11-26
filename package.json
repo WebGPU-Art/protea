@@ -1,6 +1,6 @@
 {
   "name": "@triadica/protea",
-  "version": "0.0.1-a2",
+  "version": "0.0.2-a1",
   "main": "./lib/index.mjs",
   "devDependencies": {
     "@webgpu/types": "^0.1.40",

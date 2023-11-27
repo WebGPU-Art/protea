@@ -1,4 +1,4 @@
-import { createRenderer, resetCanvasSize } from "../index.mjs";
+import { createRenderer } from "../index.mjs";
 import fractalSprite from "../../shaders/fractal-sprite.wgsl?raw";
 import fractalCompute from "../../shaders/fractal-compute.wgsl?raw";
 import { fiboGridN } from "../math.mjs";

@@ -1,10 +1,10 @@
 import { createRenderer } from "../index.mjs";
-import spriteWGSL from "../../shaders/collision-sprites.wgsl?raw";
-import computeCollision from "../../shaders/collision-compute.wgsl?raw";
-import { fiboGridN } from "../math.mjs";
+import spriteShader from "../../shaders/bifurcation-sprites.wgsl?raw";
+import computeShader from "../../shaders/bifurcation-compute.wgsl?raw";
+import { rand_middle } from "../math.mjs";
 
-export let loadCollisionRenderer = async (canvas: HTMLCanvasElement) => {
-  let seedSize = 800000;
+export let loadBifurcationRenderer = async (canvas: HTMLCanvasElement) => {
+  let seedSize = 2700000;
 
   let renderFrame = await createRenderer(
     canvas,
@@ -14,14 +14,14 @@ export let loadCollisionRenderer = async (canvas: HTMLCanvasElement) => {
       params: loadParams(),
       // computeShader: updateSpritesWGSL,
       // computeShader: computeGravityWgsl,
-      computeShader: computeCollision,
+      computeShader: computeShader,
     },
     {
       vertexCount: 1,
       vertexData: loadVertex(),
       indexData: [0, 1, 2, 1, 2, 3],
       vertexBufferLayout: vertexBufferLayout,
-      renderShader: spriteWGSL,
+      renderShader: spriteShader,
       // topology: "line-list",
       bgColor: [0.1, 0.0, 0.2, 1.0],
     }
@@ -32,25 +32,13 @@ export let loadCollisionRenderer = async (canvas: HTMLCanvasElement) => {
 
 function makeSeed(numParticles: number, _s: number): Float32Array {
   const buf = new Float32Array(numParticles * 12);
-  // let scale = 200 * (Math.random() * 0.5 + 0.5);
-  let scale_base = 50;
+  const scale = 800;
   for (let i = 0; i < numParticles; ++i) {
-    let scale = scale_base + 0.0 * i;
-    let p = fiboGridN(i, numParticles);
-    // let q = randPointInSphere(100);
-    let b = 12 * i;
-    buf[b + 0] = 0;
-    buf[b + 1] = -60;
-    buf[b + 2] = 0;
+    let b = 4 * i;
+    buf[b + 0] = rand_middle(scale);
+    buf[b + 1] = rand_middle(scale);
+    buf[b + 2] = rand_middle(scale);
     buf[b + 3] = i; // index
-    buf[b + 4] = p[0] * scale;
-    buf[b + 5] = p[1] * scale;
-    buf[b + 6] = p[2] * scale;
-    buf[b + 7] = 0;
-    buf[b + 8] = 0;
-    buf[b + 9] = 0;
-    buf[b + 10] = 0;
-    buf[b + 11] = 0;
   }
 
   return buf;
@@ -84,15 +72,12 @@ let vertexBufferLayout: GPUVertexBufferLayout[] = [
     attributes: [
       { shaderLocation: 0, offset: 0, format: "float32x3" },
       { shaderLocation: 1, offset: 3 * 4, format: "float32" },
-      { shaderLocation: 2, offset: 4 * 4, format: "float32x3" },
-      { shaderLocation: 3, offset: 7 * 4, format: "float32" },
-      { shaderLocation: 4, offset: 8 * 4, format: "float32x4" },
     ],
   },
   {
     // vertex buffer
     arrayStride: 1 * 4,
     stepMode: "vertex",
-    attributes: [{ shaderLocation: 5, offset: 0, format: "uint32" }],
+    attributes: [{ shaderLocation: 2, offset: 0, format: "uint32" }],
   },
 ];

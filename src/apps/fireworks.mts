@@ -1,9 +1,8 @@
-import { createRenderer, resetCanvasSize } from "../index.mjs";
-import spriteWGSL from "../../shaders/sprite.wgsl?raw";
-import updateSpritesWGSL from "../../shaders/update-sprites.wgsl?raw";
-import computeGravityWgsl from "../../shaders/compute-gravity.wgsl?raw";
-import computeFireworks from "../../shaders/compute-fireworks.wgsl?raw";
-import { randPointInSphere, rand_middle } from "../util.mjs";
+import { createRenderer } from "../index.mjs";
+import fireworksSprites from "../../shaders/fireworks-sprites.wgsl?raw";
+import fireworksCompute from "../../shaders/fireworks-compute.wgsl?raw";
+import { randPointInSphere } from "../util.mjs";
+import { rand_middle } from "../math.mjs";
 
 export let loadFireworksRenderer = async (canvas: HTMLCanvasElement) => {
   let seedSize = 2000000;
@@ -14,16 +13,14 @@ export let loadFireworksRenderer = async (canvas: HTMLCanvasElement) => {
       seedSize,
       seedData: makeSeed(seedSize, 0),
       params: loadParams(),
-      // computeShader: updateSpritesWGSL,
-      // computeShader: computeGravityWgsl,
-      computeShader: computeFireworks,
+      computeShader: fireworksCompute,
     },
     {
       vertexCount: 1,
       vertexData: loadVertex(),
       indexData: [0, 1, 2, 1, 2, 3],
       vertexBufferLayout: vertexBufferLayout,
-      renderShader: spriteWGSL,
+      renderShader: fireworksSprites,
       // topology: "line-list",
       bgColor: [0.1, 0.0, 0.2, 1.0],
     }

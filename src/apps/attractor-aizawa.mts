@@ -1,6 +1,7 @@
-import { createRenderer, resetCanvasSize } from "../index.mjs";
+import { createRenderer } from "../index.mjs";
 import attractorSprite from "../../shaders/attractor-sprite.wgsl?raw";
 import attractorCompute from "../../shaders/attractor-compute-aizawa.wgsl?raw";
+import { fiboGridN, rand_middle } from "../math.mjs";
 
 export let loadAizawaRenderer = async (canvas: HTMLCanvasElement) => {
   let seedSize = 2000000;
@@ -15,7 +16,7 @@ export let loadAizawaRenderer = async (canvas: HTMLCanvasElement) => {
     },
     {
       vertexCount: 1,
-      vertexData: loadVertex(),
+      vertexData: [0, 1, 2, 3],
       indexData: [0, 1, 2, 1, 2, 3],
       vertexBufferLayout: vertexBufferLayout,
       renderShader: attractorSprite,
@@ -27,22 +28,26 @@ export let loadAizawaRenderer = async (canvas: HTMLCanvasElement) => {
   return renderFrame;
 };
 
-function rand_middle(n: number) {
-  return n * (Math.random() - 0.5);
-}
+let randPoint: [number, number, number] = [0, 0, 0];
+let area = 1.0;
 
 function makeSeed(numParticles: number, scale: number): Float32Array {
   const buf = new Float32Array(numParticles * 8);
 
   for (let i = 0; i < numParticles; ++i) {
+    if (i % 24 == 0) {
+      let p = fiboGridN(i, numParticles);
+      randPoint = p;
+    }
+
     let b = 8 * i;
-    buf[b + 0] = rand_middle(4.8);
-    buf[b + 1] = rand_middle(4.8);
-    buf[b + 2] = rand_middle(4.8);
+    buf[b + 0] = randPoint[0];
+    buf[b + 1] = randPoint[1];
+    buf[b + 2] = randPoint[2];
     buf[b + 3] = rand_middle(0.8); // ages
-    buf[b + 4] = 0;
-    buf[b + 5] = 0;
-    buf[b + 6] = 0;
+    buf[b + 4] = randPoint[0];
+    buf[b + 5] = randPoint[1];
+    buf[b + 6] = randPoint[2];
     buf[b + 7] = 0; // distance
   }
 
@@ -52,20 +57,9 @@ function makeSeed(numParticles: number, scale: number): Float32Array {
 function loadParams(): number[] {
   return [
     0.04, // deltaT
-    0.06, // height
-    0.004, // width
+    600.0, // scale
+    0.001, // width
     0.99, // opacity
-  ];
-}
-
-function loadVertex(): number[] {
-  // prettier-ignore
-  return [
-    0, 1, 2, 3
-    // -0.06, -0.06, -0.03,
-    // 0.06, -0.06, -0.03,
-    // 0.0, 0.06, 0,
-    // 0.0, -0.06, 0.03,
   ];
 }
 

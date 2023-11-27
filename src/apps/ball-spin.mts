@@ -1,9 +1,9 @@
 import { createRenderer } from "../index.mjs";
-import spriteWGSL from "../../shaders/collision-sprites.wgsl?raw";
-import computeCollision from "../../shaders/collision-compute.wgsl?raw";
+import spriteShader from "../../shaders/ball-spin-sprites.wgsl?raw";
+import computeShader from "../../shaders/ball-spin-compute.wgsl?raw";
 import { fiboGridN } from "../math.mjs";
 
-export let loadCollisionRenderer = async (canvas: HTMLCanvasElement) => {
+export let loadBallSpinRenderer = async (canvas: HTMLCanvasElement) => {
   let seedSize = 800000;
 
   let renderFrame = await createRenderer(
@@ -14,14 +14,14 @@ export let loadCollisionRenderer = async (canvas: HTMLCanvasElement) => {
       params: loadParams(),
       // computeShader: updateSpritesWGSL,
       // computeShader: computeGravityWgsl,
-      computeShader: computeCollision,
+      computeShader: computeShader,
     },
     {
       vertexCount: 1,
       vertexData: loadVertex(),
       indexData: [0, 1, 2, 1, 2, 3],
       vertexBufferLayout: vertexBufferLayout,
-      renderShader: spriteWGSL,
+      renderShader: spriteShader,
       // topology: "line-list",
       bgColor: [0.1, 0.0, 0.2, 1.0],
     }
@@ -33,17 +33,18 @@ export let loadCollisionRenderer = async (canvas: HTMLCanvasElement) => {
 function makeSeed(numParticles: number, _s: number): Float32Array {
   const buf = new Float32Array(numParticles * 12);
   // let scale = 200 * (Math.random() * 0.5 + 0.5);
-  let scale_base = 50;
+  let scale_base = 10;
+  let s0 = 20;
   for (let i = 0; i < numParticles; ++i) {
-    let scale = scale_base + 0.0 * i;
+    let scale = +0.0001 * i;
     let p = fiboGridN(i, numParticles);
     // let q = randPointInSphere(100);
     let b = 12 * i;
-    buf[b + 0] = 0;
-    buf[b + 1] = -60;
-    buf[b + 2] = 0;
+    buf[b + 0] = -100 + p[0] * s0;
+    buf[b + 1] = 100 + p[1] * s0;
+    buf[b + 2] = -100 + p[2] * s0;
     buf[b + 3] = i; // index
-    buf[b + 4] = p[0] * scale;
+    buf[b + 4] = p[0] * scale + 200;
     buf[b + 5] = p[1] * scale;
     buf[b + 6] = p[2] * scale;
     buf[b + 7] = 0;

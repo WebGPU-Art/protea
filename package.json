@@ -1,17 +1,17 @@
 {
   "name": "@triadica/protea",
-  "version": "0.0.1-a2",
+  "version": "0.0.2-a1",
   "main": "./lib/index.mjs",
   "devDependencies": {
-    "@webgpu/types": "^0.1.31",
-    "query-string": "^8.1.0",
-    "typescript": "^5.0.4",
+    "@webgpu/types": "^0.1.40",
     "bottom-tip": "^0.1.5",
-    "vite": "^4.3.3"
+    "query-string": "^8.1.0",
+    "typescript": "^5.3.2",
+    "vite": "^5.0.2"
   },
   "dependencies": {
-    "@calcit/procs": "^0.8.9",
-    "@triadica/touch-control": "^0.0.3",
+    "@calcit/procs": "^0.8.12",
+    "@triadica/touch-control": "^0.0.4-a1",
     "ismobilejs": "^1.1.1"
   },
   "description": "> Compute boids with Triadica controls in WebGPU",

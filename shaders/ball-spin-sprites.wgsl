@@ -32,7 +32,7 @@ fn vert_main(
   let up = normalize(upward);
 
   // let front = params.length;
-  var width = params.width * 1.4;
+  var width = params.width * 2.0;
 
   if idx == 0u {
     pos = position + right * width;
@@ -54,7 +54,7 @@ fn vert_main(
   let scale: f32 = 0.002;
 
   output.position = vec4(p[0] * scale, p[1] * scale, p[2] * scale, 1.0);
-  let c3: vec3<f32> = hsl(fract(point_idx / 4000000.), 0.8, max(0.1, 0.9 - 0.2));
+  let c3: vec3<f32> = hsl(fract(point_idx / 2000000.) + 0.6, 0.8, max(0.1, 0.9 - 0.2));
   output.color = vec4(c3, params.opacity);
   return output;
 }

@@ -1,7 +1,6 @@
 import { createRenderer } from "../index.mjs";
 import spriteShader from "../../shaders/bounce-sprites.wgsl?raw";
 import computeShader from "../../shaders/bounce-compute.wgsl?raw";
-import { randPointInSphere, rand_middle } from "../util.mjs";
 import { fiboGridN } from "../math.mjs";
 
 export let loadBounceRenderer = async (canvas: HTMLCanvasElement) => {

@@ -20,10 +20,7 @@ struct VertexOutput {
 fn vert_main(
   @location(0) position: vec3<f32>,
   @location(1) point_idx: f32,
-  @location(2) velocity: vec3<f32>,
-  @location(3) _travel: f32,
-  @location(4) _v: vec4<f32>,
-  @location(5) idx: u32,
+  @location(2) idx: u32,
 ) -> VertexOutput {
   var pos: vec3<f32>;
   let rightward: vec3<f32> = uniforms.rightward;
@@ -32,7 +29,7 @@ fn vert_main(
   let up = normalize(upward);
 
   // let front = params.length;
-  var width = params.width * 1.4;
+  var width = params.width * 2.0;
 
   if idx == 0u {
     pos = position + right * width;
@@ -53,14 +50,14 @@ fn vert_main(
   let p: vec3<f32> = transform_perspective(p0.xyz).point_position;
   let scale: f32 = 0.002;
 
-  output.position = vec4(p[0] * scale, p[1] * scale, p[2] * scale, 1.0);
-  let c3: vec3<f32> = hsl(fract(point_idx / 4000000.), 0.8, max(0.1, 0.9 - 0.2));
+  output.position = vec4(p[0] * scale, p[1] * scale - 1., p[2] * scale, 1.0);
+  let c3: vec3<f32> = hsl(fract(point_idx / 2000000.) + 0.6, 0.8, max(0.1, 0.9 - 0.2));
   output.color = vec4(c3, params.opacity);
   return output;
 }
 
 @fragment
 fn frag_main(@location(4) color: vec4<f32>) -> @location(0) vec4<f32> {
-  return color;
-  // return vec4<f32>(1., 0., 0., 1.0);
+  // return color;
+  return vec4<f32>(1., 1., 0., 1.0);
 }

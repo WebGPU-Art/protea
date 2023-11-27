@@ -312,6 +312,24 @@
                       |b $ %{} :Leaf (:at 1699895717018) (:by |rJG4IHzWf) (:text |:bounce)
                       |h $ %{} :Leaf (:at 1699895719384) (:by |rJG4IHzWf) (:text ||Bounce)
                       |l $ %{} :Leaf (:at 1699548558878) (:by |rJG4IHzWf) (:text |:dark)
+                  |s $ %{} :Expr (:at 1699548549247) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1699548549451) (:by |rJG4IHzWf) (:text |::)
+                      |b $ %{} :Leaf (:at 1700242048779) (:by |rJG4IHzWf) (:text |:feday)
+                      |h $ %{} :Leaf (:at 1700241890967) (:by |rJG4IHzWf) (:text ||FEDAY)
+                      |l $ %{} :Leaf (:at 1699548558878) (:by |rJG4IHzWf) (:text |:dark)
+                  |t $ %{} :Expr (:at 1700503243366) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1700503243775) (:by |rJG4IHzWf) (:text |::)
+                      |b $ %{} :Leaf (:at 1700503244842) (:by |rJG4IHzWf) (:text |:bifurcation)
+                      |h $ %{} :Leaf (:at 1700503248729) (:by |rJG4IHzWf) (:text "|\"Bifurcation")
+                      |l $ %{} :Leaf (:at 1700503251549) (:by |rJG4IHzWf) (:text |:dark)
+                  |u $ %{} :Expr (:at 1700503243366) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1700503243775) (:by |rJG4IHzWf) (:text |::)
+                      |b $ %{} :Leaf (:at 1700761078243) (:by |rJG4IHzWf) (:text |:ball-spin)
+                      |h $ %{} :Leaf (:at 1700761082254) (:by |rJG4IHzWf) (:text "|\"Ball Spin")
+                      |l $ %{} :Leaf (:at 1700503251549) (:by |rJG4IHzWf) (:text |:dark)
       :ns $ %{} :CodeEntry (:doc |)
         :code $ %{} :Expr (:at 1527788237503) (:by |root)
           :data $ {}
@@ -517,6 +535,27 @@
                                         :data $ {}
                                           |T $ %{} :Leaf (:at 1699895931796) (:by |rJG4IHzWf) (:text |loadBounceRenderer)
                                           |b $ %{} :Leaf (:at 1699776638186) (:by |rJG4IHzWf) (:text |canvas)
+                                  |t $ %{} :Expr (:at 1699776632588) (:by |rJG4IHzWf)
+                                    :data $ {}
+                                      |D $ %{} :Leaf (:at 1700242065156) (:by |rJG4IHzWf) (:text |:feday)
+                                      |T $ %{} :Expr (:at 1699776630581) (:by |rJG4IHzWf)
+                                        :data $ {}
+                                          |T $ %{} :Leaf (:at 1700242069139) (:by |rJG4IHzWf) (:text |loadFedayRenderer)
+                                          |b $ %{} :Leaf (:at 1699776638186) (:by |rJG4IHzWf) (:text |canvas)
+                                  |u $ %{} :Expr (:at 1700503267636) (:by |rJG4IHzWf)
+                                    :data $ {}
+                                      |T $ %{} :Leaf (:at 1700503268160) (:by |rJG4IHzWf) (:text |:bifurcation)
+                                      |b $ %{} :Expr (:at 1700503269642) (:by |rJG4IHzWf)
+                                        :data $ {}
+                                          |T $ %{} :Leaf (:at 1700503289207) (:by |rJG4IHzWf) (:text |loadBifurcationRenderer)
+                                          |b $ %{} :Leaf (:at 1700503273226) (:by |rJG4IHzWf) (:text |canvas)
+                                  |v $ %{} :Expr (:at 1700503267636) (:by |rJG4IHzWf)
+                                    :data $ {}
+                                      |T $ %{} :Leaf (:at 1700761095208) (:by |rJG4IHzWf) (:text |:ball-spin)
+                                      |b $ %{} :Expr (:at 1700503269642) (:by |rJG4IHzWf)
+                                        :data $ {}
+                                          |T $ %{} :Leaf (:at 1700761099992) (:by |rJG4IHzWf) (:text |loadBallSpinRenderer)
+                                          |b $ %{} :Leaf (:at 1700503273226) (:by |rJG4IHzWf) (:text |canvas)
                   |b $ %{} :Expr (:at 1699550963724) (:by |rJG4IHzWf)
                     :data $ {}
                       |T $ %{} :Leaf (:at 1699550964403) (:by |rJG4IHzWf) (:text |reset!)
@@ -975,6 +1014,27 @@
                     |h $ %{} :Expr (:at 1699776619727) (:by |rJG4IHzWf)
                       :data $ {}
                         |T $ %{} :Leaf (:at 1699895927320) (:by |rJG4IHzWf) (:text |loadBounceRenderer)
+                |zCT $ %{} :Expr (:at 1699776611129) (:by |rJG4IHzWf)
+                  :data $ {}
+                    |T $ %{} :Leaf (:at 1700242080147) (:by |rJG4IHzWf) (:text "|\"../src/apps/feday")
+                    |b $ %{} :Leaf (:at 1699776619499) (:by |rJG4IHzWf) (:text |:refer)
+                    |h $ %{} :Expr (:at 1699776619727) (:by |rJG4IHzWf)
+                      :data $ {}
+                        |T $ %{} :Leaf (:at 1700242075812) (:by |rJG4IHzWf) (:text |loadFedayRenderer)
+                |zCj $ %{} :Expr (:at 1699776611129) (:by |rJG4IHzWf)
+                  :data $ {}
+                    |T $ %{} :Leaf (:at 1700503278923) (:by |rJG4IHzWf) (:text "|\"../src/apps/bifurcation")
+                    |b $ %{} :Leaf (:at 1699776619499) (:by |rJG4IHzWf) (:text |:refer)
+                    |h $ %{} :Expr (:at 1699776619727) (:by |rJG4IHzWf)
+                      :data $ {}
+                        |T $ %{} :Leaf (:at 1700503283021) (:by |rJG4IHzWf) (:text |loadBifurcationRenderer)
+                |zCr $ %{} :Expr (:at 1699776611129) (:by |rJG4IHzWf)
+                  :data $ {}
+                    |T $ %{} :Leaf (:at 1700761108200) (:by |rJG4IHzWf) (:text "|\"../src/apps/ball-spin")
+                    |b $ %{} :Leaf (:at 1699776619499) (:by |rJG4IHzWf) (:text |:refer)
+                    |h $ %{} :Expr (:at 1699776619727) (:by |rJG4IHzWf)
+                      :data $ {}
+                        |T $ %{} :Leaf (:at 1700761104998) (:by |rJG4IHzWf) (:text |loadBallSpinRenderer)
                 |zD $ %{} :Expr (:at 1699549071462) (:by |rJG4IHzWf)
                   :data $ {}
                     |T $ %{} :Leaf (:at 1699549074912) (:by |rJG4IHzWf) (:text "|\"../src/index")

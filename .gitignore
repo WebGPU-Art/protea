@@ -8,3 +8,5 @@ dist/
 
 lib/
 .vscode/
+
+.DS_Store

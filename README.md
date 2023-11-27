@@ -2,7 +2,7 @@
 
 > Compute boids with Triadica controls in WebGPU
 
-Previews https://r.tiye.me/Triadica/protea/
+Previews on https://webgpu.art/protea/
 
 Based on https://webgpu.github.io/webgpu-samples/samples/computeBoids .
 
@@ -11,6 +11,8 @@ Search parameters:
 - `remote-control` to enable remote control,
 - `control-host` to set remote control host,
 - `control-port` to set remote control port.
+
+To use Protea, try [Protea TypeScript workflow](https://github.com/Triadica/protea-ts-workflow).
 
 ### API
 
@@ -46,8 +48,8 @@ This project is still in early stage and I used it for drawing interesting patte
 
 ### Shaders
 
-- `{{colors}}` to import `hsl` function for intuitive color definition.
-  - `//!{{colors}}` as an alternative to reduce analyzer errors
+- `#import protea::perspective` to import uniform and perspective function.
+- `#import protea::colors` to import `hsl` function for intuitive color definition.
 
 ### Replace Parameters
 
@@ -63,3 +65,7 @@ window.__hotUpdateParams([0.1, 1.6, 0.12, 0.7]);
 - `length` of stroke
 - `width` of stroke
 - `opacity`
+
+### Licence
+
+MIT

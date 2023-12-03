@@ -30,7 +30,7 @@ fn vert_main(
   let up = normalize(upward);
 
   // let front = params.length;
-  var width = params.width * 2.;
+  var width = params.width * 2. + point_idx * 0.012;
 
   if idx == 0u {
     pos = position + right * width;
@@ -59,6 +59,6 @@ fn vert_main(
 
 @fragment
 fn frag_main(@location(4) color: vec4<f32>) -> @location(0) vec4<f32> {
-  return color;
-  // return vec4<f32>(1., 1., 1., 1.0);
+  // return color;
+  return vec4<f32>(1., 1., 1., 0.6);
 }

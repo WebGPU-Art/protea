@@ -336,6 +336,12 @@
                       |b $ %{} :Leaf (:at 1701579124569) (:by |rJG4IHzWf) (:text |:lifegame)
                       |h $ %{} :Leaf (:at 1701579128396) (:by |rJG4IHzWf) (:text "|\"Lifegame")
                       |l $ %{} :Leaf (:at 1700503251549) (:by |rJG4IHzWf) (:text |:dark)
+                  |w $ %{} :Expr (:at 1700503243366) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1700503243775) (:by |rJG4IHzWf) (:text |::)
+                      |b $ %{} :Leaf (:at 1701798866412) (:by |rJG4IHzWf) (:text |:lifegame-trail)
+                      |h $ %{} :Leaf (:at 1701798869465) (:by |rJG4IHzWf) (:text "|\"Lifegame Trail")
+                      |l $ %{} :Leaf (:at 1700503251549) (:by |rJG4IHzWf) (:text |:dark)
       :ns $ %{} :CodeEntry (:doc |)
         :code $ %{} :Expr (:at 1527788237503) (:by |root)
           :data $ {}
@@ -568,6 +574,13 @@
                                       |b $ %{} :Expr (:at 1700503269642) (:by |rJG4IHzWf)
                                         :data $ {}
                                           |T $ %{} :Leaf (:at 1701579203834) (:by |rJG4IHzWf) (:text |loadLifegameRenderer)
+                                          |b $ %{} :Leaf (:at 1700503273226) (:by |rJG4IHzWf) (:text |canvas)
+                                  |x $ %{} :Expr (:at 1700503267636) (:by |rJG4IHzWf)
+                                    :data $ {}
+                                      |T $ %{} :Leaf (:at 1701798887249) (:by |rJG4IHzWf) (:text |:lifegame-trail)
+                                      |b $ %{} :Expr (:at 1700503269642) (:by |rJG4IHzWf)
+                                        :data $ {}
+                                          |T $ %{} :Leaf (:at 1701798890686) (:by |rJG4IHzWf) (:text |loadLifegameTrailRenderer)
                                           |b $ %{} :Leaf (:at 1700503273226) (:by |rJG4IHzWf) (:text |canvas)
                   |b $ %{} :Expr (:at 1699550963724) (:by |rJG4IHzWf)
                     :data $ {}
@@ -1055,6 +1068,13 @@
                     |h $ %{} :Expr (:at 1699776619727) (:by |rJG4IHzWf)
                       :data $ {}
                         |T $ %{} :Leaf (:at 1701579227045) (:by |rJG4IHzWf) (:text |loadLifegameRenderer)
+                |zCx $ %{} :Expr (:at 1699776611129) (:by |rJG4IHzWf)
+                  :data $ {}
+                    |T $ %{} :Leaf (:at 1701798898873) (:by |rJG4IHzWf) (:text "|\"../src/apps/lifegame-trail")
+                    |b $ %{} :Leaf (:at 1699776619499) (:by |rJG4IHzWf) (:text |:refer)
+                    |h $ %{} :Expr (:at 1699776619727) (:by |rJG4IHzWf)
+                      :data $ {}
+                        |T $ %{} :Leaf (:at 1701798896473) (:by |rJG4IHzWf) (:text |loadLifegameTrailRenderer)
                 |zD $ %{} :Expr (:at 1699549071462) (:by |rJG4IHzWf)
                   :data $ {}
                     |T $ %{} :Leaf (:at 1699549074912) (:by |rJG4IHzWf) (:text "|\"../src/index")

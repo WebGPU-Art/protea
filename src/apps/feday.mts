@@ -1,6 +1,6 @@
 import { createRenderer } from "../index.mjs";
-import spriteShader from "../../shaders/feday-sprites.wgsl?raw";
-import computeShader from "../../shaders/feday-compute.wgsl?raw";
+import spriteShader from "./feday/sprites.wgsl?raw";
+import computeShader from "./feday/compute.wgsl?raw";
 import { fiboGridN } from "../math.mjs";
 
 export let loadFedayRenderer = async (canvas: HTMLCanvasElement) => {

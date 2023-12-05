@@ -1,6 +1,6 @@
 import { createRenderer } from "../index.mjs";
-import spriteShader from "../../shaders/lifegame-sprites.wgsl?raw";
-import computeShader from "../../shaders/lifegame-compute.wgsl?raw";
+import spriteShader from "./lifegame/sprites.wgsl?raw";
+import computeShader from "./lifegame/compute.wgsl?raw";
 
 export let loadLifegameRenderer = async (canvas: HTMLCanvasElement) => {
   let seedSize = 160;

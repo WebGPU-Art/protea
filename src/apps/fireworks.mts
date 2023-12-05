@@ -1,6 +1,6 @@
 import { createRenderer } from "../index.mjs";
-import fireworksSprites from "../../shaders/fireworks-sprites.wgsl?raw";
-import fireworksCompute from "../../shaders/fireworks-compute.wgsl?raw";
+import fireworksSprites from "./fireworks/sprites.wgsl?raw";
+import fireworksCompute from "./fireworks/compute.wgsl?raw";
 import { randPointInSphere } from "../util.mjs";
 import { rand_middle } from "../math.mjs";
 

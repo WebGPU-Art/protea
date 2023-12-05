@@ -1,6 +1,6 @@
 import { createRenderer } from "../index.mjs";
-import fractalSprite from "../../shaders/fractal-sprite.wgsl?raw";
-import fractalCompute from "../../shaders/fractal-compute.wgsl?raw";
+import fractalSprite from "./fractal/sprites.wgsl?raw";
+import fractalCompute from "./fractal/compute.wgsl?raw";
 import { fiboGridN } from "../math.mjs";
 
 export let loadFractalRenderer = async (canvas: HTMLCanvasElement) => {

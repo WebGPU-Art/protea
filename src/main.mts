@@ -7,6 +7,7 @@ import {} from "./apps/attractor-fourwing.mjs";
 import {} from "./apps/fractal.mjs";
 import {} from "./apps/collision.mjs";
 import {} from "./apps/bounce.mjs";
+import {} from "./apps/bounce-trail.mjs";
 import {} from "./apps/feday.mjs";
 import {} from "./apps/bifurcation.mjs";
 import {} from "./apps/ball-spin.mjs";

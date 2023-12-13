@@ -1,6 +1,6 @@
 import { createRenderer } from "../index.mjs";
-import attractorSprite from "../../shaders/attractor-sprite.wgsl?raw";
-import attractorCompute from "../../shaders/attractor-compute-four-wing.wgsl?raw";
+import attractorSprite from "./attractor/sprites.wgsl?raw";
+import attractorCompute from "./attractor/compute-four-wing.wgsl?raw";
 import { fiboGridN, rand_middle } from "../math.mjs";
 
 export let loadFourwingRenderer = async (canvas: HTMLCanvasElement) => {

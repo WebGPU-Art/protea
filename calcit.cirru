@@ -336,6 +336,18 @@
                       |b $ %{} :Leaf (:at 1701579124569) (:by |rJG4IHzWf) (:text |:lifegame)
                       |h $ %{} :Leaf (:at 1701579128396) (:by |rJG4IHzWf) (:text "|\"Lifegame")
                       |l $ %{} :Leaf (:at 1700503251549) (:by |rJG4IHzWf) (:text |:dark)
+                  |w $ %{} :Expr (:at 1700503243366) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1700503243775) (:by |rJG4IHzWf) (:text |::)
+                      |b $ %{} :Leaf (:at 1701798866412) (:by |rJG4IHzWf) (:text |:lifegame-trail)
+                      |h $ %{} :Leaf (:at 1701798869465) (:by |rJG4IHzWf) (:text "|\"Lifegame Trail")
+                      |l $ %{} :Leaf (:at 1700503251549) (:by |rJG4IHzWf) (:text |:dark)
+                  |x $ %{} :Expr (:at 1702230361864) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1702230361864) (:by |rJG4IHzWf) (:text |::)
+                      |b $ %{} :Leaf (:at 1702230361864) (:by |rJG4IHzWf) (:text |:bounce-trail)
+                      |h $ %{} :Leaf (:at 1702230361864) (:by |rJG4IHzWf) (:text "||Bounce Trail")
+                      |l $ %{} :Leaf (:at 1702230361864) (:by |rJG4IHzWf) (:text |:dark)
       :ns $ %{} :CodeEntry (:doc |)
         :code $ %{} :Expr (:at 1527788237503) (:by |root)
           :data $ {}
@@ -541,6 +553,13 @@
                                         :data $ {}
                                           |T $ %{} :Leaf (:at 1699895931796) (:by |rJG4IHzWf) (:text |loadBounceRenderer)
                                           |b $ %{} :Leaf (:at 1699776638186) (:by |rJG4IHzWf) (:text |canvas)
+                                  |sT $ %{} :Expr (:at 1699776632588) (:by |rJG4IHzWf)
+                                    :data $ {}
+                                      |D $ %{} :Leaf (:at 1702229217287) (:by |rJG4IHzWf) (:text |:bounce-trail)
+                                      |T $ %{} :Expr (:at 1699776630581) (:by |rJG4IHzWf)
+                                        :data $ {}
+                                          |T $ %{} :Leaf (:at 1702229221196) (:by |rJG4IHzWf) (:text |loadBounceTrailRenderer)
+                                          |b $ %{} :Leaf (:at 1699776638186) (:by |rJG4IHzWf) (:text |canvas)
                                   |t $ %{} :Expr (:at 1699776632588) (:by |rJG4IHzWf)
                                     :data $ {}
                                       |D $ %{} :Leaf (:at 1700242065156) (:by |rJG4IHzWf) (:text |:feday)
@@ -568,6 +587,13 @@
                                       |b $ %{} :Expr (:at 1700503269642) (:by |rJG4IHzWf)
                                         :data $ {}
                                           |T $ %{} :Leaf (:at 1701579203834) (:by |rJG4IHzWf) (:text |loadLifegameRenderer)
+                                          |b $ %{} :Leaf (:at 1700503273226) (:by |rJG4IHzWf) (:text |canvas)
+                                  |x $ %{} :Expr (:at 1700503267636) (:by |rJG4IHzWf)
+                                    :data $ {}
+                                      |T $ %{} :Leaf (:at 1701798887249) (:by |rJG4IHzWf) (:text |:lifegame-trail)
+                                      |b $ %{} :Expr (:at 1700503269642) (:by |rJG4IHzWf)
+                                        :data $ {}
+                                          |T $ %{} :Leaf (:at 1701798890686) (:by |rJG4IHzWf) (:text |loadLifegameTrailRenderer)
                                           |b $ %{} :Leaf (:at 1700503273226) (:by |rJG4IHzWf) (:text |canvas)
                   |b $ %{} :Expr (:at 1699550963724) (:by |rJG4IHzWf)
                     :data $ {}
@@ -1027,6 +1053,13 @@
                     |h $ %{} :Expr (:at 1699776619727) (:by |rJG4IHzWf)
                       :data $ {}
                         |T $ %{} :Leaf (:at 1699895927320) (:by |rJG4IHzWf) (:text |loadBounceRenderer)
+                |zCD $ %{} :Expr (:at 1699776611129) (:by |rJG4IHzWf)
+                  :data $ {}
+                    |T $ %{} :Leaf (:at 1702229230774) (:by |rJG4IHzWf) (:text "|\"../src/apps/bounce-trail")
+                    |b $ %{} :Leaf (:at 1699776619499) (:by |rJG4IHzWf) (:text |:refer)
+                    |h $ %{} :Expr (:at 1699776619727) (:by |rJG4IHzWf)
+                      :data $ {}
+                        |T $ %{} :Leaf (:at 1702229228479) (:by |rJG4IHzWf) (:text |loadBounceTrailRenderer)
                 |zCT $ %{} :Expr (:at 1699776611129) (:by |rJG4IHzWf)
                   :data $ {}
                     |T $ %{} :Leaf (:at 1700242080147) (:by |rJG4IHzWf) (:text "|\"../src/apps/feday")
@@ -1055,6 +1088,13 @@
                     |h $ %{} :Expr (:at 1699776619727) (:by |rJG4IHzWf)
                       :data $ {}
                         |T $ %{} :Leaf (:at 1701579227045) (:by |rJG4IHzWf) (:text |loadLifegameRenderer)
+                |zCx $ %{} :Expr (:at 1699776611129) (:by |rJG4IHzWf)
+                  :data $ {}
+                    |T $ %{} :Leaf (:at 1701798898873) (:by |rJG4IHzWf) (:text "|\"../src/apps/lifegame-trail")
+                    |b $ %{} :Leaf (:at 1699776619499) (:by |rJG4IHzWf) (:text |:refer)
+                    |h $ %{} :Expr (:at 1699776619727) (:by |rJG4IHzWf)
+                      :data $ {}
+                        |T $ %{} :Leaf (:at 1701798896473) (:by |rJG4IHzWf) (:text |loadLifegameTrailRenderer)
                 |zD $ %{} :Expr (:at 1699549071462) (:by |rJG4IHzWf)
                   :data $ {}
                     |T $ %{} :Leaf (:at 1699549074912) (:by |rJG4IHzWf) (:text "|\"../src/index")

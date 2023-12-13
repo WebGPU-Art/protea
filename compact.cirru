@@ -51,7 +51,7 @@
             def skip-rendering? $ = "\"true" (get-env "\"skip" "\"false")
         |tabs $ %{} :CodeEntry (:doc |)
           :code $ quote
-            def tabs $ [] (:: :fireworks |Fireworks :dark) (:: :lorenz |Lorenz :dark) (:: :aizawa |Aizawa :dark) (:: :fourwing "|Four Wing" :dark) (:: :fractal |Fractal :dark) (:: :collision |Collision :dark) (:: :bounce |Bounce :dark) (:: :feday |FEDAY :dark) (:: :bifurcation "\"Bifurcation" :dark) (:: :ball-spin "\"Ball Spin" :dark) (:: :lifegame "\"Lifegame" :dark)
+            def tabs $ [] (:: :fireworks |Fireworks :dark) (:: :lorenz |Lorenz :dark) (:: :aizawa |Aizawa :dark) (:: :fourwing "|Four Wing" :dark) (:: :fractal |Fractal :dark) (:: :collision |Collision :dark) (:: :bounce |Bounce :dark) (:: :feday |FEDAY :dark) (:: :bifurcation "\"Bifurcation" :dark) (:: :ball-spin "\"Ball Spin" :dark) (:: :lifegame "\"Lifegame" :dark) (:: :lifegame-trail "\"Lifegame Trail" :dark) (:: :bounce-trail "|Bounce Trail" :dark)
       :ns $ %{} :CodeEntry (:doc |)
         :code $ quote
           ns app.config $ :require
@@ -94,10 +94,12 @@
                       :fractal $ loadFractalRenderer canvas
                       :collision $ loadCollisionRenderer canvas
                       :bounce $ loadBounceRenderer canvas
+                      :bounce-trail $ loadBounceTrailRenderer canvas
                       :feday $ loadFedayRenderer canvas
                       :bifurcation $ loadBifurcationRenderer canvas
                       :ball-spin $ loadBallSpinRenderer canvas
                       :lifegame $ loadLifegameRenderer canvas
+                      :lifegame-trail $ loadLifegameTrailRenderer canvas
                 reset! *instance-renderer renderer
         |loop-renderer! $ %{} :CodeEntry (:doc |)
           :code $ quote
@@ -171,10 +173,12 @@
             "\"../src/apps/fractal" :refer $ loadFractalRenderer
             "\"../src/apps/collision" :refer $ loadCollisionRenderer
             "\"../src/apps/bounce" :refer $ loadBounceRenderer
+            "\"../src/apps/bounce-trail" :refer $ loadBounceTrailRenderer
             "\"../src/apps/feday" :refer $ loadFedayRenderer
             "\"../src/apps/bifurcation" :refer $ loadBifurcationRenderer
             "\"../src/apps/ball-spin" :refer $ loadBallSpinRenderer
             "\"../src/apps/lifegame" :refer $ loadLifegameRenderer
+            "\"../src/apps/lifegame-trail" :refer $ loadLifegameTrailRenderer
             "\"../src/index" :refer $ setupInitials
     |app.schema $ %{} :FileEntry
       :defs $ {}

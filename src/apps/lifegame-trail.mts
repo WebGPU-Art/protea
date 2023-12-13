@@ -1,8 +1,8 @@
 import { createRenderer } from "../index.mjs";
-import spriteShader from "./lifegame/sprites.wgsl?raw";
-import computeShader from "./lifegame/compute.wgsl?raw";
+import spriteShader from "./lifegame-trail/sprites.wgsl?raw";
+import computeShader from "./lifegame-trail/compute.wgsl?raw";
 
-export let loadLifegameRenderer = async (canvas: HTMLCanvasElement) => {
+export let loadLifegameTrailRenderer = async (canvas: HTMLCanvasElement) => {
   let seedSize = 160;
 
   let renderFrame = await createRenderer(
@@ -29,7 +29,7 @@ export let loadLifegameRenderer = async (canvas: HTMLCanvasElement) => {
   return renderFrame;
 };
 
-let scale = 8;
+let scale = 4;
 
 function makeSeed(size: number, _s: number): Float32Array {
   const buf = new Float32Array(size * size * size * 4);
@@ -42,7 +42,7 @@ function makeSeed(size: number, _s: number): Float32Array {
         buf[b + 0] = (i - 0.5 * size) * scale;
         buf[b + 1] = (j - 0.5 * size) * scale;
         buf[b + 2] = (k - 0.5 * size) * scale;
-        buf[b + 3] = Math.random() * 100;
+        buf[b + 3] = Math.random() > 0.5 ? 1.0 : 0.0;
       }
     }
   }

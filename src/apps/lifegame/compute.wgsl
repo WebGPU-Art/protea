@@ -26,7 +26,10 @@ struct SphereConstraint {
 
 fn rand(n: f32) -> f32 { return fract(sin(n) * 43758.5453123); }
 
-fn safe_index(cursor: u32, unit: i32, max_idx: u32, x: i32, y: i32, z: i32) -> u32 {
+const unit_size = 160u;
+
+fn safe_index(cursor: u32, _unit: i32, max_idx: u32, x: i32, y: i32, z: i32) -> u32 {
+  let unit = i32(unit_size);
   let x_offset = x * unit * unit;
   let y_offset = y * unit;
   let z_offset = z;
@@ -86,13 +89,13 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
   if mean > 100.0 {
     next_v -= 1.;
   } else {
-    if variance > 1. {
+    if variance > 0.8 {
       if mean > 50. {
         next_v += 1.0;
       } else {
         next_v -= 1.0;
       }
-    } else if variance < 0.1 {
+    } else if variance < 0.8 {
       if mean > 50. {
         next_v += 1.0;
       } else {

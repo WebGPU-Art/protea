@@ -64,7 +64,7 @@ fn vert_main(
   let p0 = vec4(pos * params.scale, 1.0);
 
   let p: vec3<f32> = transform_perspective(p0.xyz).point_position;
-  let scale: f32 = 0.002;
+  let scale: f32 = 0.0002;
 
   output.position = vec4(p * scale, 1.0);
   // let c3: vec3<f32> = hsl(fract(travel/100.), 0.8, fract(0.9 - ages * 0.0002));

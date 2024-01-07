@@ -348,6 +348,12 @@
                       |b $ %{} :Leaf (:at 1702230361864) (:by |rJG4IHzWf) (:text |:bounce-trail)
                       |h $ %{} :Leaf (:at 1702230361864) (:by |rJG4IHzWf) (:text "||Bounce Trail")
                       |l $ %{} :Leaf (:at 1702230361864) (:by |rJG4IHzWf) (:text |:dark)
+                  |y $ %{} :Expr (:at 1702230361864) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1702230361864) (:by |rJG4IHzWf) (:text |::)
+                      |b $ %{} :Leaf (:at 1704090054042) (:by |rJG4IHzWf) (:text |:orbit-spark)
+                      |h $ %{} :Leaf (:at 1704090060565) (:by |rJG4IHzWf) (:text "||Orbit Spark")
+                      |l $ %{} :Leaf (:at 1702230361864) (:by |rJG4IHzWf) (:text |:dark)
       :ns $ %{} :CodeEntry (:doc |)
         :code $ %{} :Expr (:at 1527788237503) (:by |root)
           :data $ {}
@@ -595,6 +601,13 @@
                                         :data $ {}
                                           |T $ %{} :Leaf (:at 1701798890686) (:by |rJG4IHzWf) (:text |loadLifegameTrailRenderer)
                                           |b $ %{} :Leaf (:at 1700503273226) (:by |rJG4IHzWf) (:text |canvas)
+                                  |y $ %{} :Expr (:at 1704090090422) (:by |rJG4IHzWf)
+                                    :data $ {}
+                                      |T $ %{} :Leaf (:at 1704090092279) (:by |rJG4IHzWf) (:text |:orbit-spark)
+                                      |b $ %{} :Expr (:at 1704090104358) (:by |rJG4IHzWf)
+                                        :data $ {}
+                                          |T $ %{} :Leaf (:at 1704090115555) (:by |rJG4IHzWf) (:text |loadOrbitSparkRenderer)
+                                          |b $ %{} :Leaf (:at 1704090104358) (:by |rJG4IHzWf) (:text |canvas)
                   |b $ %{} :Expr (:at 1699550963724) (:by |rJG4IHzWf)
                     :data $ {}
                       |T $ %{} :Leaf (:at 1699550964403) (:by |rJG4IHzWf) (:text |reset!)
@@ -1095,6 +1108,13 @@
                     |h $ %{} :Expr (:at 1699776619727) (:by |rJG4IHzWf)
                       :data $ {}
                         |T $ %{} :Leaf (:at 1701798896473) (:by |rJG4IHzWf) (:text |loadLifegameTrailRenderer)
+                |zCy $ %{} :Expr (:at 1699776611129) (:by |rJG4IHzWf)
+                  :data $ {}
+                    |T $ %{} :Leaf (:at 1704090127422) (:by |rJG4IHzWf) (:text "|\"../src/apps/orbit-spark")
+                    |b $ %{} :Leaf (:at 1699776619499) (:by |rJG4IHzWf) (:text |:refer)
+                    |h $ %{} :Expr (:at 1699776619727) (:by |rJG4IHzWf)
+                      :data $ {}
+                        |T $ %{} :Leaf (:at 1704090122194) (:by |rJG4IHzWf) (:text |loadOrbitSparkRenderer)
                 |zD $ %{} :Expr (:at 1699549071462) (:by |rJG4IHzWf)
                   :data $ {}
                     |T $ %{} :Leaf (:at 1699549074912) (:by |rJG4IHzWf) (:text "|\"../src/index")

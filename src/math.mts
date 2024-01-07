@@ -12,3 +12,15 @@ export let fiboGridN = (n: number, total: number): [number, number, number] => {
 export let rand_middle = (n: number) => {
   return n * (Math.random() - 0.5);
 };
+
+export let fiboGridN_snd = (
+  n: number,
+  total: number
+): [number, number, number] => {
+  let theta = (2.0 * Math.PI * n) / PHI;
+  let phi = Math.acos(1 - (2 * (n + 0.5)) / total);
+  let x = Math.sin(phi) * Math.cos(theta);
+  let y = Math.sin(phi) * Math.sin(theta);
+  let z = Math.cos(phi);
+  return [x, y, z];
+};

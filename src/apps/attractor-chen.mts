@@ -4,7 +4,7 @@ import attractorCompute from "./attractor/compute-chen.wgsl?raw";
 import { fiboGridN, rand_middle } from "../math.mjs";
 
 export let loadChenRenderer = async (canvas: HTMLCanvasElement) => {
-  let seedSize = 2000000;
+  let seedSize = 4100000;
 
   let renderFrame = await createRenderer(
     canvas,

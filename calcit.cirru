@@ -354,6 +354,12 @@
                       |b $ %{} :Leaf (:at 1704090054042) (:by |rJG4IHzWf) (:text |:orbit-spark)
                       |h $ %{} :Leaf (:at 1704090060565) (:by |rJG4IHzWf) (:text "||Orbit Spark")
                       |l $ %{} :Leaf (:at 1702230361864) (:by |rJG4IHzWf) (:text |:dark)
+                  |z $ %{} :Expr (:at 1702230361864) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1702230361864) (:by |rJG4IHzWf) (:text |::)
+                      |b $ %{} :Leaf (:at 1706427265576) (:by |rJG4IHzWf) (:text |:chen)
+                      |h $ %{} :Leaf (:at 1706427268968) (:by |rJG4IHzWf) (:text ||Chen)
+                      |l $ %{} :Leaf (:at 1702230361864) (:by |rJG4IHzWf) (:text |:dark)
       :ns $ %{} :CodeEntry (:doc |)
         :code $ %{} :Expr (:at 1527788237503) (:by |root)
           :data $ {}
@@ -607,6 +613,13 @@
                                       |b $ %{} :Expr (:at 1704090104358) (:by |rJG4IHzWf)
                                         :data $ {}
                                           |T $ %{} :Leaf (:at 1704090115555) (:by |rJG4IHzWf) (:text |loadOrbitSparkRenderer)
+                                          |b $ %{} :Leaf (:at 1704090104358) (:by |rJG4IHzWf) (:text |canvas)
+                                  |z $ %{} :Expr (:at 1704090090422) (:by |rJG4IHzWf)
+                                    :data $ {}
+                                      |T $ %{} :Leaf (:at 1706427293188) (:by |rJG4IHzWf) (:text |:chen)
+                                      |b $ %{} :Expr (:at 1704090104358) (:by |rJG4IHzWf)
+                                        :data $ {}
+                                          |T $ %{} :Leaf (:at 1706427301582) (:by |rJG4IHzWf) (:text |loadChenRenderer)
                                           |b $ %{} :Leaf (:at 1704090104358) (:by |rJG4IHzWf) (:text |canvas)
                   |b $ %{} :Expr (:at 1699550963724) (:by |rJG4IHzWf)
                     :data $ {}
@@ -1045,6 +1058,13 @@
                     |h $ %{} :Expr (:at 1699548935548) (:by |rJG4IHzWf)
                       :data $ {}
                         |T $ %{} :Leaf (:at 1699553280259) (:by |rJG4IHzWf) (:text |loadFourwingRenderer)
+                |z8T $ %{} :Expr (:at 1699548920367) (:by |rJG4IHzWf)
+                  :data $ {}
+                    |T $ %{} :Leaf (:at 1706427309218) (:by |rJG4IHzWf) (:text "|\"../src/apps/attractor-chen")
+                    |b $ %{} :Leaf (:at 1699548935286) (:by |rJG4IHzWf) (:text |:refer)
+                    |h $ %{} :Expr (:at 1699548935548) (:by |rJG4IHzWf)
+                      :data $ {}
+                        |T $ %{} :Leaf (:at 1706427311123) (:by |rJG4IHzWf) (:text |loadChenRenderer)
                 |z9 $ %{} :Expr (:at 1699548920367) (:by |rJG4IHzWf)
                   :data $ {}
                     |T $ %{} :Leaf (:at 1699550419801) (:by |rJG4IHzWf) (:text "|\"../src/apps/fractal")

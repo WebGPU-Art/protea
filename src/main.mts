@@ -14,6 +14,7 @@ import {} from "./apps/ball-spin.mjs";
 import {} from "./apps/lifegame.mjs";
 import {} from "./apps/lifegame-trail.mjs";
 import {} from "./apps/orbit-spark.mjs";
+import {} from "./apps/attractor-chen.mjs";
 
 let instanceRenderer: (t: number, skipComputing: boolean) => void;
 let canvas = document.querySelector("#canvas-container") as HTMLCanvasElement;

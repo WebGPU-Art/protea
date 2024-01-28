@@ -360,6 +360,18 @@
                       |b $ %{} :Leaf (:at 1706427265576) (:by |rJG4IHzWf) (:text |:chen)
                       |h $ %{} :Leaf (:at 1706427268968) (:by |rJG4IHzWf) (:text ||Chen)
                       |l $ %{} :Leaf (:at 1702230361864) (:by |rJG4IHzWf) (:text |:dark)
+                  |zD $ %{} :Expr (:at 1702230361864) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1702230361864) (:by |rJG4IHzWf) (:text |::)
+                      |b $ %{} :Leaf (:at 1706459667300) (:by |rJG4IHzWf) (:text |:sprott)
+                      |h $ %{} :Leaf (:at 1706459673341) (:by |rJG4IHzWf) (:text ||Sprott)
+                      |l $ %{} :Leaf (:at 1702230361864) (:by |rJG4IHzWf) (:text |:dark)
+                  |zP $ %{} :Expr (:at 1702230361864) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1702230361864) (:by |rJG4IHzWf) (:text |::)
+                      |b $ %{} :Leaf (:at 1706460593534) (:by |rJG4IHzWf) (:text |:lorenz83)
+                      |h $ %{} :Leaf (:at 1706460597111) (:by |rJG4IHzWf) (:text ||Lorenz83)
+                      |l $ %{} :Leaf (:at 1702230361864) (:by |rJG4IHzWf) (:text |:dark)
       :ns $ %{} :CodeEntry (:doc |)
         :code $ %{} :Expr (:at 1527788237503) (:by |root)
           :data $ {}
@@ -621,6 +633,20 @@
                                         :data $ {}
                                           |T $ %{} :Leaf (:at 1706427301582) (:by |rJG4IHzWf) (:text |loadChenRenderer)
                                           |b $ %{} :Leaf (:at 1704090104358) (:by |rJG4IHzWf) (:text |canvas)
+                                  |zD $ %{} :Expr (:at 1706459638179) (:by |rJG4IHzWf)
+                                    :data $ {}
+                                      |T $ %{} :Leaf (:at 1706459640456) (:by |rJG4IHzWf) (:text |:sprott)
+                                      |b $ %{} :Expr (:at 1706459641038) (:by |rJG4IHzWf)
+                                        :data $ {}
+                                          |T $ %{} :Leaf (:at 1706459645386) (:by |rJG4IHzWf) (:text |loadSprottRenderer)
+                                          |b $ %{} :Leaf (:at 1706459646349) (:by |rJG4IHzWf) (:text |canvas)
+                                  |zP $ %{} :Expr (:at 1706459638179) (:by |rJG4IHzWf)
+                                    :data $ {}
+                                      |T $ %{} :Leaf (:at 1706461125149) (:by |rJG4IHzWf) (:text |:lorenz83)
+                                      |b $ %{} :Expr (:at 1706459641038) (:by |rJG4IHzWf)
+                                        :data $ {}
+                                          |T $ %{} :Leaf (:at 1706461132578) (:by |rJG4IHzWf) (:text |loadLorenz83Renderer)
+                                          |b $ %{} :Leaf (:at 1706459646349) (:by |rJG4IHzWf) (:text |canvas)
                   |b $ %{} :Expr (:at 1699550963724) (:by |rJG4IHzWf)
                     :data $ {}
                       |T $ %{} :Leaf (:at 1699550964403) (:by |rJG4IHzWf) (:text |reset!)
@@ -1065,6 +1091,20 @@
                     |h $ %{} :Expr (:at 1699548935548) (:by |rJG4IHzWf)
                       :data $ {}
                         |T $ %{} :Leaf (:at 1706427311123) (:by |rJG4IHzWf) (:text |loadChenRenderer)
+                |z8j $ %{} :Expr (:at 1699548920367) (:by |rJG4IHzWf)
+                  :data $ {}
+                    |T $ %{} :Leaf (:at 1706459656210) (:by |rJG4IHzWf) (:text "|\"../src/apps/attractor-sprott")
+                    |b $ %{} :Leaf (:at 1699548935286) (:by |rJG4IHzWf) (:text |:refer)
+                    |h $ %{} :Expr (:at 1699548935548) (:by |rJG4IHzWf)
+                      :data $ {}
+                        |T $ %{} :Leaf (:at 1706459652830) (:by |rJG4IHzWf) (:text |loadSprottRenderer)
+                |z8r $ %{} :Expr (:at 1699548920367) (:by |rJG4IHzWf)
+                  :data $ {}
+                    |T $ %{} :Leaf (:at 1706460559814) (:by |rJG4IHzWf) (:text "|\"../src/apps/attractor-lorenz83")
+                    |b $ %{} :Leaf (:at 1699548935286) (:by |rJG4IHzWf) (:text |:refer)
+                    |h $ %{} :Expr (:at 1699548935548) (:by |rJG4IHzWf)
+                      :data $ {}
+                        |T $ %{} :Leaf (:at 1706460566318) (:by |rJG4IHzWf) (:text |loadLorenz83Renderer)
                 |z9 $ %{} :Expr (:at 1699548920367) (:by |rJG4IHzWf)
                   :data $ {}
                     |T $ %{} :Leaf (:at 1699550419801) (:by |rJG4IHzWf) (:text "|\"../src/apps/fractal")

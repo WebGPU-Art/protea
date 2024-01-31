@@ -29,11 +29,14 @@ struct LorenzResult {
   distance: f32,
 }
 
-fn lorenz(p: vec3f, dt: f32) -> LorenzResult {
-  let beta = 8.0 / 3.0;
-  let dx = tau * (p.y - p.x);
-  let dy = p.x * (rou - p.z) - p.y;
-  let dz = p.x * p.y - beta * p.z;
+fn chen(p: vec3f, dt: f32) -> LorenzResult {
+  let alpha = 5.;
+  let beta = -10.;
+  let gama = -0.38;
+
+  let dx = alpha * p.x - p.y * p.z;
+  let dy = beta * p.y + p.x * p.z;
+  let dz = gama * p.z + p.x * p.y / 3.;
   let d = vec3<f32>(dx, dy, dz) * dt;
   return LorenzResult(
     p + d,
@@ -41,6 +44,8 @@ fn lorenz(p: vec3f, dt: f32) -> LorenzResult {
     length(d) * 2.1
   );
 }
+
+
 
 fn rand(n: f32) -> f32 { return fract(sin(n) * 43758.5453123); }
 
@@ -66,12 +71,8 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
     return;
   }
 
-  let ret = lorenz(v_pos, params.delta_t * 0.01 * (2. + 2. * rand(f32(index))));
-  // let ret = four_wing(v_pos, params.delta_t * 0.01 * (20. + 2. * rand(f32(index))));
-  // let ret = aizawa(v_pos, params.delta_t * 0.001 * (12. + 4. * rand(f32(index))));
-
-  // let ret = lorenz(v_pos, params.delta_t * 0.2);
-  // let ret = chen(v_pos, params.delta_t * 0.8);
+  // let ret = lorenz(v_pos, params.delta_t * 0.01 * (2. + 2. * rand(f32(index))));
+  let ret = chen(v_pos, params.delta_t * 0.01 * (2. + 2. * rand(f32(index))));
 
   // Write back
   particles_b.particles[index].pos = ret.position;

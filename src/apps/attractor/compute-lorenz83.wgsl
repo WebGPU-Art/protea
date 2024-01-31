@@ -29,11 +29,18 @@ struct LorenzResult {
   distance: f32,
 }
 
-fn lorenz(p: vec3f, dt: f32) -> LorenzResult {
-  let beta = 8.0 / 3.0;
-  let dx = tau * (p.y - p.x);
-  let dy = p.x * (rou - p.z) - p.y;
-  let dz = p.x * p.y - beta * p.z;
+fn lorenz83(p: vec3f, dt: f32) -> LorenzResult {
+  let x = p.x;
+  let y = p.y;
+  let z = p.z;
+  let a = 0.95;
+  let b = 7.91;
+  let f = 4.83;
+  let g = 4.66;
+
+  let dx = -a * x - y * y - z * z + a * f;
+  let dy = -y + x * y - b * x * z + g;
+  let dz = -z + b * x * y + x * z;
   let d = vec3<f32>(dx, dy, dz) * dt;
   return LorenzResult(
     p + d,
@@ -66,7 +73,7 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
     return;
   }
 
-  let ret = lorenz(v_pos, params.delta_t * 0.01 * (2. + 2. * rand(f32(index))));
+  let ret = lorenz83(v_pos, params.delta_t * 0.01 * (2. + 2. * rand(f32(index))));
   // let ret = four_wing(v_pos, params.delta_t * 0.01 * (20. + 2. * rand(f32(index))));
   // let ret = aizawa(v_pos, params.delta_t * 0.001 * (12. + 4. * rand(f32(index))));
 

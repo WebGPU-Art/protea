@@ -51,7 +51,7 @@
             def skip-rendering? $ = "\"true" (get-env "\"skip" "\"false")
         |tabs $ %{} :CodeEntry (:doc |)
           :code $ quote
-            def tabs $ [] (:: :fireworks |Fireworks :dark) (:: :lorenz |Lorenz :dark) (:: :aizawa |Aizawa :dark) (:: :fourwing "|Four Wing" :dark) (:: :fractal |Fractal :dark) (:: :collision |Collision :dark) (:: :bounce |Bounce :dark) (:: :feday |FEDAY :dark) (:: :bifurcation "\"Bifurcation" :dark) (:: :ball-spin "\"Ball Spin" :dark) (:: :lifegame "\"Lifegame" :dark) (:: :lifegame-trail "\"Lifegame Trail" :dark) (:: :bounce-trail "|Bounce Trail" :dark) (:: :orbit-spark "|Orbit Spark" :dark)
+            def tabs $ [] (:: :fireworks |Fireworks :dark) (:: :lorenz |Lorenz :dark) (:: :aizawa |Aizawa :dark) (:: :fourwing "|Four Wing" :dark) (:: :fractal |Fractal :dark) (:: :collision |Collision :dark) (:: :bounce |Bounce :dark) (:: :feday |FEDAY :dark) (:: :bifurcation "\"Bifurcation" :dark) (:: :ball-spin "\"Ball Spin" :dark) (:: :lifegame "\"Lifegame" :dark) (:: :lifegame-trail "\"Lifegame Trail" :dark) (:: :bounce-trail "|Bounce Trail" :dark) (:: :orbit-spark "|Orbit Spark" :dark) (:: :chen |Chen :dark) (:: :sprott |Sprott :dark) (:: :lorenz83 |Lorenz83 :dark)
       :ns $ %{} :CodeEntry (:doc |)
         :code $ quote
           ns app.config $ :require
@@ -101,6 +101,9 @@
                       :lifegame $ loadLifegameRenderer canvas
                       :lifegame-trail $ loadLifegameTrailRenderer canvas
                       :orbit-spark $ loadOrbitSparkRenderer canvas
+                      :chen $ loadChenRenderer canvas
+                      :sprott $ loadSprottRenderer canvas
+                      :lorenz83 $ loadLorenz83Renderer canvas
                 reset! *instance-renderer renderer
         |loop-renderer! $ %{} :CodeEntry (:doc |)
           :code $ quote
@@ -171,6 +174,9 @@
             "\"../src/apps/attractor-aizawa" :refer $ loadAizawaRenderer
             "\"../src/apps/attractor-lorenz" :refer $ loadLorenzRenderer
             "\"../src/apps/attractor-fourwing" :refer $ loadFourwingRenderer
+            "\"../src/apps/attractor-chen" :refer $ loadChenRenderer
+            "\"../src/apps/attractor-sprott" :refer $ loadSprottRenderer
+            "\"../src/apps/attractor-lorenz83" :refer $ loadLorenz83Renderer
             "\"../src/apps/fractal" :refer $ loadFractalRenderer
             "\"../src/apps/collision" :refer $ loadCollisionRenderer
             "\"../src/apps/bounce" :refer $ loadBounceRenderer

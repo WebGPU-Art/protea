@@ -9,6 +9,8 @@ import {
   resetCanvasSize,
   setupRemoteControl,
 } from "./index.mjs";
+import { useGamepad, useRemoveContrl } from "./config.mjs";
+import { loadGamepadControl } from "./control.mjs";
 
 export async function setupInitials(canvas: HTMLCanvasElement) {
   const adapter = await navigator.gpu.requestAdapter();
@@ -26,9 +28,11 @@ export async function setupInitials(canvas: HTMLCanvasElement) {
   renderControl();
   startControlLoop(10, onControlEvent);
 
-  const parsed = queryString.parse(location.search);
-
-  if (parsed["remote-control"]) {
+  if (useRemoveContrl) {
     setupRemoteControl();
+  }
+
+  if (useGamepad) {
+    loadGamepadControl();
   }
 }

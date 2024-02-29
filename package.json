@@ -5,12 +5,12 @@
   "devDependencies": {
     "@webgpu/types": "^0.1.40",
     "bottom-tip": "^0.1.5",
-    "query-string": "^8.1.0",
+    "query-string": "^9.0.0",
     "typescript": "^5.3.3",
-    "vite": "^5.0.12"
+    "vite": "^5.1.4"
   },
   "dependencies": {
-    "@calcit/procs": "^0.8.19",
+    "@calcit/procs": "^0.8.37",
     "@triadica/touch-control": "^0.0.4-a1",
     "ismobilejs": "^1.1.1"
   },

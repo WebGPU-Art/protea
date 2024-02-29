@@ -52,6 +52,13 @@
         |tabs $ %{} :CodeEntry (:doc |)
           :code $ quote
             def tabs $ [] (:: :fireworks |Fireworks :dark) (:: :lorenz |Lorenz :dark) (:: :aizawa |Aizawa :dark) (:: :fourwing "|Four Wing" :dark) (:: :fractal |Fractal :dark) (:: :collision |Collision :dark) (:: :bounce |Bounce :dark) (:: :feday |FEDAY :dark) (:: :bifurcation "\"Bifurcation" :dark) (:: :ball-spin "\"Ball Spin" :dark) (:: :lifegame "\"Lifegame" :dark) (:: :lifegame-trail "\"Lifegame Trail" :dark) (:: :bounce-trail "|Bounce Trail" :dark) (:: :orbit-spark "|Orbit Spark" :dark) (:: :chen |Chen :dark) (:: :sprott |Sprott :dark) (:: :lorenz83 |Lorenz83 :dark)
+        |threshold $ %{} :CodeEntry (:doc |)
+          :code $ quote
+            def threshold $ js/parseFloat
+              or (get-env "\"threshold") "\"0.016"
+        |use-gamepad? $ %{} :CodeEntry (:doc |)
+          :code $ quote
+            def use-gamepad? $ get-env "\"gamepad"
       :ns $ %{} :CodeEntry (:doc |)
         :code $ quote
           ns app.config $ :require

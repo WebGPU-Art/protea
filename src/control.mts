@@ -1,10 +1,13 @@
+import { setupGamepadControl } from "./gamepad";
 import {
   moveViewerBy,
   rotateGlanceBy,
   spinGlanceBy,
   changeScaleBy,
+  atomViewerScale,
 } from "./perspective.mjs";
 import { ControlStates } from "@triadica/touch-control";
+import { threshold } from "./config.mjs";
 
 /** 2D point */
 export type V2 = [number, number];
@@ -60,3 +63,40 @@ export function registerShaderResult(
 ) {
   window.__lagopusHandleCompilationInfo = f;
 }
+
+let someValue = (x: number) => {
+  return Math.abs(x) > threshold ? x : 0;
+};
+
+export let loadGamepadControl = () => {
+  console.log("loading gamepad control");
+  setupGamepadControl((axes, buttons) => {
+    let scale = atomViewerScale.deref();
+    let ss = 1 / scale;
+    // left/right, up/down, front/back
+    moveViewerBy(
+      someValue(axes.rightX) * 10 * ss,
+      -someValue(axes.rightY) * 10 * ss,
+      someValue(axes.leftY) * 10 * ss
+    );
+    rotateGlanceBy(
+      -0.1 * someValue(axes.leftX),
+      0.05 * (buttons.up.value - buttons.down.value)
+    );
+
+    spinGlanceBy(0.1 * (buttons.right.value - buttons.left.value));
+
+    if (buttons.l2.value > 0.5) {
+      changeScaleBy(0.01);
+    }
+    if (buttons.r2.value > 0.5) {
+      changeScaleBy(-0.01);
+    }
+
+    registerShaderResult((e, code) => {
+      if (e.messages.length) {
+        console.error(e);
+      }
+    });
+  });
+};

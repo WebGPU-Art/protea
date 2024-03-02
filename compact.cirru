@@ -51,7 +51,7 @@
             def skip-rendering? $ = "\"true" (get-env "\"skip" "\"false")
         |tabs $ %{} :CodeEntry (:doc |)
           :code $ quote
-            def tabs $ [] (:: :fireworks |Fireworks :dark) (:: :lorenz |Lorenz :dark) (:: :aizawa |Aizawa :dark) (:: :fourwing "|Four Wing" :dark) (:: :fractal |Fractal :dark) (:: :collision |Collision :dark) (:: :bounce |Bounce :dark) (:: :feday |FEDAY :dark) (:: :bifurcation "\"Bifurcation" :dark) (:: :ball-spin "\"Ball Spin" :dark) (:: :lifegame "\"Lifegame" :dark) (:: :lifegame-trail "\"Lifegame Trail" :dark) (:: :bounce-trail "|Bounce Trail" :dark) (:: :orbit-spark "|Orbit Spark" :dark) (:: :chen |Chen :dark) (:: :sprott |Sprott :dark) (:: :lorenz83 |Lorenz83 :dark) (:: :orbits |Orbits :dark)
+            def tabs $ [] (:: :fireworks |Fireworks :dark) (:: :lorenz |Lorenz :dark) (:: :aizawa |Aizawa :dark) (:: :fourwing "|Four Wing" :dark) (:: :fractal |Fractal :dark) (:: :collision |Collision :dark) (:: :bounce |Bounce :dark) (:: :feday |FEDAY :dark) (:: :bifurcation "\"Bifurcation" :dark) (:: :ball-spin "\"Ball Spin" :dark) (:: :lifegame "\"Lifegame" :dark) (:: :lifegame-trail "\"Lifegame Trail" :dark) (:: :bounce-trail "|Bounce Trail" :dark) (:: :orbit-spark "|Orbit Spark" :dark) (:: :chen |Chen :dark) (:: :sprott |Sprott :dark) (:: :lorenz83 |Lorenz83 :dark) (:: :orbits |Orbits :dark) (:: :lamps |Lamps :dark) (:: :debug-grid "|Debug Grid" :dark)
         |threshold $ %{} :CodeEntry (:doc |)
           :code $ quote
             def threshold $ js/parseFloat
@@ -112,15 +112,22 @@
                       :sprott $ loadSprottRenderer canvas
                       :lorenz83 $ loadLorenz83Renderer canvas
                       :orbits $ loadOrbitsRenderer canvas
+                      :lamps $ lamps/loadRenderer canvas
+                      :debug-grid $ debug-grid/loadRenderer canvas
                 reset! *instance-renderer renderer
         |loop-renderer! $ %{} :CodeEntry (:doc |)
           :code $ quote
-            defn loop-renderer! () $ js/setTimeout
-              fn ()
+            defn loop-renderer! () $ if (&< js-config/interval 10)
+              do
                 js/requestAnimationFrame $ fn (_t) (loop-renderer!)
                 swap! *t inc
                 @*instance-renderer @*t js/window.skipComputing
-              , 20
+              js/setTimeout
+                fn ()
+                  js/requestAnimationFrame $ fn (_t) (loop-renderer!)
+                  swap! *t inc
+                  @*instance-renderer @*t js/window.skipComputing
+                , js-config/interval
         |main! $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn main! () (hint-fn async)
@@ -196,7 +203,10 @@
             "\"../src/apps/lifegame-trail" :refer $ loadLifegameTrailRenderer
             "\"../src/apps/orbit-spark" :refer $ loadOrbitSparkRenderer
             "\"../src/apps/orbits" :refer $ loadOrbitsRenderer
+            "\"../src/apps/lamps" :as lamps
+            "\"../src/apps/debug-grid" :as debug-grid
             "\"../src/index" :refer $ setupInitials
+            "\"../src/config" :as js-config
     |app.schema $ %{} :FileEntry
       :defs $ {}
         |store $ %{} :CodeEntry (:doc |)

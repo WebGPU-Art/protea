@@ -25,7 +25,7 @@ export async function setupInitials(canvas: HTMLCanvasElement) {
     resetCanvasSize(canvas);
     atomDepthTexture.reset(createDepthTexture());
   };
-  renderControl();
+
   startControlLoop(10, onControlEvent);
 
   if (useRemoveContrl) {
@@ -34,5 +34,7 @@ export async function setupInitials(canvas: HTMLCanvasElement) {
 
   if (useGamepad) {
     loadGamepadControl();
+  } else {
+    renderControl();
   }
 }

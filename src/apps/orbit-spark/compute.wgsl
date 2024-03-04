@@ -18,7 +18,7 @@ struct Particles {
   particles: array<Particle>,
 }
 
-@binding(0) @group(0) var<uniform> params: Params;
+@group(0) @binding(1) var<uniform> params: Params;
 @binding(1) @group(0) var<storage, read> pass_in: Particles;
 @binding(2) @group(0) var<storage, read_write> pass_out: Particles;
 

@@ -14,9 +14,9 @@ struct Particles {
   particles: array<Particle>,
 }
 
-@binding(0) @group(0) var<uniform> params: Params;
-@binding(1) @group(0) var<storage, read> particles_a: Particles;
-@binding(2) @group(0) var<storage, read_write> particles_b: Particles;
+@group(0) @binding(1) var<uniform> params: Params;
+@group(1) @binding(0) var<storage, read> particles_a: Particles;
+@group(1) @binding(1) var<storage, read_write> particles_b: Particles;
 
 const tau = 10f;
 const rou = 28f;

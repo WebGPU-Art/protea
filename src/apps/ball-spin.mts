@@ -3,7 +3,7 @@ import spriteShader from "./ball-spin/sprites.wgsl?raw";
 import computeShader from ".//ball-spin/compute.wgsl?raw";
 import { fiboGridN } from "../math.mjs";
 
-export let loadBallSpinRenderer = async (canvas: HTMLCanvasElement) => {
+export let loadRenderer = async (canvas: HTMLCanvasElement) => {
   let seedSize = 800000;
 
   let renderFrame = await createRenderer(

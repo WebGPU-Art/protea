@@ -4,7 +4,7 @@ import fireworksCompute from "./fireworks/compute.wgsl?raw";
 import { randPointInSphere } from "../util.mjs";
 import { rand_middle } from "../math.mjs";
 
-export let loadFireworksRenderer = async (canvas: HTMLCanvasElement) => {
+export let loadRenderer = async (canvas: HTMLCanvasElement) => {
   let seedSize = 2000000;
 
   let renderFrame = await createRenderer(

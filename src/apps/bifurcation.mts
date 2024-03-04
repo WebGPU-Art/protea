@@ -3,7 +3,7 @@ import spriteShader from "./bifurcation/sprites.wgsl?raw";
 import computeShader from "./bifurcation/compute.wgsl?raw";
 import { rand_middle } from "../math.mjs";
 
-export let loadBifurcationRenderer = async (canvas: HTMLCanvasElement) => {
+export let loadRenderer = async (canvas: HTMLCanvasElement) => {
   let seedSize = 2700000;
 
   let renderFrame = await createRenderer(

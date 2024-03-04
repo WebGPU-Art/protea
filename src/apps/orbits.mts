@@ -3,7 +3,7 @@ import spriteWGSL from "./orbits/sprites.wgsl?raw";
 import computeOrbits from "./orbits/compute.wgsl?raw";
 import { fiboGridN } from "../math.mjs";
 
-export let loadOrbitsRenderer = async (canvas: HTMLCanvasElement) => {
+export let loadRenderer = async (canvas: HTMLCanvasElement) => {
   let seedSize = 800000;
 
   let renderFrame = await createRenderer(

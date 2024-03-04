@@ -87,7 +87,7 @@ fn vert_main(
   lightness *= opacity;
 
   let c3: vec3<f32> = hsl(fract(point_idx / 400.), 0.8, lightness);
-  output.color = vec4(c3, 0.9);
+  output.color = vec4(c3, 1.);
 
   return output;
 }

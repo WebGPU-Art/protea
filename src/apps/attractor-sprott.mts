@@ -3,7 +3,7 @@ import attractorSprite from "./attractor/sprites.wgsl?raw";
 import attractorCompute from "./attractor/compute-sprott.wgsl?raw";
 import { fiboGridN, rand_middle } from "../math.mjs";
 
-export let loadSprottRenderer = async (canvas: HTMLCanvasElement) => {
+export let loadRenderer = async (canvas: HTMLCanvasElement) => {
   let seedSize = 4000000;
 
   let renderFrame = await createRenderer(

@@ -3,7 +3,7 @@ import attractorSprite from "./attractor/sprites.wgsl?raw";
 import attractorCompute from "./attractor/compute-lorenz83.wgsl?raw";
 import { fiboGridN, rand_middle } from "../math.mjs";
 
-export let loadLorenz83Renderer = async (canvas: HTMLCanvasElement) => {
+export let loadRenderer = async (canvas: HTMLCanvasElement) => {
   let seedSize = 2000000;
 
   let renderFrame = await createRenderer(

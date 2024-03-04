@@ -68,7 +68,7 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
       vertexBufferLayout: vertexBufferLayout,
       renderShader: spriteWGSL,
       // topology: "line-list",
-      bgColor: [0.1, 0.0, 0.2, 1.0],
+      bgColor: [0.0, 0.0, 0.0, 1.0],
     }
   );
 

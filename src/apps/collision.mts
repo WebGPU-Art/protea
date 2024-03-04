@@ -3,7 +3,7 @@ import spriteWGSL from "./collision/sprites.wgsl?raw";
 import computeCollision from "./collision/compute.wgsl?raw";
 import { fiboGridN } from "../math.mjs";
 
-export let loadCollisionRenderer = async (canvas: HTMLCanvasElement) => {
+export let loadRenderer = async (canvas: HTMLCanvasElement) => {
   let seedSize = 800000;
 
   let renderFrame = await createRenderer(

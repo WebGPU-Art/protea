@@ -3,7 +3,7 @@ import attractorSprite from "./orbit-spark/sprites.wgsl?raw";
 import computeSpark from "./orbit-spark/compute.wgsl?raw";
 import { fiboGridN, fiboGridN_snd, rand_middle } from "../math.mjs";
 
-export let loadOrbitSparkRenderer = async (canvas: HTMLCanvasElement) => {
+export let loadRenderer = async (canvas: HTMLCanvasElement) => {
   let seedSize = 400000;
 
   let renderFrame = await createRenderer(

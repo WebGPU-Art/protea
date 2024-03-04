@@ -2,7 +2,7 @@ import { createRenderer } from "../index.mjs";
 import spriteShader from "./lifegame-trail/sprites.wgsl?raw";
 import computeShader from "./lifegame-trail/compute.wgsl?raw";
 
-export let loadLifegameTrailRenderer = async (canvas: HTMLCanvasElement) => {
+export let loadRenderer = async (canvas: HTMLCanvasElement) => {
   let seedSize = 160;
 
   let renderFrame = await createRenderer(

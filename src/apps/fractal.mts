@@ -3,7 +3,7 @@ import fractalSprite from "./fractal/sprites.wgsl?raw";
 import fractalCompute from "./fractal/compute.wgsl?raw";
 import { fiboGridN } from "../math.mjs";
 
-export let loadFractalRenderer = async (canvas: HTMLCanvasElement) => {
+export let loadRenderer = async (canvas: HTMLCanvasElement) => {
   let seedSize = 4110000;
 
   let renderFrame = await createRenderer(

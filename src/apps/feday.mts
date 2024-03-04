@@ -3,7 +3,7 @@ import spriteShader from "./feday/sprites.wgsl?raw";
 import computeShader from "./feday/compute.wgsl?raw";
 import { fiboGridN } from "../math.mjs";
 
-export let loadFedayRenderer = async (canvas: HTMLCanvasElement) => {
+export let loadRenderer = async (canvas: HTMLCanvasElement) => {
   let seedSize = 800000;
 
   let renderFrame = await createRenderer(

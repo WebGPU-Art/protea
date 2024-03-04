@@ -3,7 +3,7 @@ import spriteShader from "./bounce-trail/sprites.wgsl?raw";
 import computeShader from "./bounce-trail/compute.wgsl?raw";
 import { fiboGridN } from "../math.mjs";
 
-export let loadBounceTrailRenderer = async (canvas: HTMLCanvasElement) => {
+export let loadRenderer = async (canvas: HTMLCanvasElement) => {
   let seedSize = 800000;
 
   let renderFrame = await createRenderer(

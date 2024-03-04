@@ -11,12 +11,17 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
     {
       seedSize,
       seedData: makeSeed(seedSize),
-      params: loadParams(),
+      params: [
+        0.04, // deltaT
+        0.06, // height
+        0.004, // width
+        0.99, // opacity
+      ],
       computeShader: fractalCompute,
     },
     {
       vertexCount: 1,
-      vertexData: loadVertex(),
+      vertexData: [0, 1, 2, 3],
       indexData: [0, 1, 2, 1, 2, 3],
       vertexBufferLayout: vertexBufferLayout,
       renderShader: fractalSprite,
@@ -43,26 +48,6 @@ function makeSeed(numParticles: number): Float32Array {
   }
 
   return buf;
-}
-
-function loadParams(): number[] {
-  return [
-    0.04, // deltaT
-    0.06, // height
-    0.004, // width
-    0.99, // opacity
-  ];
-}
-
-function loadVertex(): number[] {
-  // prettier-ignore
-  return [
-    0, 1, 2, 3
-    // -0.06, -0.06, -0.03,
-    // 0.06, -0.06, -0.03,
-    // 0.0, 0.06, 0,
-    // 0.0, -0.06, 0.03,
-  ];
 }
 
 let vertexBufferLayout: GPUVertexBufferLayout[] = [

@@ -11,9 +11,12 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
     {
       seedSize,
       seedData: makeSeed(seedSize, 0),
-      params: loadParams(),
-      // computeShader: updateSpritesWGSL,
-      // computeShader: computeGravityWgsl,
+      params: [
+        0.004, // deltaT
+        0.6, // height
+        0.2, // width
+        0.8, // opacity
+      ],
       computeShader: computeShader,
     },
     {
@@ -54,15 +57,6 @@ function makeSeed(numParticles: number, _s: number): Float32Array {
   }
 
   return buf;
-}
-
-function loadParams(): number[] {
-  return [
-    0.004, // deltaT
-    0.6, // height
-    0.2, // width
-    0.8, // opacity
-  ];
 }
 
 function loadVertex(): number[] {

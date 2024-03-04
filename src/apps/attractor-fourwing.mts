@@ -11,7 +11,12 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
     {
       seedSize,
       seedData: makeSeed(seedSize, 0),
-      params: loadParams(),
+      params: [
+        0.04, // deltaT
+        100.0, // scale
+        0.004, // width
+        0.99, // opacity
+      ],
       computeShader: attractorCompute,
     },
     {
@@ -52,15 +57,6 @@ function makeSeed(numParticles: number, scale: number): Float32Array {
   }
 
   return buf;
-}
-
-function loadParams(): number[] {
-  return [
-    0.04, // deltaT
-    100.0, // scale
-    0.004, // width
-    0.99, // opacity
-  ];
 }
 
 let vertexBufferLayout: GPUVertexBufferLayout[] = [

@@ -12,12 +12,17 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
     {
       seedSize,
       seedData: makeSeed(seedSize, 0),
-      params: loadParams(),
+      params: [
+        0.004, // deltaT
+        0.6, // height
+        0.2, // width
+        0.8, // opacity
+      ],
       computeShader: fireworksCompute,
     },
     {
       vertexCount: 1,
-      vertexData: loadVertex(),
+      vertexData: [0, 1, 2, 3],
       indexData: [0, 1, 2, 1, 2, 3],
       vertexBufferLayout: vertexBufferLayout,
       renderShader: fireworksSprites,
@@ -52,26 +57,6 @@ function makeSeed(numParticles: number, scale: number): Float32Array {
   }
 
   return buf;
-}
-
-function loadParams(): number[] {
-  return [
-    0.004, // deltaT
-    0.6, // height
-    0.2, // width
-    0.8, // opacity
-  ];
-}
-
-function loadVertex(): number[] {
-  // prettier-ignore
-  return [
-    0, 1, 2, 3
-    // -0.06, -0.06, -0.03,
-    // 0.06, -0.06, -0.03,
-    // 0.0, 0.06, 0,
-    // 0.0, -0.06, 0.03,
-  ];
 }
 
 let vertexBufferLayout: GPUVertexBufferLayout[] = [

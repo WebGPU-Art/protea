@@ -9,7 +9,6 @@ struct Params {
   opacity: f32,
 }
 
-
 @group(1) @binding(0) var<uniform> params: Params;
 
 struct VertexOutput {
@@ -33,11 +32,7 @@ fn vert_main(
   let up = normalize(upward);
 
   // let front = params.length;
-  var width = params.width * 2.0;
-  let center_ret = transform_perspective(position);
-  if center_ret.front_distance < 1000. {
-    width = width * 0.5;
-  }
+  var width = params.width * 4.;
 
   if idx == 0u {
     pos = position + right * width;
@@ -55,12 +50,21 @@ fn vert_main(
   var output: VertexOutput;
   let p0 = vec4(pos * 10.0, 1.0);
 
-  let p: vec3<f32> = transform_perspective(p0.xyz).point_position;
+  let ret = transform_perspective(p0.xyz);
+  let p: vec3<f32> = ret.point_position;
   let scale: f32 = 0.002;
 
   output.position = vec4(p[0] * scale, p[1] * scale, p[2] * scale, 1.0);
-  let c3: vec3<f32> = hsl(fract(point_idx / 2000000.) + 0.6, 0.8, max(0.1, 0.9 - 0.2));
-  output.color = vec4(c3, params.opacity);
+  output.color = vec4(0., 0., 1., 1.);
+  // if ret.r > 1. {
+  //   output.color = vec4(0.2, 0., 0., 1.);
+  // }
+  // if ret.side_distance * scale > 8. {
+  //   output.color = vec4(1., 1., 0., 1.);
+  // }
+  if ret.side_distance > ret.front_distance * 0.4 {
+    output.color = vec4(1., 1., 0., 1.);
+  }
   return output;
 }
 

@@ -72,7 +72,9 @@ export let loadGamepadControl = () => {
   console.log("loading gamepad control");
   setupGamepadControl((axes, buttons) => {
     let scale = atomViewerScale.deref();
-    let ss = 1 / scale;
+    let speedy = buttons.l1.value > 0.5 || buttons.r1.value > 0.5 ? 8 : 1;
+    let faster = speedy > 4 ? 4 : 1;
+    let ss = speedy / scale;
     // left/right, up/down, front/back
     moveViewerBy(
       someValue(axes.rightX) * 10 * ss,
@@ -80,17 +82,19 @@ export let loadGamepadControl = () => {
       someValue(axes.leftY) * 10 * ss
     );
     rotateGlanceBy(
-      -0.1 * someValue(axes.leftX),
-      0.05 * (buttons.up.value - buttons.down.value)
+      -0.05 * faster * someValue(axes.leftX),
+      0.05 * faster * someValue(buttons.up.value - buttons.down.value)
     );
 
-    spinGlanceBy(0.1 * (buttons.right.value - buttons.left.value));
+    spinGlanceBy(
+      0.1 * faster * someValue(buttons.right.value - buttons.left.value)
+    );
 
     if (buttons.l2.value > 0.5) {
-      changeScaleBy(0.01);
+      changeScaleBy(0.01 * speedy);
     }
     if (buttons.r2.value > 0.5) {
-      changeScaleBy(-0.01);
+      changeScaleBy(-0.01 * speedy);
     }
 
     registerShaderResult((e, code) => {

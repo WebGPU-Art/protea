@@ -11,14 +11,21 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
     {
       seedSize,
       seedData: makeSeed(seedSize, 0),
-      params: loadParams(),
-      // computeShader: updateSpritesWGSL,
-      // computeShader: computeGravityWgsl,
+      params: [
+        0.004, // deltaT
+        0.6, // height
+        0.2, // width
+        0.8, // opacity
+      ],
       computeShader: computeCollision,
     },
     {
       vertexCount: 1,
-      vertexData: loadVertex(),
+      vertexData: [
+        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
+        // up
+        12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
+      ],
       indexData: [
         // face 1
         0, 1, 12, 1, 12, 13,
@@ -68,7 +75,7 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
       vertexBufferLayout: vertexBufferLayout,
       renderShader: spriteWGSL,
       // topology: "line-list",
-      bgColor: [0.1, 0.0, 0.2, 1.0],
+      bgColor: [0.0, 0.0, 0.0, 1.0],
     }
   );
 
@@ -109,24 +116,6 @@ function makeSeed(numParticles: number, _s: number): Float32Array {
   }
 
   return buf;
-}
-
-function loadParams(): number[] {
-  return [
-    0.004, // deltaT
-    0.6, // height
-    0.2, // width
-    0.8, // opacity
-  ];
-}
-
-function loadVertex(): number[] {
-  // prettier-ignore
-  return [
-    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
-    // up
-    12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
-  ];
 }
 
 let vertexBufferLayout: GPUVertexBufferLayout[] = [

@@ -3,7 +3,7 @@ import attractorSprite from "./orbit-spark/sprites.wgsl?raw";
 import computeSpark from "./orbit-spark/compute.wgsl?raw";
 import { fiboGridN, fiboGridN_snd, rand_middle } from "../math.mjs";
 
-export let loadOrbitSparkRenderer = async (canvas: HTMLCanvasElement) => {
+export let loadRenderer = async (canvas: HTMLCanvasElement) => {
   let seedSize = 400000;
 
   let renderFrame = await createRenderer(
@@ -11,7 +11,12 @@ export let loadOrbitSparkRenderer = async (canvas: HTMLCanvasElement) => {
     {
       seedSize,
       seedData: makeSeed(seedSize, 0),
-      params: loadParams(),
+      params: [
+        0.04, // deltaT
+        600.0, // scale
+        0.001, // width
+        0.99, // opacity
+      ],
       computeShader: computeSpark,
     },
     {
@@ -60,15 +65,6 @@ function makeSeed(numParticles: number, scale: number): Float32Array {
   }
 
   return buf;
-}
-
-function loadParams(): number[] {
-  return [
-    0.04, // deltaT
-    600.0, // scale
-    0.001, // width
-    0.99, // opacity
-  ];
 }
 
 let vertexBufferLayout: GPUVertexBufferLayout[] = [

@@ -11,6 +11,51 @@ import { atomDepthTexture, atomDevice } from "./globals.mjs";
 import proteaColors from "../shaders/protea-colors.wgsl?raw";
 import proteaPerspective from "../shaders/protea-perspective.wgsl?raw";
 
+let renderGroupEntries: GPUBindGroupLayoutEntry[] = [
+  {
+    binding: 0,
+    visibility: GPUShaderStage.VERTEX,
+    buffer: { type: "uniform" },
+  },
+  {
+    binding: 1,
+    visibility: GPUShaderStage.VERTEX,
+    buffer: { type: "uniform" },
+  },
+];
+
+let computeUniformEntries: GPUBindGroupLayoutEntry[] = [
+  {
+    binding: 0,
+    visibility: GPUShaderStage.COMPUTE,
+    buffer: { type: "uniform" },
+  },
+  {
+    binding: 1,
+    visibility: GPUShaderStage.COMPUTE,
+    buffer: { type: "uniform" },
+  },
+];
+
+let computeParticleEntries: GPUBindGroupLayoutEntry[] = [
+  {
+    binding: 0,
+    visibility: GPUShaderStage.COMPUTE,
+    buffer: { type: "read-only-storage" },
+  },
+  {
+    binding: 1,
+    visibility: GPUShaderStage.COMPUTE,
+    buffer: { type: "storage" },
+  },
+];
+
+let interpolateShader = (shader: string) => {
+  return shader
+    .replace("#import protea::perspective", proteaPerspective)
+    .replace("#import protea::colors", proteaColors);
+};
+
 export let createRenderer = async (
   canvas: HTMLCanvasElement,
   computeOptions: {
@@ -31,15 +76,13 @@ export let createRenderer = async (
 ) => {
   let numParticles = computeOptions.seedSize;
   let initialParticleData = computeOptions.seedData;
-  let updateSpritesWGSL = computeOptions.computeShader;
+  let updateSpritesWGSL = interpolateShader(computeOptions.computeShader);
 
   let vertexCount = renderOptions.vertexCount;
   let paramsData = computeOptions.params;
   let vertexData = renderOptions.vertexData;
   let vertexBufferlayout = renderOptions.vertexBufferLayout;
-  let spriteWGSL = renderOptions.renderShader
-    .replace("#import protea::perspective", proteaPerspective)
-    .replace("#import protea::colors", proteaColors);
+  let spriteWGSL = interpolateShader(renderOptions.renderShader);
   let indexBuffer = renderOptions.indexData
     ? createBuffer(
         new Uint32Array(renderOptions.indexData),
@@ -57,28 +100,28 @@ export let createRenderer = async (
     alphaMode: "premultiplied",
   });
 
-  /** TODO don't know why, but fixes, https://programmer.ink/think/several-best-practices-of-webgpu.html */
-  let emtpyBuffer = {};
-
-  let uniformBindGroupLayout = device.createBindGroupLayout({
-    entries: [
-      { binding: 0, visibility: GPUShaderStage.VERTEX, buffer: emtpyBuffer },
-    ],
+  const computePipeline = device.createComputePipeline({
+    layout: device.createPipelineLayout({
+      bindGroupLayouts: [
+        device.createBindGroupLayout({ entries: computeUniformEntries }),
+        device.createBindGroupLayout({ entries: computeParticleEntries }),
+      ],
+    }),
+    compute: {
+      module: device.createShaderModule({ code: updateSpritesWGSL }),
+      entryPoint: "main",
+    },
   });
-  let paramsBindGroupLayout = device.createBindGroupLayout({
-    entries: [
-      { binding: 0, visibility: GPUShaderStage.VERTEX, buffer: emtpyBuffer },
-    ],
-  });
-
-  const pipelineLayoutDesc = {
-    bindGroupLayouts: [uniformBindGroupLayout, paramsBindGroupLayout],
-  };
-  let renderLayout = device.createPipelineLayout(pipelineLayoutDesc);
 
   const spriteShaderModule = device.createShaderModule({ code: spriteWGSL });
   const renderPipeline = device.createRenderPipeline({
-    layout: renderLayout,
+    layout: device.createPipelineLayout({
+      bindGroupLayouts: [
+        device.createBindGroupLayout({
+          entries: renderGroupEntries,
+        }),
+      ],
+    }),
     vertex: {
       module: spriteShaderModule,
       entryPoint: "vert_main",
@@ -89,9 +132,7 @@ export let createRenderer = async (
       entryPoint: "frag_main",
       targets: [{ format: presentationFormat, blend: blendState }],
     },
-    primitive: {
-      topology: renderOptions.topology ?? "triangle-list",
-    },
+    primitive: { topology: renderOptions.topology ?? "triangle-list" },
     depthStencil: {
       depthWriteEnabled: true,
       depthCompare: "less",
@@ -99,40 +140,8 @@ export let createRenderer = async (
     },
   });
 
-  const bindGroupLayout = device.createBindGroupLayout({
-    entries: [
-      {
-        binding: 0,
-        visibility: GPUShaderStage.COMPUTE,
-        buffer: { type: "uniform" },
-      },
-      {
-        binding: 1,
-        visibility: GPUShaderStage.COMPUTE,
-        buffer: { type: "read-only-storage" },
-      },
-      {
-        binding: 2,
-        visibility: GPUShaderStage.COMPUTE,
-        buffer: { type: "storage" },
-      },
-    ],
-  });
-
-  const computePipeline = device.createComputePipeline({
-    layout: device.createPipelineLayout({
-      bindGroupLayouts: [bindGroupLayout],
-    }),
-    compute: {
-      module: device.createShaderModule({ code: updateSpritesWGSL }),
-      entryPoint: "main",
-    },
-  });
-
   let needClear = true;
   let loadOp: GPULoadOp = (needClear ? "clear" : "load") as GPULoadOp;
-
-  let depthTexture = atomDepthTexture.deref();
 
   const renderPassDescriptor: GPURenderPassDescriptor = {
     colorAttachments: [
@@ -144,7 +153,7 @@ export let createRenderer = async (
       },
     ],
     depthStencilAttachment: {
-      view: depthTexture.createView(),
+      view: atomDepthTexture.deref().createView(),
       depthClearValue: 1,
       depthLoadOp: loadOp,
       depthStoreOp: "store" as const,
@@ -152,10 +161,6 @@ export let createRenderer = async (
       stencilStoreOp: "store" as const,
     },
   };
-
-  let spriteVertexBuffer = buildSpriteVertexBuffer(vertexData);
-
-  let paramBuffer = buildParamBuffer(paramsData);
 
   const particleBuffers: GPUBuffer[] = new Array(2);
   for (let i = 0; i < 2; ++i) {
@@ -171,38 +176,23 @@ export let createRenderer = async (
   }
 
   const particleBindGroups: GPUBindGroup[] = new Array(2);
-  let setupBindGroups = () => {
+  let setupParticlesBindGroups = () => {
     for (let i = 0; i < 2; ++i) {
       let byteLength = initialParticleData.byteLength;
       let fromBuffer = particleBuffers[i % 2];
       let toBuffer = particleBuffers[(i + 1) % 2];
       particleBindGroups[i] = device.createBindGroup({
-        layout: computePipeline.getBindGroupLayout(0),
+        layout: computePipeline.getBindGroupLayout(1),
         entries: [
-          { binding: 0, resource: { buffer: paramBuffer } },
-          {
-            binding: 1,
-            resource: { buffer: fromBuffer, offset: 0, size: byteLength },
-          },
-          {
-            binding: 2,
-            resource: { buffer: toBuffer, offset: 0, size: byteLength },
-          },
+          { binding: 0, resource: { buffer: fromBuffer, size: byteLength } },
+          { binding: 1, resource: { buffer: toBuffer, size: byteLength } },
         ],
       });
     }
   };
-  setupBindGroups();
+  setupParticlesBindGroups();
 
-  let paramsBindingGroup: GPUBindGroup;
-
-  let setBindGroupForParams = () => {
-    paramsBindingGroup = device.createBindGroup({
-      layout: paramsBindGroupLayout,
-      entries: [{ binding: 0, resource: { buffer: paramBuffer } }],
-    });
-  };
-  setBindGroupForParams();
+  let paramBuffer = buildParamBuffer(paramsData);
 
   let buildParamsBuffer = (partial: number[]) => {
     let data = paramsData.slice();
@@ -210,46 +200,57 @@ export let createRenderer = async (
       data[idx] = n;
     });
     paramBuffer = buildParamBuffer(data);
-    setupBindGroups();
-    setBindGroupForParams();
+    setupParticlesBindGroups();
   };
 
   window.__hotUpdateParams = buildParamsBuffer;
 
   return async function render(t: number, skipComputing: boolean = false) {
-    let uniformBuffer = loadUniformBuffer();
-
-    let uniformBindGroup: GPUBindGroup = device.createBindGroup({
-      layout: uniformBindGroupLayout,
-      entries: [{ binding: 0, resource: { buffer: uniformBuffer } }],
-    });
-
-    // Sample is no longer the active page.
-
-    (
-      renderPassDescriptor.colorAttachments as GPURenderPassColorAttachment[]
-    )[0].view = context.getCurrentTexture().createView();
-
-    renderPassDescriptor.depthStencilAttachment.view = atomDepthTexture
-      .deref()
-      .createView();
-
     const commandEncoder = device.createCommandEncoder();
+
+    let uniformEntries: GPUBindGroupEntry[] = [
+      { binding: 0, resource: { buffer: loadUniformBuffer() } },
+      { binding: 1, resource: { buffer: paramBuffer } },
+    ];
 
     if (!skipComputing) {
       const computePassEncoder = commandEncoder.beginComputePass();
       computePassEncoder.setPipeline(computePipeline);
-      computePassEncoder.setBindGroup(0, particleBindGroups[t % 2]);
+      computePassEncoder.setBindGroup(
+        0,
+        device.createBindGroup({
+          layout: device.createBindGroupLayout({
+            entries: computeUniformEntries,
+          }),
+          entries: uniformEntries,
+        })
+      );
+      computePassEncoder.setBindGroup(1, particleBindGroups[t % 2]);
       computePassEncoder.dispatchWorkgroups(Math.ceil(numParticles / 64));
       computePassEncoder.end();
     }
 
+    (
+      renderPassDescriptor.colorAttachments as GPURenderPassColorAttachment[]
+    )[0].view = context.getCurrentTexture().createView();
+    renderPassDescriptor.depthStencilAttachment.view = atomDepthTexture
+      .deref()
+      .createView();
+
     const passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
     passEncoder.setPipeline(renderPipeline);
     passEncoder.setVertexBuffer(0, particleBuffers[(t + 1) % 2]);
-    passEncoder.setVertexBuffer(1, spriteVertexBuffer);
-    passEncoder.setBindGroup(0, uniformBindGroup);
-    passEncoder.setBindGroup(1, paramsBindingGroup);
+    passEncoder.setVertexBuffer(1, buildSpriteVertexBuffer(vertexData));
+    passEncoder.setBindGroup(
+      0,
+      device.createBindGroup({
+        layout: device.createBindGroupLayout({
+          entries: renderGroupEntries,
+        }),
+        entries: uniformEntries,
+      })
+    );
+
     if (indexBuffer != null) {
       passEncoder.setIndexBuffer(indexBuffer, "uint32");
       passEncoder.drawIndexed(

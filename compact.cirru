@@ -77,57 +77,15 @@
             def canvas $ js/document.querySelector "\"canvas"
         |dispatch! $ %{} :CodeEntry (:doc |)
           :code $ quote
-            defn dispatch! (op)
+            defn dispatch! (op) (hint-fn async)
               when
                 and config/dev? $ not= op :states
                 js/console.log "\"Dispatch:" op
               reset! *reel $ reel-updater updater @*reel op
               tag-match op
                   :tab t
-                  load-renderer t
+                  set-renderer! $ :tab (:store @*reel)
                 _ :ok
-        |load-renderer $ %{} :CodeEntry (:doc |)
-          :code $ quote
-            defn load-renderer (tab) (hint-fn async)
-              let
-                  renderer $ js-await
-                    case-default tab
-                      do (eprintln "\"unknown tab:" tab) (loadFireworksRenderer canvas)
-                      :fireworks $ loadFireworksRenderer canvas
-                      :lorenz $ loadLorenzRenderer canvas
-                      :lorenz $ loadLorenzRenderer canvas
-                      :aizawa $ loadAizawaRenderer canvas
-                      :fourwing $ loadFourwingRenderer canvas
-                      :fractal $ loadFractalRenderer canvas
-                      :collision $ loadCollisionRenderer canvas
-                      :bounce $ loadBounceRenderer canvas
-                      :bounce-trail $ loadBounceTrailRenderer canvas
-                      :feday $ loadFedayRenderer canvas
-                      :bifurcation $ loadBifurcationRenderer canvas
-                      :ball-spin $ loadBallSpinRenderer canvas
-                      :lifegame $ loadLifegameRenderer canvas
-                      :lifegame-trail $ loadLifegameTrailRenderer canvas
-                      :orbit-spark $ loadOrbitSparkRenderer canvas
-                      :chen $ loadChenRenderer canvas
-                      :sprott $ loadSprottRenderer canvas
-                      :lorenz83 $ loadLorenz83Renderer canvas
-                      :orbits $ loadOrbitsRenderer canvas
-                      :lamps $ lamps/loadRenderer canvas
-                      :debug-grid $ debug-grid/loadRenderer canvas
-                reset! *instance-renderer renderer
-        |loop-renderer! $ %{} :CodeEntry (:doc |)
-          :code $ quote
-            defn loop-renderer! () $ if (&< js-config/interval 10)
-              do
-                js/requestAnimationFrame $ fn (_t) (loop-renderer!)
-                swap! *t inc
-                @*instance-renderer @*t js/window.skipComputing
-              js/setTimeout
-                fn ()
-                  js/requestAnimationFrame $ fn (_t) (loop-renderer!)
-                  swap! *t inc
-                  @*instance-renderer @*t js/window.skipComputing
-                , js-config/interval
         |main! $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn main! () (hint-fn async)
@@ -145,10 +103,10 @@
                   raw $ js/localStorage.getItem (:storage-key config/site)
                 when (some? raw)
                   dispatch! $ :: :hydrate-storage (parse-cirru-edn raw)
+              js-await $ set-renderer!
+                :tab $ :store @*reel
+              render-loop!
               println "|App started."
-              ->
-                load-renderer $ :tab (:store @*reel)
-                .!then $ fn (r) (loop-renderer!)
         |mount-target $ %{} :CodeEntry (:doc |)
           :code $ quote
             def mount-target $ js/document.querySelector |.app
@@ -158,6 +116,31 @@
               println "\"Saved at" $ .!toISOString (new js/Date)
               js/localStorage.setItem (:storage-key config/site)
                 format-cirru-edn $ :store @*reel
+        |pick-renderer $ %{} :CodeEntry (:doc |)
+          :code $ quote
+            defn pick-renderer (tab)
+              case-default tab
+                do (eprintln "\"unknown tab:" tab) (fireworks/loadRenderer canvas)
+                :fireworks $ fireworks/loadRenderer canvas
+                :lorenz $ lorenz/loadRenderer canvas
+                :aizawa $ aizawa/loadRenderer canvas
+                :fourwing $ fourwing/loadRenderer canvas
+                :fractal $ fractal/loadRenderer canvas
+                :collision $ collision/loadRenderer canvas
+                :bounce $ bounce/loadRenderer canvas
+                :bounce-trail $ bounce-trail/loadRenderer canvas
+                :feday $ feday/loadRenderer canvas
+                :bifurcation $ bifurcation/loadRenderer canvas
+                :ball-spin $ ball-spin/loadRenderer canvas
+                :lifegame $ lifegame/loadRenderer canvas
+                :lifegame-trail $ lifegame-trail/loadRenderer canvas
+                :orbit-spark $ orbit-spark/loadRenderer canvas
+                :chen $ chen/loadRenderer canvas
+                :sprott $ sprott/loadRenderer canvas
+                :lorenz83 $ lorenz-83/loadRenderer canvas
+                :orbits $ orbits/loadRenderer canvas
+                :lamps $ lamps/loadRenderer canvas
+                :debug-grid $ debug-grid/loadRenderer canvas
         |reload! $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn reload! () (hint-fn async)
@@ -165,13 +148,31 @@
                 do (remove-watch *reel :changes) (clear-cache!)
                   add-watch *reel :changes $ fn (reel prev) (render-app!)
                   reset! *reel $ refresh-reel @*reel schema/store updater
-                  js-await $ load-renderer
-                    :tab $ :store @*reel
+                  set-renderer! $ :tab (:store @*reel)
                   hud! "\"ok~" "\"Ok"
                 hud! "\"error" build-errors
         |render-app! $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn render-app! () $ render! mount-target (comp-container @*reel) dispatch!
+        |render-loop! $ %{} :CodeEntry (:doc |)
+          :code $ quote
+            defn render-loop! () $ if (&< js-config/interval 10)
+              do
+                js/requestAnimationFrame $ fn (_t) (render-loop!)
+                swap! *t inc
+                @*instance-renderer @*t js/window.skipComputing
+              js/setTimeout
+                fn ()
+                  js/requestAnimationFrame $ fn (_t) (render-loop!)
+                  swap! *t inc
+                  @*instance-renderer @*t js/window.skipComputing
+                , js-config/interval
+        |set-renderer! $ %{} :CodeEntry (:doc |)
+          :code $ quote
+            defn set-renderer! (name) (hint-fn async)
+              let
+                  renderer $ js-await (pick-renderer name)
+                reset! *instance-renderer renderer
       :ns $ %{} :CodeEntry (:doc |)
         :code $ quote
           ns app.main $ :require
@@ -185,24 +186,24 @@
             app.config :as config
             "\"./calcit.build-errors" :default build-errors
             "\"bottom-tip" :default hud!
-            "\"../src/apps/fireworks" :refer $ loadFireworksRenderer
-            "\"../src/apps/attractor-aizawa" :refer $ loadAizawaRenderer
-            "\"../src/apps/attractor-lorenz" :refer $ loadLorenzRenderer
-            "\"../src/apps/attractor-fourwing" :refer $ loadFourwingRenderer
-            "\"../src/apps/attractor-chen" :refer $ loadChenRenderer
-            "\"../src/apps/attractor-sprott" :refer $ loadSprottRenderer
-            "\"../src/apps/attractor-lorenz83" :refer $ loadLorenz83Renderer
-            "\"../src/apps/fractal" :refer $ loadFractalRenderer
-            "\"../src/apps/collision" :refer $ loadCollisionRenderer
-            "\"../src/apps/bounce" :refer $ loadBounceRenderer
-            "\"../src/apps/bounce-trail" :refer $ loadBounceTrailRenderer
-            "\"../src/apps/feday" :refer $ loadFedayRenderer
-            "\"../src/apps/bifurcation" :refer $ loadBifurcationRenderer
-            "\"../src/apps/ball-spin" :refer $ loadBallSpinRenderer
-            "\"../src/apps/lifegame" :refer $ loadLifegameRenderer
-            "\"../src/apps/lifegame-trail" :refer $ loadLifegameTrailRenderer
-            "\"../src/apps/orbit-spark" :refer $ loadOrbitSparkRenderer
-            "\"../src/apps/orbits" :refer $ loadOrbitsRenderer
+            "\"../src/apps/fireworks" :as fireworks
+            "\"../src/apps/attractor-aizawa" :as aizawa
+            "\"../src/apps/attractor-lorenz" :as lorenz
+            "\"../src/apps/attractor-fourwing" :as fourwing
+            "\"../src/apps/attractor-chen" :as chen
+            "\"../src/apps/attractor-sprott" :as sprott
+            "\"../src/apps/attractor-lorenz83" :as lorenz-83
+            "\"../src/apps/fractal" :as fractal
+            "\"../src/apps/collision" :as collision
+            "\"../src/apps/bounce" :as bounce
+            "\"../src/apps/bounce-trail" :as bounce-trail
+            "\"../src/apps/feday" :as feday
+            "\"../src/apps/bifurcation" :as bifurcation
+            "\"../src/apps/ball-spin" :as ball-spin
+            "\"../src/apps/lifegame" :as lifegame
+            "\"../src/apps/lifegame-trail" :as lifegame-trail
+            "\"../src/apps/orbit-spark" :as orbit-spark
+            "\"../src/apps/orbits" :as orbits
             "\"../src/apps/lamps" :as lamps
             "\"../src/apps/debug-grid" :as debug-grid
             "\"../src/index" :refer $ setupInitials

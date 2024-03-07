@@ -10,7 +10,7 @@ struct Params {
 }
 
 
-@group(1) @binding(0) var<uniform> params: Params;
+@group(0) @binding(1) var<uniform> params: Params;
 
 struct VertexOutput {
   @builtin(position) position: vec4<f32>,

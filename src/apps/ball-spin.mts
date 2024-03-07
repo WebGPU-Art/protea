@@ -3,7 +3,7 @@ import spriteShader from "./ball-spin/sprites.wgsl?raw";
 import computeShader from ".//ball-spin/compute.wgsl?raw";
 import { fiboGridN } from "../math.mjs";
 
-export let loadBallSpinRenderer = async (canvas: HTMLCanvasElement) => {
+export let loadRenderer = async (canvas: HTMLCanvasElement) => {
   let seedSize = 800000;
 
   let renderFrame = await createRenderer(
@@ -11,14 +11,17 @@ export let loadBallSpinRenderer = async (canvas: HTMLCanvasElement) => {
     {
       seedSize,
       seedData: makeSeed(seedSize, 0),
-      params: loadParams(),
-      // computeShader: updateSpritesWGSL,
-      // computeShader: computeGravityWgsl,
+      params: [
+        0.004, // deltaT
+        0.6, // height
+        0.2, // width
+        0.8, // opacity
+      ],
       computeShader: computeShader,
     },
     {
       vertexCount: 1,
-      vertexData: loadVertex(),
+      vertexData: [0, 1, 2, 3],
       indexData: [0, 1, 2, 1, 2, 3],
       vertexBufferLayout: vertexBufferLayout,
       renderShader: spriteShader,
@@ -55,26 +58,6 @@ function makeSeed(numParticles: number, _s: number): Float32Array {
   }
 
   return buf;
-}
-
-function loadParams(): number[] {
-  return [
-    0.004, // deltaT
-    0.6, // height
-    0.2, // width
-    0.8, // opacity
-  ];
-}
-
-function loadVertex(): number[] {
-  // prettier-ignore
-  return [
-    0, 1, 2, 3
-    // -0.06, -0.06, -0.03,
-    // 0.06, -0.06, -0.03,
-    // 0.0, 0.06, 0,
-    // 0.0, -0.06, 0.03,
-  ];
 }
 
 let vertexBufferLayout: GPUVertexBufferLayout[] = [

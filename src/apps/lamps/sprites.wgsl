@@ -9,7 +9,7 @@ struct Params {
   opacity: f32,
 }
 
-@group(1) @binding(0) var<uniform> params: Params;
+@group(0) @binding(1) var<uniform> params: Params;
 
 struct VertexOutput {
   @builtin(position) position: vec4<f32>,
@@ -87,7 +87,7 @@ fn vert_main(
   lightness *= opacity;
 
   let c3: vec3<f32> = hsl(fract(point_idx / 400.), 0.8, lightness);
-  output.color = vec4(c3, 0.9);
+  output.color = vec4(c3, 1.);
 
   return output;
 }

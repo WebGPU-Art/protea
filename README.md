@@ -66,6 +66,25 @@ window.__hotUpdateParams([0.1, 1.6, 0.12, 0.7]);
 - `width` of stroke
 - `opacity`
 
+### Bind Groups
+
+For compute shader:
+
+```wgsl
+@group(0) @binding(0) var<uniform> uniforms: UniformData;
+@group(0) @binding(1) var<uniform> params: Params;
+
+@group(1) @binding(0) var<storage, read> particles_a: Particles;
+@group(1) @binding(1) var<storage, read_write> particles_b: Particles;
+```
+
+For fragment shader:
+
+```wgsl
+@group(0) @binding(0) var<uniform> uniforms: UniformData;
+@group(0) @binding(1) var<uniform> params: Params;
+```
+
 ### Licence
 
 MIT

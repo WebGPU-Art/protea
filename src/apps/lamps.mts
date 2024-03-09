@@ -4,7 +4,7 @@ import computeCollision from "./lamps/compute.wgsl?raw";
 import { fiboGridN } from "../math.mjs";
 
 export let loadRenderer = async (canvas: HTMLCanvasElement) => {
-  let seedSize = 20000;
+  let seedSize = 30000;
 
   let renderFrame = await createRenderer(
     canvas,
@@ -85,13 +85,12 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
 function makeSeed(numParticles: number, _s: number): Float32Array {
   const buf = new Float32Array(numParticles * 12);
   // let scale = 200 * (Math.random() * 0.5 + 0.5);
-  let scale_base = 50;
-  let radius = 40000;
+  let scale = 600;
+  let radius = 80000;
   for (let i = 0; i < numParticles; ++i) {
-    let scale = scale_base * 2 + 0.0 * i;
     let p = [
       radius * (Math.random() - 0.5),
-      0.4 * radius * (Math.random() - 0.5),
+      0.2 * radius * (Math.random() - 0.5),
       radius * (Math.random() - 0.5),
     ];
     let v = [

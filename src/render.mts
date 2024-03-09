@@ -114,6 +114,9 @@ export let createRenderer = async (
   });
 
   const spriteShaderModule = device.createShaderModule({ code: spriteWGSL });
+  spriteShaderModule.getCompilationInfo().then((info) => {
+    window.__lagopusHandleCompilationInfo(info, spriteWGSL);
+  });
   const renderPipeline = device.createRenderPipeline({
     layout: device.createPipelineLayout({
       bindGroupLayouts: [

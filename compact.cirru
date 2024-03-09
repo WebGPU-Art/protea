@@ -106,6 +106,8 @@
               js-await $ set-renderer!
                 :tab $ :store @*reel
               render-loop!
+              listenShaderError $ fn (err)
+                if (some? err) (hud! "\"error" err)
               println "|App started."
         |mount-target $ %{} :CodeEntry (:doc |)
           :code $ quote
@@ -208,6 +210,7 @@
             "\"../src/apps/debug-grid" :as debug-grid
             "\"../src/index" :refer $ setupInitials
             "\"../src/config" :as js-config
+            "\"../src/index" :refer $ listenShaderError
     |app.schema $ %{} :FileEntry
       :defs $ {}
         |store $ %{} :CodeEntry (:doc |)

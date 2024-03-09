@@ -38,7 +38,7 @@ fn vert_main(
 
   let center_ret = transform_perspective(position);
 
-  var width = params.width * 10.;
+  var width = params.width * 16.;
 
   let outside = center_ret.side_distance > center_ret.front_distance * 0.8;
   if outside {
@@ -78,7 +78,7 @@ fn vert_main(
   // }
 
   output.position = vec4(ret.point_position.xyz * scale, 1.0);
-  var opacity = min(1., 1.0 - 0.1 * sqrt(0.1 + abs(ret.r * 3.0)));
+  var opacity = min(1., 1.0 - 0.1 * sqrt(0.02 + abs(ret.r * 3.0)));
 
   // if ret.r < 1. {
   //   opacity = 0.0;
@@ -86,7 +86,7 @@ fn vert_main(
 
   lightness *= opacity;
 
-  let c3: vec3<f32> = hsl(fract(point_idx / 400.), 0.8, lightness);
+  let c3: vec3<f32> = hsl(0.05 + 0.6 * fract(point_idx / 400.), 0.8, lightness);
   output.color = vec4(c3, 1.);
 
   return output;

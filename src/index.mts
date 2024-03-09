@@ -1,4 +1,4 @@
-export { onControlEvent } from "./control.mjs";
+export { onControlEvent, listenShaderError } from "./control.mjs";
 export { createDepthTexture } from "./buffer.mjs";
 export { setupRemoteControl } from "./remote-control.mjs";
 export { atomDepthTexture, atomDevice } from "./globals.mjs";

@@ -684,6 +684,27 @@
               |zP $ %{} :Expr (:at 1699551087579) (:by |rJG4IHzWf)
                 :data $ {}
                   |T $ %{} :Leaf (:at 1709576524471) (:by |rJG4IHzWf) (:text |render-loop!)
+              |zT $ %{} :Expr (:at 1710004820748) (:by |rJG4IHzWf)
+                :data $ {}
+                  |T $ %{} :Leaf (:at 1710004821098) (:by |rJG4IHzWf) (:text |listenShaderError)
+                  |b $ %{} :Expr (:at 1710004821762) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1710004821992) (:by |rJG4IHzWf) (:text |fn)
+                      |b $ %{} :Expr (:at 1710004822999) (:by |rJG4IHzWf)
+                        :data $ {}
+                          |T $ %{} :Leaf (:at 1710004824645) (:by |rJG4IHzWf) (:text |err)
+                      |h $ %{} :Expr (:at 1710004825526) (:by |rJG4IHzWf)
+                        :data $ {}
+                          |T $ %{} :Leaf (:at 1710004825885) (:by |rJG4IHzWf) (:text |if)
+                          |b $ %{} :Expr (:at 1710004826785) (:by |rJG4IHzWf)
+                            :data $ {}
+                              |D $ %{} :Leaf (:at 1710004827889) (:by |rJG4IHzWf) (:text |some?)
+                              |T $ %{} :Leaf (:at 1710004826217) (:by |rJG4IHzWf) (:text |err)
+                          |h $ %{} :Expr (:at 1710004829911) (:by |rJG4IHzWf)
+                            :data $ {}
+                              |T $ %{} :Leaf (:at 1710005161675) (:by |rJG4IHzWf) (:text |hud!)
+                              |X $ %{} :Leaf (:at 1710005176575) (:by |rJG4IHzWf) (:text "|\"error")
+                              |b $ %{} :Leaf (:at 1710004836276) (:by |rJG4IHzWf) (:text |err)
               |zY $ %{} :Expr (:at 1709576498501) (:by |rJG4IHzWf)
                 :data $ {}
                   |T $ %{} :Leaf (:at 1709576498501) (:by |rJG4IHzWf) (:text |println)
@@ -957,11 +978,11 @@
                                 :data $ {}
                                   |T $ %{} :Leaf (:at 1709576773226) (:by |rJG4IHzWf) (:text |:store)
                                   |b $ %{} :Leaf (:at 1709576773226) (:by |rJG4IHzWf) (:text |@*reel)
-                      |y $ %{} :Expr (:at 1626777542168) (:by |rJG4IHzWf)
+                      |y $ %{} :Expr (:at 1710004411260) (:by |rJG4IHzWf)
                         :data $ {}
-                          |T $ %{} :Leaf (:at 1626777542168) (:by |rJG4IHzWf) (:text |hud!)
-                          |j $ %{} :Leaf (:at 1626777542168) (:by |rJG4IHzWf) (:text "|\"ok~")
-                          |r $ %{} :Leaf (:at 1679237703306) (:by |rJG4IHzWf) (:text "|\"Ok")
+                          |T $ %{} :Leaf (:at 1710004411260) (:by |rJG4IHzWf) (:text |hud!)
+                          |b $ %{} :Leaf (:at 1710004411260) (:by |rJG4IHzWf) (:text "|\"ok~")
+                          |h $ %{} :Leaf (:at 1710004411260) (:by |rJG4IHzWf) (:text "|\"Ok")
                   |j $ %{} :Expr (:at 1626201203433) (:by |rJG4IHzWf)
                     :data $ {}
                       |T $ %{} :Leaf (:at 1626290831868) (:by |rJG4IHzWf) (:text |hud!)
@@ -1268,6 +1289,13 @@
                     |T $ %{} :Leaf (:at 1709365552413) (:by |rJG4IHzWf) (:text "|\"../src/config")
                     |b $ %{} :Leaf (:at 1709365556269) (:by |rJG4IHzWf) (:text |:as)
                     |h $ %{} :Leaf (:at 1709365558666) (:by |rJG4IHzWf) (:text |js-config)
+                |zY $ %{} :Expr (:at 1710004809761) (:by |rJG4IHzWf)
+                  :data $ {}
+                    |T $ %{} :Leaf (:at 1710004816203) (:by |rJG4IHzWf) (:text "|\"../src/index")
+                    |b $ %{} :Leaf (:at 1710004817781) (:by |rJG4IHzWf) (:text |:refer)
+                    |h $ %{} :Expr (:at 1710004818072) (:by |rJG4IHzWf)
+                      :data $ {}
+                        |T $ %{} :Leaf (:at 1710004818305) (:by |rJG4IHzWf) (:text |listenShaderError)
     |app.schema $ %{} :FileEntry
       :defs $ {}
         |store $ %{} :CodeEntry (:doc |)

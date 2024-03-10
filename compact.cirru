@@ -51,7 +51,7 @@
             def skip-rendering? $ = "\"true" (get-env "\"skip" "\"false")
         |tabs $ %{} :CodeEntry (:doc |)
           :code $ quote
-            def tabs $ [] (:: :fireworks |Fireworks :dark) (:: :lorenz |Lorenz :dark) (:: :aizawa |Aizawa :dark) (:: :fourwing "|Four Wing" :dark) (:: :fractal |Fractal :dark) (:: :collision |Collision :dark) (:: :bounce |Bounce :dark) (:: :feday |FEDAY :dark) (:: :bifurcation "\"Bifurcation" :dark) (:: :ball-spin "\"Ball Spin" :dark) (:: :lifegame "\"Lifegame" :dark) (:: :lifegame-trail "\"Lifegame Trail" :dark) (:: :bounce-trail "|Bounce Trail" :dark) (:: :orbit-spark "|Orbit Spark" :dark) (:: :chen |Chen :dark) (:: :sprott |Sprott :dark) (:: :lorenz83 |Lorenz83 :dark) (:: :orbits |Orbits :dark) (:: :lamps |Lamps :dark) (:: :debug-grid "|Debug Grid" :dark)
+            def tabs $ [] (:: :fireworks |Fireworks :dark) (:: :lorenz |Lorenz :dark) (:: :aizawa |Aizawa :dark) (:: :fourwing "|Four Wing" :dark) (:: :fractal |Fractal :dark) (:: :collision |Collision :dark) (:: :bounce |Bounce :dark) (:: :feday |FEDAY :dark) (:: :bifurcation "\"Bifurcation" :dark) (:: :ball-spin "\"Ball Spin" :dark) (:: :lifegame "\"Lifegame" :dark) (:: :lifegame-trail "\"Lifegame Trail" :dark) (:: :bounce-trail "|Bounce Trail" :dark) (:: :orbit-spark "|Orbit Spark" :dark) (:: :chen |Chen :dark) (:: :sprott |Sprott :dark) (:: :lorenz83 |Lorenz83 :dark) (:: :orbits |Orbits :dark) (:: :lamps |Lamps :dark) (:: :debug-grid "|Debug Grid" :dark) (:: :den-tsucs "\"Den Tsucs" :dark)
         |threshold $ %{} :CodeEntry (:doc |)
           :code $ quote
             def threshold $ js/parseFloat
@@ -143,6 +143,7 @@
                 :orbits $ orbits/loadRenderer canvas
                 :lamps $ lamps/loadRenderer canvas
                 :debug-grid $ debug-grid/loadRenderer canvas
+                :den-tsucs $ den-tsucs/loadRenderer canvas
         |reload! $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn reload! () (hint-fn async)
@@ -208,6 +209,7 @@
             "\"../src/apps/orbits" :as orbits
             "\"../src/apps/lamps" :as lamps
             "\"../src/apps/debug-grid" :as debug-grid
+            "\"../src/apps/attractor-den-tsucs" :as den-tsucs
             "\"../src/index" :refer $ setupInitials
             "\"../src/config" :as js-config
             "\"../src/index" :refer $ listenShaderError

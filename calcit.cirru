@@ -390,6 +390,12 @@
                       |b $ %{} :Leaf (:at 1709387587936) (:by |rJG4IHzWf) (:text |:debug-grid)
                       |h $ %{} :Leaf (:at 1709387591545) (:by |rJG4IHzWf) (:text "||Debug Grid")
                       |l $ %{} :Leaf (:at 1702230361864) (:by |rJG4IHzWf) (:text |:dark)
+                  |zn $ %{} :Expr (:at 1710063101339) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1710063102869) (:by |rJG4IHzWf) (:text |::)
+                      |X $ %{} :Leaf (:at 1710063110666) (:by |rJG4IHzWf) (:text |:den-tsucs)
+                      |b $ %{} :Leaf (:at 1710063104176) (:by |rJG4IHzWf) (:text "|\"Den Tsucs")
+                      |h $ %{} :Leaf (:at 1710063105599) (:by |rJG4IHzWf) (:text |:dark)
         |threshold $ %{} :CodeEntry (:doc |)
           :code $ %{} :Expr (:at 1709145122009) (:by |rJG4IHzWf)
             :data $ {}
@@ -914,6 +920,13 @@
                         :data $ {}
                           |T $ %{} :Leaf (:at 1709576589750) (:by |rJG4IHzWf) (:text |debug-grid/loadRenderer)
                           |b $ %{} :Leaf (:at 1709576589750) (:by |rJG4IHzWf) (:text |canvas)
+                  |zu $ %{} :Expr (:at 1709576589750) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1710063578040) (:by |rJG4IHzWf) (:text |:den-tsucs)
+                      |b $ %{} :Expr (:at 1709576589750) (:by |rJG4IHzWf)
+                        :data $ {}
+                          |T $ %{} :Leaf (:at 1710063576896) (:by |rJG4IHzWf) (:text |den-tsucs/loadRenderer)
+                          |b $ %{} :Leaf (:at 1709576589750) (:by |rJG4IHzWf) (:text |canvas)
         |reload! $ %{} :CodeEntry (:doc |)
           :code $ %{} :Expr (:at 1626201152815) (:by |rJG4IHzWf)
             :data $ {}
@@ -1277,6 +1290,11 @@
                     |T $ %{} :Leaf (:at 1709387576563) (:by |rJG4IHzWf) (:text "|\"../src/apps/debug-grid")
                     |b $ %{} :Leaf (:at 1709356814139) (:by |rJG4IHzWf) (:text |:as)
                     |h $ %{} :Leaf (:at 1709387579147) (:by |rJG4IHzWf) (:text |debug-grid)
+                |zCzY $ %{} :Expr (:at 1709356808034) (:by |rJG4IHzWf)
+                  :data $ {}
+                    |T $ %{} :Leaf (:at 1710063641340) (:by |rJG4IHzWf) (:text "|\"../src/apps/attractor-den-tsucs")
+                    |b $ %{} :Leaf (:at 1709356814139) (:by |rJG4IHzWf) (:text |:as)
+                    |h $ %{} :Leaf (:at 1710063572855) (:by |rJG4IHzWf) (:text |den-tsucs)
                 |zD $ %{} :Expr (:at 1699549071462) (:by |rJG4IHzWf)
                   :data $ {}
                     |T $ %{} :Leaf (:at 1699549074912) (:by |rJG4IHzWf) (:text "|\"../src/index")

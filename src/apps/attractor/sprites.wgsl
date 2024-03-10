@@ -25,6 +25,9 @@ fn vert_main(
   @location(3) travel: f32,
   @location(4) idx: u32,
 ) -> VertexOutput {
+  let scale: f32 = 0.002 ;
+  var output: VertexOutput;
+
   let position = position0 * 8.;
   let prev_pos = prev_pos0 * 8.;
   var pos: vec3<f32>;
@@ -34,15 +37,20 @@ fn vert_main(
   let right = normalize(cross(v0, forward));
 
   // let front = params.length;
-  var width = params.width * 8.;
+  var width = params.width * 60.;
 
   if ages < 0.01 {
     // prev_position = position;
     width = 0.0;
   }
   // TODO hack
-  if distance(position, prev_pos) > 12.2 {
-    width = 0.0;
+
+  let center_ret = transform_perspective(position);
+  let outside = center_ret.side_distance > center_ret.front_distance * 0.8;
+  if outside {
+    width *= 0.0;
+    output.position = vec4(center_ret.point_position.xyz * scale, 1.0);
+    return output;
   }
 
   if idx == 0u {
@@ -58,18 +66,17 @@ fn vert_main(
     pos = position;
   }
 
-  var output: VertexOutput;
-  let p0 = vec4(pos * params.scale, 1.0);
+  let p0 = vec4(pos, 1.0);
 
   let p: vec3<f32> = transform_perspective(p0.xyz).point_position;
-  let scale: f32 = 0.002;
+
 
   output.position = vec4(p * scale, 1.0);
   // let c3: vec3<f32> = hsl(fract(travel/100.), 0.8, fract(0.9 - ages * 0.0002));
   // let c3: vec3<f32> = hsl(0.24, 0.8, 0.7 + 0.3 * sin(travel * 0.2));
   // let c3 = hsl(0.24, 0.99, 0.99 - dim);
   // let c3 = vec3<f32>(0.99, 0.94, 0.2) * (1. - ages * 0.01);
-  let c3: vec3<f32> = hsl(fract(travel * 0.000008 + 0.0), 0.998, 0.5 - ages * 0.002);
+  let c3: vec3<f32> = hsl(fract(12. * travel * 0.00000025), 0.998, 0.5 - ages * 0.002);
   output.color = vec4(c3, params.opacity * (1.2 - ages * 0.04));
   return output;
 }

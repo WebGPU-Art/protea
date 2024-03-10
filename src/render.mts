@@ -123,6 +123,9 @@ export let createRenderer = async (
         device.createBindGroupLayout({
           entries: renderGroupEntries,
         }),
+        device.createBindGroupLayout({
+          entries: computeParticleEntries, // mocked
+        }),
       ],
     }),
     vertex: {
@@ -179,6 +182,7 @@ export let createRenderer = async (
   }
 
   const particleBindGroups: GPUBindGroup[] = new Array(2);
+  const mockedBindGroups: GPUBindGroup[] = new Array(2);
   let setupParticlesBindGroups = () => {
     for (let i = 0; i < 2; ++i) {
       let byteLength = initialParticleData.byteLength;
@@ -189,6 +193,21 @@ export let createRenderer = async (
         entries: [
           { binding: 0, resource: { buffer: fromBuffer, size: byteLength } },
           { binding: 1, resource: { buffer: toBuffer, size: byteLength } },
+        ],
+      });
+      let emptyBuffer = device.createBuffer({
+        size: 4,
+        usage: GPUBufferUsage.STORAGE,
+      });
+      let emptyBuffer2 = device.createBuffer({
+        size: 4,
+        usage: GPUBufferUsage.STORAGE,
+      });
+      mockedBindGroups[i] = device.createBindGroup({
+        layout: computePipeline.getBindGroupLayout(1),
+        entries: [
+          { binding: 0, resource: { buffer: emptyBuffer, size: 4 } },
+          { binding: 1, resource: { buffer: emptyBuffer2, size: 4 } },
         ],
       });
     }
@@ -253,6 +272,7 @@ export let createRenderer = async (
         entries: uniformEntries,
       })
     );
+    passEncoder.setBindGroup(1, mockedBindGroups[t % 2]); // mocked
 
     if (indexBuffer != null) {
       passEncoder.setIndexBuffer(indexBuffer, "uint32");

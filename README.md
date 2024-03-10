@@ -68,7 +68,7 @@ window.__hotUpdateParams([0.1, 1.6, 0.12, 0.7]);
 
 ### Bind Groups
 
-For compute shader:
+Bindings in shader:
 
 ```wgsl
 @group(0) @binding(0) var<uniform> uniforms: UniformData;
@@ -78,12 +78,7 @@ For compute shader:
 @group(1) @binding(1) var<storage, read_write> particles_b: Particles;
 ```
 
-For fragment shader:
-
-```wgsl
-@group(0) @binding(0) var<uniform> uniforms: UniformData;
-@group(0) @binding(1) var<uniform> params: Params;
-```
+shaders is mocked to be unified in both compute shader and fragment shader.
 
 ### Licence
 

@@ -1,6 +1,5 @@
 import { createRenderer } from "../index.mjs";
-import fireworksSprites from "./fireworks/sprites.wgsl?raw";
-import fireworksCompute from "./fireworks/compute.wgsl?raw";
+import fireworksCompute from "./fireworks.wgsl?raw";
 import { randPointInSphere } from "../util.mjs";
 import { rand_middle } from "../math.mjs";
 
@@ -25,7 +24,7 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
       vertexData: [0, 1, 2, 3],
       indexData: [0, 1, 2, 1, 2, 3],
       vertexBufferLayout: vertexBufferLayout,
-      renderShader: fireworksSprites,
+      renderShader: fireworksCompute,
       // topology: "line-list",
       bgColor: [0.1, 0.0, 0.2, 1.0],
     }

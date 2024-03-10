@@ -1,6 +1,5 @@
 import { createRenderer } from "../index.mjs";
-import spriteShader from "./lifegame-trail/sprites.wgsl?raw";
-import computeShader from "./lifegame-trail/compute.wgsl?raw";
+import computeShader from "./lifegame-trail.wgsl?raw";
 
 export let loadRenderer = async (canvas: HTMLCanvasElement) => {
   let seedSize = 160;
@@ -23,7 +22,7 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
       vertexData: [0, 1, 2, 3],
       indexData: [0, 1, 2, 1, 2, 3],
       vertexBufferLayout: vertexBufferLayout,
-      renderShader: spriteShader,
+      renderShader: computeShader,
       // topology: "line-list",
       bgColor: [0.1, 0.0, 0.2, 1.0],
     }

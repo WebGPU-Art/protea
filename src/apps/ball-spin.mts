@@ -1,6 +1,5 @@
 import { createRenderer } from "../index.mjs";
-import spriteShader from "./ball-spin/sprites.wgsl?raw";
-import computeShader from ".//ball-spin/compute.wgsl?raw";
+import computeShader from ".//ball-spin.wgsl?raw";
 import { fiboGridN } from "../math.mjs";
 
 export let loadRenderer = async (canvas: HTMLCanvasElement) => {
@@ -24,7 +23,7 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
       vertexData: [0, 1, 2, 3],
       indexData: [0, 1, 2, 1, 2, 3],
       vertexBufferLayout: vertexBufferLayout,
-      renderShader: spriteShader,
+      renderShader: computeShader,
       // topology: "line-list",
       bgColor: [0.1, 0.0, 0.2, 1.0],
     }

@@ -72,7 +72,6 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
         12, 22, 23,
       ],
       vertexBufferLayout: vertexBufferLayout,
-      renderShader: computeCollision,
       // topology: "line-list",
       bgColor: [0.0, 0.0, 0.0, 1.0],
     }

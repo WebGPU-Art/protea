@@ -10,6 +10,7 @@ import { vCross, vLength, vNormalize } from "@triadica/touch-control";
 import { atomDepthTexture, atomDevice } from "./globals.mjs";
 import proteaColors from "../shaders/protea-colors.wgsl?raw";
 import proteaPerspective from "../shaders/protea-perspective.wgsl?raw";
+import { countLines } from "./util.mjs";
 
 let renderGroupEntries: GPUBindGroupLayoutEntry[] = [
   {
@@ -122,6 +123,9 @@ export let createRenderer = async (
   let initialParticleData = computeOptions.seedData;
   let shaderCode = interpolateShader(computeOptions.computeShader);
 
+  let diffLines =
+    countLines(shaderCode) - countLines(computeOptions.computeShader);
+
   let vertexCount = renderOptions.vertexCount;
   let paramsData = computeOptions.params;
   let vertexData = renderOptions.vertexData;
@@ -163,7 +167,7 @@ export let createRenderer = async (
   });
 
   shaderModule.getCompilationInfo().then((info) => {
-    window.__lagopusHandleCompilationInfo(info, shaderCode);
+    window.__lagopusHandleCompilationInfo(info, shaderCode, diffLines);
   });
   const renderPipeline = device.createRenderPipeline({
     layout: device.createPipelineLayout({

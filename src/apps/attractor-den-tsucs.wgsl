@@ -1,3 +1,7 @@
+
+#import protea::perspective
+#import protea::colors
+
 struct Particle {
   pos: vec3<f32>,
   ages: f32,
@@ -89,10 +93,6 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
   // particles_b.particles[index].distance += ret.distance;
   particles_b.particles[index].distance = group_idx;
 }
-
-
-#import protea::perspective
-#import protea::colors
 
 struct VertexOutput {
   @builtin(position) position: vec4<f32>,

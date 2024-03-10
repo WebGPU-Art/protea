@@ -16,9 +16,10 @@ export function randPointInSphere(a: number, shift: number = 2) {
 
 export let stringifyCompilationError = (
   error: GPUCompilationMessage,
-  code: string
+  code: string,
+  delta: number = 0
 ): string => {
-  let lineNum = error.lineNum;
+  let lineNum = error.lineNum - delta; // suppose #import at file beginning
   let linePos = error.linePos;
   let lines = code.split("\n");
   let message = lineNum + " " + lines[lineNum - 1];
@@ -27,4 +28,8 @@ export let stringifyCompilationError = (
     " ".repeat(linePos + lineNum.toString().length) + "^ " + error.message;
   console.error("WGSL Error:\n" + message);
   return "WGSL Error:\n" + message;
+};
+
+export let countLines = (s: string) => {
+  return s.match(/\n/g).length;
 };

@@ -61,7 +61,7 @@ let refineStrength = (x: number): number => {
 
 /** function to catch shader compilation errors */
 export function registerShaderResult(
-  f: (e: GPUCompilationInfo, code: string) => void
+  f: (e: GPUCompilationInfo, code: string, n: number) => void
 ) {
   window.__lagopusHandleCompilationInfo = f;
 }
@@ -129,10 +129,10 @@ export let loadGamepadControl = () => {
 };
 
 export let listenShaderError = (f: (s: string) => void) => {
-  registerShaderResult((e, code) => {
+  registerShaderResult((e, code, delta) => {
     if (e.messages.length) {
       console.error(e);
-      f(stringifyCompilationError(e.messages[0], code));
+      f(stringifyCompilationError(e.messages[0], code, delta));
     } else {
       f(null);
     }

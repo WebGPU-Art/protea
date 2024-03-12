@@ -11,8 +11,8 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
       seedSize,
       seedData: makeSeed(seedSize, 0),
       params: [
-        0.4, // deltaT
-        100.0, // scale
+        1, // deltaT
+        400.0, // scale
         0.008, // width
         0.99, // opacity
       ],
@@ -32,7 +32,7 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
 };
 
 let randPoint: [number, number, number, number] = [0, 0, 0, 0];
-let area = 0.8;
+let area = 0.2;
 
 function makeSeed(numParticles: number, scale: number): Float32Array {
   const buf = new Float32Array(numParticles * 8);

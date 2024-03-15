@@ -1,6 +1,5 @@
 import { createRenderer } from "../index.mjs";
-import attractorSprite from "./orbit-spark/sprites.wgsl?raw";
-import computeSpark from "./orbit-spark/compute.wgsl?raw";
+import computeSpark from "./orbit-spark.wgsl?raw";
 import { fiboGridN, fiboGridN_snd, rand_middle } from "../math.mjs";
 
 export let loadRenderer = async (canvas: HTMLCanvasElement) => {
@@ -24,7 +23,6 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
       vertexData: [0, 1, 2, 3],
       indexData: [0, 1, 2, 1, 2, 3],
       vertexBufferLayout: vertexBufferLayout,
-      renderShader: attractorSprite,
       // topology: "line-list",
       bgColor: [0.1, 0.0, 0.2, 1.0],
     }

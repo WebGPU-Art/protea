@@ -51,7 +51,7 @@
             def skip-rendering? $ = "\"true" (get-env "\"skip" "\"false")
         |tabs $ %{} :CodeEntry (:doc |)
           :code $ quote
-            def tabs $ [] (:: :fireworks |Fireworks :dark) (:: :lorenz |Lorenz :dark) (:: :aizawa |Aizawa :dark) (:: :fourwing "|Four Wing" :dark) (:: :fractal |Fractal :dark) (:: :collision |Collision :dark) (:: :bounce |Bounce :dark) (:: :feday |FEDAY :dark) (:: :bifurcation "\"Bifurcation" :dark) (:: :ball-spin "\"Ball Spin" :dark) (:: :lifegame "\"Lifegame" :dark) (:: :lifegame-trail "\"Lifegame Trail" :dark) (:: :bounce-trail "|Bounce Trail" :dark) (:: :orbit-spark "|Orbit Spark" :dark) (:: :chen |Chen :dark) (:: :sprott |Sprott :dark) (:: :lorenz83 |Lorenz83 :dark) (:: :orbits |Orbits :dark) (:: :lamps |Lamps :dark) (:: :debug-grid "|Debug Grid" :dark)
+            def tabs $ [] (:: :fireworks |Fireworks :dark) (:: :lorenz |Lorenz :dark) (:: :aizawa |Aizawa :dark) (:: :fourwing "|Four Wing" :dark) (:: :fractal |Fractal :dark) (:: :collision |Collision :dark) (:: :bounce |Bounce :dark) (:: :feday |FEDAY :dark) (:: :bifurcation "\"Bifurcation" :dark) (:: :ball-spin "\"Ball Spin" :dark) (:: :lifegame "\"Lifegame" :dark) (:: :lifegame-trail "\"Lifegame Trail" :dark) (:: :bounce-trail "|Bounce Trail" :dark) (:: :orbit-spark "|Orbit Spark" :dark) (:: :chen |Chen :dark) (:: :sprott |Sprott :dark) (:: :lorenz83 |Lorenz83 :dark) (:: :orbits |Orbits :dark) (:: :lamps |Lamps :dark) (:: :debug-grid "|Debug Grid" :dark) (:: :den-tsucs "\"Den Tsucs" :dark) (:: :bouali "\"Bouali" :dark)
         |threshold $ %{} :CodeEntry (:doc |)
           :code $ quote
             def threshold $ js/parseFloat
@@ -83,9 +83,9 @@
                 js/console.log "\"Dispatch:" op
               reset! *reel $ reel-updater updater @*reel op
               tag-match op
-                  :tab t
+                  :tab t theme
                   set-renderer! $ :tab (:store @*reel)
-                _ :ok
+                _ $ eprintln "\"unknown op:" op
         |main! $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn main! () (hint-fn async)
@@ -106,6 +106,8 @@
               js-await $ set-renderer!
                 :tab $ :store @*reel
               render-loop!
+              listenShaderError $ fn (err)
+                if (some? err) (hud! "\"error" err)
               println "|App started."
         |mount-target $ %{} :CodeEntry (:doc |)
           :code $ quote
@@ -141,6 +143,8 @@
                 :orbits $ orbits/loadRenderer canvas
                 :lamps $ lamps/loadRenderer canvas
                 :debug-grid $ debug-grid/loadRenderer canvas
+                :den-tsucs $ den-tsucs/loadRenderer canvas
+                :bouali $ bouali/loadRenderer canvas
         |reload! $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn reload! () (hint-fn async)
@@ -193,6 +197,7 @@
             "\"../src/apps/attractor-chen" :as chen
             "\"../src/apps/attractor-sprott" :as sprott
             "\"../src/apps/attractor-lorenz83" :as lorenz-83
+            "\"../src/apps/attractor-bouali" :as bouali
             "\"../src/apps/fractal" :as fractal
             "\"../src/apps/collision" :as collision
             "\"../src/apps/bounce" :as bounce
@@ -206,8 +211,10 @@
             "\"../src/apps/orbits" :as orbits
             "\"../src/apps/lamps" :as lamps
             "\"../src/apps/debug-grid" :as debug-grid
+            "\"../src/apps/attractor-den-tsucs" :as den-tsucs
             "\"../src/index" :refer $ setupInitials
             "\"../src/config" :as js-config
+            "\"../src/index" :refer $ listenShaderError
     |app.schema $ %{} :FileEntry
       :defs $ {}
         |store $ %{} :CodeEntry (:doc |)
@@ -227,7 +234,7 @@
               tag-match op
                   :states cursor s
                   update-states store cursor s
-                (:tab t) (assoc store :tab t)
+                (:tab t theme) (assoc store :tab t)
                 (:hydrate-storage data) data
                 _ $ do (eprintln "\"unknown op:" op) store
       :ns $ %{} :CodeEntry (:doc |)

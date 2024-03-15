@@ -1,6 +1,5 @@
 import { createRenderer } from "../index.mjs";
-import spriteShader from "./bounce-trail/sprites.wgsl?raw";
-import computeShader from "./bounce-trail/compute.wgsl?raw";
+import computeShader from "./bounce-trail.wgsl?raw";
 import { fiboGridN } from "../math.mjs";
 
 export let loadRenderer = async (canvas: HTMLCanvasElement) => {
@@ -24,7 +23,6 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
       vertexData: [0, 1, 2, 3],
       indexData: [0, 1, 2, 1, 2, 3],
       vertexBufferLayout: vertexBufferLayout,
-      renderShader: spriteShader,
       // topology: "line-list",
       bgColor: [0.1, 0.0, 0.2, 1.0],
     }

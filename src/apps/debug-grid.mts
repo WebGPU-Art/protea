@@ -1,6 +1,5 @@
 import { createRenderer } from "../index.mjs";
-import spriteWGSL from "./debug-grid/sprites.wgsl?raw";
-import computeCollision from "./debug-grid/compute.wgsl?raw";
+import computeCollision from "./debug-grid.wgsl?raw";
 import { fiboGridN } from "../math.mjs";
 
 export let loadRenderer = async (canvas: HTMLCanvasElement) => {
@@ -24,7 +23,6 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
       vertexData: [0, 1, 2, 3],
       indexData: [0, 1, 2, 1, 2, 3],
       vertexBufferLayout: vertexBufferLayout,
-      renderShader: spriteWGSL,
       // topology: "line-list",
       bgColor: [0.1, 0.0, 0.2, 1.0],
     }

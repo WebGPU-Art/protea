@@ -1,6 +1,6 @@
 import { setupInitials } from "./index.mjs";
 
-import { loadFireworksRenderer } from "./apps/fireworks.mjs";
+import { loadRenderer } from "./apps/fireworks.mjs";
 import {} from "./apps/attractor-lorenz.mjs";
 import {} from "./apps/attractor-aizawa.mjs";
 import {} from "./apps/attractor-fourwing.mjs";
@@ -20,6 +20,8 @@ import {} from "./apps/attractor-lorenz83.mjs";
 import {} from "./apps/orbits.mjs";
 import {} from "./apps/lamps.mjs";
 import {} from "./apps/debug-grid.mjs";
+import {} from "./apps/attractor-den-tsucs.mjs";
+import {} from "./apps/attractor-bouali.mjs";
 
 let instanceRenderer: (t: number, skipComputing: boolean) => void;
 let canvas = document.querySelector("#canvas-container") as HTMLCanvasElement;
@@ -28,7 +30,7 @@ window.__skipComputing = false;
 window.onload = async () => {
   await setupInitials(canvas);
 
-  instanceRenderer = await loadFireworksRenderer(canvas);
+  instanceRenderer = await loadRenderer(canvas);
 
   let t = 0;
   let renderer = () => {

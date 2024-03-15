@@ -13,3 +13,23 @@ export function randPointInSphere(a: number, shift: number = 2) {
   var z = r * cosPhi;
   return { x: x, y: y, z: z };
 }
+
+export let stringifyCompilationError = (
+  error: GPUCompilationMessage,
+  code: string,
+  delta: number = 0
+): string => {
+  let lineNum = error.lineNum - delta; // suppose #import at file beginning
+  let linePos = error.linePos;
+  let lines = code.split("\n");
+  let message = lineNum + " " + lines[lineNum - 1];
+  message += "\n";
+  message +=
+    " ".repeat(linePos + lineNum.toString().length) + "^ " + error.message;
+  console.error("WGSL Error:\n" + message);
+  return "WGSL Error:\n" + message;
+};
+
+export let countLines = (s: string) => {
+  return s.match(/\n/g).length;
+};

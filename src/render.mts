@@ -10,6 +10,7 @@ import { vCross, vLength, vNormalize } from "@triadica/touch-control";
 import { atomDepthTexture, atomDevice } from "./globals.mjs";
 import proteaColors from "../shaders/protea-colors.wgsl?raw";
 import proteaPerspective from "../shaders/protea-perspective.wgsl?raw";
+import { countLines } from "./util.mjs";
 
 let renderGroupEntries: GPUBindGroupLayoutEntry[] = [
   {
@@ -56,6 +57,51 @@ let interpolateShader = (shader: string) => {
     .replace("#import protea::colors", proteaColors);
 };
 
+/** setup buffer for compute shader,
+ * also mock some buffer in render pass
+ */
+let setupParticlesBindGroups = (
+  device: GPUDevice,
+  layout: GPUBindGroupLayout,
+  particleBuffers: GPUBuffer[],
+  byteLength: number
+) => {
+  const particleBindGroups: GPUBindGroup[] = new Array(2);
+  const mockedBindGroups: GPUBindGroup[] = new Array(2);
+
+  for (let i = 0; i < 2; ++i) {
+    let fromBuffer = particleBuffers[i % 2];
+    let toBuffer = particleBuffers[(i + 1) % 2];
+    particleBindGroups[i] = device.createBindGroup({
+      layout: layout,
+      entries: [
+        { binding: 0, resource: { buffer: fromBuffer, size: byteLength } },
+        { binding: 1, resource: { buffer: toBuffer, size: byteLength } },
+      ],
+    });
+    let emptyBuffer = device.createBuffer({
+      size: 4,
+      usage: GPUBufferUsage.STORAGE,
+    });
+    let emptyBuffer2 = device.createBuffer({
+      size: 4,
+      usage: GPUBufferUsage.STORAGE,
+    });
+    mockedBindGroups[i] = device.createBindGroup({
+      layout: layout,
+      entries: [
+        { binding: 0, resource: { buffer: emptyBuffer, size: 4 } },
+        { binding: 1, resource: { buffer: emptyBuffer2, size: 4 } },
+      ],
+    });
+  }
+
+  return {
+    particleBindGroups,
+    mockedBindGroups,
+  };
+};
+
 export let createRenderer = async (
   canvas: HTMLCanvasElement,
   computeOptions: {
@@ -69,20 +115,21 @@ export let createRenderer = async (
     vertexData: number[];
     vertexBufferLayout: GPUVertexBufferLayout[];
     indexData?: number[];
-    renderShader: string;
     topology?: GPUPrimitiveTopology;
     bgColor?: number[];
   }
 ) => {
   let numParticles = computeOptions.seedSize;
   let initialParticleData = computeOptions.seedData;
-  let updateSpritesWGSL = interpolateShader(computeOptions.computeShader);
+  let shaderCode = interpolateShader(computeOptions.computeShader);
+
+  let diffLines =
+    countLines(shaderCode) - countLines(computeOptions.computeShader);
 
   let vertexCount = renderOptions.vertexCount;
   let paramsData = computeOptions.params;
   let vertexData = renderOptions.vertexData;
   let vertexBufferlayout = renderOptions.vertexBufferLayout;
-  let spriteWGSL = interpolateShader(renderOptions.renderShader);
   let indexBuffer = renderOptions.indexData
     ? createBuffer(
         new Uint32Array(renderOptions.indexData),
@@ -100,35 +147,46 @@ export let createRenderer = async (
     alphaMode: "premultiplied",
   });
 
+  let computeParticlesLayout = device.createBindGroupLayout({
+    entries: computeParticleEntries,
+  });
+
+  let shaderModule = device.createShaderModule({ code: shaderCode });
+
   const computePipeline = device.createComputePipeline({
     layout: device.createPipelineLayout({
       bindGroupLayouts: [
         device.createBindGroupLayout({ entries: computeUniformEntries }),
-        device.createBindGroupLayout({ entries: computeParticleEntries }),
+        computeParticlesLayout,
       ],
     }),
     compute: {
-      module: device.createShaderModule({ code: updateSpritesWGSL }),
+      module: shaderModule,
       entryPoint: "main",
     },
   });
 
-  const spriteShaderModule = device.createShaderModule({ code: spriteWGSL });
+  shaderModule.getCompilationInfo().then((info) => {
+    window.__lagopusHandleCompilationInfo(info, shaderCode, diffLines);
+  });
   const renderPipeline = device.createRenderPipeline({
     layout: device.createPipelineLayout({
       bindGroupLayouts: [
         device.createBindGroupLayout({
           entries: renderGroupEntries,
         }),
+        device.createBindGroupLayout({
+          entries: computeParticleEntries, // mocked
+        }),
       ],
     }),
     vertex: {
-      module: spriteShaderModule,
+      module: shaderModule,
       entryPoint: "vert_main",
       buffers: vertexBufferlayout,
     },
     fragment: {
-      module: spriteShaderModule,
+      module: shaderModule,
       entryPoint: "frag_main",
       targets: [{ format: presentationFormat, blend: blendState }],
     },
@@ -175,22 +233,14 @@ export let createRenderer = async (
     particleBuffers[i].unmap();
   }
 
-  const particleBindGroups: GPUBindGroup[] = new Array(2);
-  let setupParticlesBindGroups = () => {
-    for (let i = 0; i < 2; ++i) {
-      let byteLength = initialParticleData.byteLength;
-      let fromBuffer = particleBuffers[i % 2];
-      let toBuffer = particleBuffers[(i + 1) % 2];
-      particleBindGroups[i] = device.createBindGroup({
-        layout: computePipeline.getBindGroupLayout(1),
-        entries: [
-          { binding: 0, resource: { buffer: fromBuffer, size: byteLength } },
-          { binding: 1, resource: { buffer: toBuffer, size: byteLength } },
-        ],
-      });
-    }
-  };
-  setupParticlesBindGroups();
+  let seedSize = initialParticleData.byteLength;
+
+  let { particleBindGroups, mockedBindGroups } = setupParticlesBindGroups(
+    device,
+    computeParticlesLayout,
+    particleBuffers,
+    seedSize
+  );
 
   let paramBuffer = buildParamBuffer(paramsData);
 
@@ -200,7 +250,15 @@ export let createRenderer = async (
       data[idx] = n;
     });
     paramBuffer = buildParamBuffer(data);
-    setupParticlesBindGroups();
+
+    let ret = setupParticlesBindGroups(
+      device,
+      computeParticlesLayout,
+      particleBuffers,
+      seedSize
+    );
+    particleBindGroups = ret.particleBindGroups;
+    mockedBindGroups = ret.mockedBindGroups;
   };
 
   window.__hotUpdateParams = buildParamsBuffer;
@@ -250,6 +308,7 @@ export let createRenderer = async (
         entries: uniformEntries,
       })
     );
+    passEncoder.setBindGroup(1, mockedBindGroups[t % 2]); // mocked
 
     if (indexBuffer != null) {
       passEncoder.setIndexBuffer(indexBuffer, "uint32");

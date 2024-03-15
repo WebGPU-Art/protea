@@ -15,7 +15,8 @@ declare var __skipComputing: boolean;
 /** dirty hook for extracting error messages */
 declare var __lagopusHandleCompilationInfo: (
   info: GPUCompilationInfo,
-  code: string
+  code: string,
+  diffLines: number
 ) => void;
 
 declare var __hotUpdateParams: (partial: number[]) => void;

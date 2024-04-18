@@ -6,8 +6,11 @@ struct Particle {
   pos: vec3<f32>,
   idx: f32,
   velocity: vec3<f32>,
-  _distance: f32,
-  _prev_pos: vec4<f32>,
+  times: f32,
+  // p1: f32,
+  // p2: f32,
+  // p3: f32,
+  // p4: f32,
 }
 
 struct Params {
@@ -22,8 +25,8 @@ struct Particles {
 }
 
 @group(0) @binding(1) var<uniform> params: Params;
-@group(1) @binding(0) var<storage, read> particles_a: Particles;
-@group(1) @binding(1) var<storage, read_write> particles_b: Particles;
+@group(1) @binding(0) var<storage, read> pass_in: Particles;
+@group(1) @binding(1) var<storage, read_write> pass_out: Particles;
 
 fn rand(n: f32) -> f32 { return fract(sin(n) * 43758.5453123); }
 
@@ -31,23 +34,26 @@ fn iterate(p: vec3<f32>) -> vec3<f32> {
   let x = p[0];
   let y = p[1];
   let z = p[2];
-  return vec3(
-    sin(x * x - y * y + .536 - z * 0.5),
-    cos(2. * x * y + .575 + z * 0.5), z * 0.992
-  );
+  let next_x = sin(x * x - y * y + 0.848);
+  let next_y = cos(2. * x * y + 4.783);
+  return vec3(next_x, next_y, z);
 }
 
 // https://github.com/austinEng/Project6-Vulkan-Flocking/blob/master/data/shaders/computeparticles/particle.comp
 @compute @workgroup_size(64)
 fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
   var index = GlobalInvocationID.x;
-  let item = particles_a.particles[index];
-  let write_target = &particles_b.particles[index];
+  let item = pass_in.particles[index];
 
   var v_pos = item.pos;
 
-  let next = iterate(v_pos * 0.01) * 101.;
-  (*write_target).pos = vec3<f32>(next.x, next.y, next.z);
+  if item.times < item.idx * 0.0001 {
+    let next = iterate(v_pos);
+    pass_out.particles[index].pos = vec3<f32>(next.x, next.y, next.z);
+  } else {
+    pass_out.particles[index].pos = item.pos;
+  }
+  pass_out.particles[index].times = item.times + 1.;
 }
 
 struct VertexOutput {
@@ -57,13 +63,13 @@ struct VertexOutput {
 
 @vertex
 fn vert_main(
-  @location(0) position: vec3<f32>,
+  @location(0) position0: vec3<f32>,
   @location(1) point_idx: f32,
   @location(2) velocity: vec3<f32>,
-  @location(3) _travel: f32,
-  @location(4) _v: vec4<f32>,
-  @location(5) idx: u32,
+  @location(3) times: f32,
+  @location(4) idx: u32,
 ) -> VertexOutput {
+  let position = position0 * 100.;
   var pos: vec3<f32>;
   let rightward: vec3<f32> = uniforms.rightward;
   let upward: vec3<f32> = uniforms.upward;

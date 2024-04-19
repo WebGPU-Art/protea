@@ -5,8 +5,8 @@
 struct Particle {
   pos: vec3<f32>,
   idx: f32,
-  velocity: vec3<f32>,
-  times: f32,
+  // velocity: vec3<f32>,
+  // times: f32,
   // p1: f32,
   // p2: f32,
   // p3: f32,
@@ -30,32 +30,9 @@ struct Particles {
 
 fn rand(n: f32) -> f32 { return fract(sin(n) * 43758.5453123); }
 
-fn iterate(p: vec3<f32>) -> vec3<f32> {
-  let x = p[0];
-  let y = p[1];
-  let z = p[2];
-  // let next_x = sin(x * x - y * y + 0.848);
-  // let next_y = cos(2. * x * y + 4.783);
-  // let next_x = sin(x * x - y * y + 1.158);
-  // let next_y = cos(2. * x * y + 1.93);
-  let next_x = sin(x * x - y * y + 3.536);
-  let next_y = cos(2. * x * y + 5.575);
-  return vec3(next_y, next_x, z);
-}
-
 // https://github.com/austinEng/Project6-Vulkan-Flocking/blob/master/data/shaders/computeparticles/particle.comp
 @compute @workgroup_size(64)
 fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
-  var index = GlobalInvocationID.x;
-  let item = pass_in.particles[index];
-
-  if (item.times * item.times) < item.idx * 0.2 {
-    let next = iterate(item.pos);
-    pass_out.particles[index].pos = vec3<f32>(next.x, next.y, next.z);
-  } else {
-    pass_out.particles[index].pos = item.pos;
-  }
-  pass_out.particles[index].times = item.times + 1.;
 }
 
 struct VertexOutput {
@@ -67,9 +44,9 @@ struct VertexOutput {
 fn vert_main(
   @location(0) position0: vec3<f32>,
   @location(1) point_idx: f32,
-  @location(2) velocity: vec3<f32>,
-  @location(3) times: f32,
-  @location(4) idx: u32,
+  // @location(2) velocity: vec3<f32>,
+  // @location(3) times: f32,
+  @location(2) idx: u32,
 ) -> VertexOutput {
   let position = position0 * 100.;
   var pos: vec3<f32>;
@@ -79,7 +56,7 @@ fn vert_main(
   let up = normalize(upward);
 
   // let front = params.length;
-  var width = params.width * 1.4;
+  var width = params.width * 0.4;
 
   if idx == 0u {
     pos = position + right * width;

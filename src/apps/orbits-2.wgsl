@@ -34,9 +34,13 @@ fn iterate(p: vec3<f32>) -> vec3<f32> {
   let x = p[0];
   let y = p[1];
   let z = p[2];
-  let next_x = sin(x * x - y * y + 0.848);
-  let next_y = cos(2. * x * y + 4.783);
-  return vec3(next_x, next_y, z);
+  // let next_x = sin(x * x - y * y + 0.848);
+  // let next_y = cos(2. * x * y + 4.783);
+  // let next_x = sin(x * x - y * y + 1.158);
+  // let next_y = cos(2. * x * y + 1.93);
+  let next_x = sin(x * x - y * y + 3.536);
+  let next_y = cos(2. * x * y + 5.575);
+  return vec3(next_y, next_x, z);
 }
 
 // https://github.com/austinEng/Project6-Vulkan-Flocking/blob/master/data/shaders/computeparticles/particle.comp
@@ -45,10 +49,8 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
   var index = GlobalInvocationID.x;
   let item = pass_in.particles[index];
 
-  var v_pos = item.pos;
-
-  if item.times < item.idx * 0.0001 {
-    let next = iterate(v_pos);
+  if (item.times * item.times) < item.idx * 0.2 {
+    let next = iterate(item.pos);
     pass_out.particles[index].pos = vec3<f32>(next.x, next.y, next.z);
   } else {
     pass_out.particles[index].pos = item.pos;

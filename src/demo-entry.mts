@@ -22,6 +22,7 @@ import {} from "./apps/lamps.mjs";
 import {} from "./apps/debug-grid.mjs";
 import {} from "./apps/attractor-den-tsucs.mjs";
 import {} from "./apps/attractor-bouali.mjs";
+import {} from "./apps/orbits-2.mjs";
 
 let instanceRenderer: (t: number, skipComputing: boolean) => void;
 let canvas = document.querySelector("#canvas-container") as HTMLCanvasElement;

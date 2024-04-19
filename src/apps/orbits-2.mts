@@ -37,7 +37,7 @@ function makeSeed(numParticles: number, _s: number): Float32Array {
   const unit = 8;
   const buf = new Float32Array(numParticles * unit);
   // let scale = 200 * (Math.random() * 0.5 + 0.5);
-  let scale_base = 50;
+  let scale_base = 1;
   for (let i = 0; i < numParticles; ++i) {
     let scale = scale_base + 0.0 * i;
     let p = fiboGridN(i, numParticles);

@@ -56,7 +56,7 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
 // };
 
 function makeSeed(numParticles: number, _s: number): Float32Array {
-  const unit = 4;
+  const unit = 8;
   const buf = new Float32Array(numParticles * unit);
   // let scale = 200 * (Math.random() * 0.5 + 0.5);
   let scale_base = 1;
@@ -75,6 +75,10 @@ function makeSeed(numParticles: number, _s: number): Float32Array {
     buf[b + 1] = p[1] * scale_base;
     buf[b + 2] = Math.random();
     buf[b + 3] = 0; // times
+    buf[b + 4] = p[0] * scale_base;
+    buf[b + 5] = p[1] * scale_base;
+    buf[b + 6] = Math.random();
+    buf[b + 7] = 0; // times
     // p = iterate(p);
   }
 
@@ -84,17 +88,19 @@ function makeSeed(numParticles: number, _s: number): Float32Array {
 let vertexBufferLayout: GPUVertexBufferLayout[] = [
   {
     // instanced particles buffer
-    arrayStride: 4 * 4,
+    arrayStride: 8 * 4,
     stepMode: "instance",
     attributes: [
       { shaderLocation: 0, offset: 0, format: "float32x3" },
       { shaderLocation: 1, offset: 3 * 4, format: "float32" },
+      { shaderLocation: 2, offset: 4 * 4, format: "float32x3" },
+      { shaderLocation: 3, offset: 7 * 4, format: "float32" },
     ],
   },
   {
     // vertex buffer
     arrayStride: 1 * 4,
     stepMode: "vertex",
-    attributes: [{ shaderLocation: 2, offset: 0, format: "uint32" }],
+    attributes: [{ shaderLocation: 4, offset: 0, format: "uint32" }],
   },
 ];

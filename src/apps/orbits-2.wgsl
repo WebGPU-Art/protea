@@ -5,8 +5,8 @@
 struct Particle {
   pos: vec3<f32>,
   times: f32,
-  // velocity: vec3<f32>,
-  // times: f32,
+  pos0: vec3<f32>,
+  times2: f32,
   // p1: f32,
   // p2: f32,
   // p3: f32,
@@ -30,21 +30,50 @@ struct Particles {
 
 fn rand(n: f32) -> f32 { return fract(sin(n) * 43758.5453123); }
 
-fn iterate(p: vec3<f32>) -> vec3<f32> {
+fn pick_param(n: u32) -> vec2f {
+  switch n {
+    case 0u: {
+      return vec2f(0.1, 0.6);
+    }
+    case 1u: {
+      return vec2f(3.667, 3.934);
+    }
+    case 2u: {
+      return vec2f(3.536, 5.575);
+    }
+    case 3u: {
+      return vec2f(5.655, 5.16);
+    }
+    case 4u: {
+      return vec2f(5.937, 5.482);
+    }
+    case 5u: {
+      return vec2f(2.3, 2.72);
+    }
+    case 6u: {
+      return vec2f(5.46, 4.55);
+    }
+    case 7u: {
+      return vec2f(3.65, 4.58);
+    }
+    case 8u: {
+      return vec2f(2.65, 1.58);
+    }
+    case 9u: {
+      return vec2f(-2.65, -.8);
+    }
+    default: {
+      return vec2f(1.158, 1.93);
+    }
+  }
+}
+
+fn iterate(p: vec3<f32>, n: u32) -> vec3<f32> {
   let x = p[0];
   let y = p[1];
   let z = p[2];
 
-  var vv = vec2f(0.848, 4.783);
-  // vv = vec2f(1.158, 1.93);
-  // vv = vec2f(3.667, 3.934);
-  // vv = vec2f(3.536, 5.575);
-  // vv = vec2f(5.655, 5.16);
-  // vv = vec2f(5.937, 5.482);
-  // vv = vec2f(2.3, 2.72);
-  // vv = vec2f(5.46, 4.55);
-  vv = vec2f(3.65, 4.58);
-  // vv = vec2f(0.02, 1.07);
+  var vv = pick_param(n);
   let next_x = sin(x * x - y * y + vv.x);
   let next_y = cos(2. * x * y + vv.y);
   return vec3(next_y, next_x, z);
@@ -56,15 +85,23 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
   var index = GlobalInvocationID.x;
   let item = pass_in.particles[index];
 
-  let next = iterate(item.pos);
-  if item.times < 20. {
+  let duration = 50.;
+  let try_idx = u32(item.times2 / duration) % 10u;
+
+  let next = iterate(item.pos, try_idx);
+  if item.times < duration {
     pass_out.particles[index].pos.x = next.x;
     pass_out.particles[index].pos.y = next.y;
     pass_out.particles[index].pos.z = item.pos.z;
+    pass_out.particles[index].times = item.times + 1.;
+    pass_out.particles[index].times2 = item.times2 + 1.;
   } else {
-    pass_out.particles[index].pos = item.pos;
+    pass_out.particles[index].pos.x = item.pos0.x;
+    pass_out.particles[index].pos.y = item.pos0.y;
+    pass_out.particles[index].times = 0.;
+    pass_out.particles[index].times2 = item.times2 + 1.;
+    // pass_out.particles[index].pos = item.pos;
   }
-  pass_out.particles[index].times = item.times + 1.;
 }
 
 struct VertexOutput {
@@ -76,9 +113,9 @@ struct VertexOutput {
 fn vert_main(
   @location(0) position0: vec3<f32>,
   @location(1) point_idx: f32,
-  // @location(2) velocity: vec3<f32>,
-  // @location(3) times: f32,
-  @location(2) idx: u32,
+  @location(2) velocity: vec3<f32>,
+  @location(3) times: f32,
+  @location(4) idx: u32,
 ) -> VertexOutput {
   let position = position0 * 100.;
   var pos: vec3<f32>;

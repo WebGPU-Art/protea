@@ -62,6 +62,9 @@ fn pick_param(n: u32) -> vec2f {
     case 9u: {
       return vec2f(-2.65, -.8);
     }
+    case 10u: {
+      return vec2f(4., -1.5);
+    }
     default: {
       return vec2f(1.158, 1.93);
     }
@@ -86,7 +89,7 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
   let item = pass_in.particles[index];
 
   let duration = 50.;
-  let try_idx = u32(item.times2 / duration) % 10u;
+  let try_idx = u32(item.times2 / duration) % 12u;
 
   let next = iterate(item.pos, try_idx);
   if item.times < duration {

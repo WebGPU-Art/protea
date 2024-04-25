@@ -33,7 +33,7 @@ fn rand(n: f32) -> f32 { return fract(sin(n) * 43758.5453123); }
 fn pick_param(n: u32) -> vec2f {
   switch n {
     case 0u: {
-      return vec2f(0.1, 0.6);
+      return vec2f(3.7, 4.25);
     }
     case 1u: {
       return vec2f(3.667, 3.934);
@@ -65,6 +65,18 @@ fn pick_param(n: u32) -> vec2f {
     case 10u: {
       return vec2f(4., -1.5);
     }
+    case 11u {
+      return vec2f(2.72, 0.65);
+    }
+    case 12u {
+      return vec2f(0.1, 0.6);
+    }
+    case 13u {
+      return vec2f(2.79, 4.64);
+    }
+    case 14u {
+      return vec2f(.66, 1.9);
+    }
     default: {
       return vec2f(1.158, 1.93);
     }
@@ -88,8 +100,8 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
   var index = GlobalInvocationID.x;
   let item = pass_in.particles[index];
 
-  let duration = 50.;
-  let try_idx = u32(item.times2 / duration) % 12u;
+  let duration = 100.;
+  let try_idx = u32(item.times2 / duration) % 15u;
 
   let next = iterate(item.pos, try_idx);
   if item.times < duration {

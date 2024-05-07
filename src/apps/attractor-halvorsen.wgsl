@@ -2,24 +2,25 @@
 
 /// ok
 fn iterate_fn(p: vec3f, dt: f32) -> LorenzResult {
-  let a = 1.4;
-  let b = 40.;
-  let c = 2.;
-  let d0 = 2.5;
 
   let x = p.x;
   let y = p.y;
   let z = p.z;
 
+  let a = 1.4;
   let dx = -a * x - 4. * y - 4. * z - y * y;
   let dy = -a * y - 4. * z - 4. * x - z * z;
   let dz = -a * z - 4. * x - 4. * y - x * x;
 
+  // let a = 10.;
+  // let b = 40.;
+  // let c = 2.;
+  // let d0 = 2.5;
   // let dx = a * (y - x);
   // let dy = b * x - c * x * z;
   // let dz = exp(x * y) - d0 * z;
 
-  var d = vec3<f32>(dx, dy, dz) * dt * 10.;
+  var d = vec3<f32>(dx, dy, dz) * dt * 4.;
   // let dl = length(d);
   // if (dl > 0.2) {
   //   d = d / dl * 0.2;

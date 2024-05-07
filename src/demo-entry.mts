@@ -23,6 +23,8 @@ import {} from "./apps/debug-grid.mjs";
 import {} from "./apps/attractor-den-tsucs.mjs";
 import {} from "./apps/attractor-bouali.mjs";
 import {} from "./apps/orbits-2.mjs";
+import {} from "./apps/attractor-halvorsen.mjs";
+import * as cliffordd from "./apps/clifford.mjs";
 
 let instanceRenderer: (t: number, skipComputing: boolean) => void;
 let canvas = document.querySelector("#canvas-container") as HTMLCanvasElement;

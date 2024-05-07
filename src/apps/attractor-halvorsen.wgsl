@@ -1,43 +1,6 @@
 
-
-/// ok
-fn iterate_fn(p: vec3f, dt: f32) -> LorenzResult {
-
-  let x = p.x;
-  let y = p.y;
-  let z = p.z;
-
-  let a = 1.4;
-  let dx = -a * x - 4. * y - 4. * z - y * y;
-  let dy = -a * y - 4. * z - 4. * x - z * z;
-  let dz = -a * z - 4. * x - 4. * y - x * x;
-
-  // let a = 10.;
-  // let b = 40.;
-  // let c = 2.;
-  // let d0 = 2.5;
-  // let dx = a * (y - x);
-  // let dy = b * x - c * x * z;
-  // let dz = exp(x * y) - d0 * z;
-
-  var d = vec3<f32>(dx, dy, dz) * dt * 4.;
-  // let dl = length(d);
-  // if (dl > 0.2) {
-  //   d = d / dl * 0.2;
-  // } else if (dl < 0.01) {
-  //   d = d / dl * 0.01;
-  // }
-  let next = p + d;
-  // if (length(next) > 100.0) {
-  //   next = vec3(0.1);
-  // }
-  return LorenzResult(
-    next,
-    vec3(dx, dy, dz),
-    length(d) * 8.8
-  );
-}
-
+#import protea::perspective
+#import protea::colors
 
 struct Particle {
   pos: vec3<f32>,
@@ -70,7 +33,32 @@ struct LorenzResult {
   distance: f32,
 }
 
+fn iterate_fn(p: vec3f, dt: f32) -> LorenzResult {
+  let x = p.x;
+  let y = p.y;
+  let z = p.z;
 
+  // let a = 10.;
+  // let b = 40.;
+  // let c = 2.;
+  // let d0 = 2.5;
+  // let dx = a * (y - x);
+  // let dy = b * x - c * x * z;
+  // let dz = exp(x * y) - d0 * z;
+
+
+  let a = 1.4;
+  let dx = -a * x - 4. * y - 4. * z - y * y;
+  let dy = -a * y - 4. * z - 4. * x - z * z;
+  let dz = -a * z - 4. * x - 4. * y - x * x;
+
+  let d = vec3<f32>(dx, dy, dz) * dt;
+  return LorenzResult(
+    p + d,
+    vec3(dx, dy, dz),
+    length(d) * 2.1
+  );
+}
 
 fn rand(n: f32) -> f32 { return fract(sin(n) * 43758.5453123); }
 
@@ -96,8 +84,7 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
     return;
   }
 
-  // let ret = lorenz(v_pos, params.delta_t * 0.01 * (2. + 2. * rand(f32(index))));
-  let ret = iterate_fn(v_pos, params.delta_t * 0.001 * (2. + 2. * rand(f32(index))));
+  let ret = iterate_fn(v_pos, params.delta_t * 0.01 * (2. + 2. * rand(f32(index))));
 
   // Write back
   particles_b.particles[index].pos = ret.position;
@@ -156,8 +143,8 @@ fn vert_main(
   var output: VertexOutput;
   let p0 = vec4(pos * params.scale, 1.0);
 
-  let p: vec3<f32> = transform_perspective(p0.xyz).point_position;
-  let scale: f32 = 0.00002;
+  let p: vec3<f32> = transform_perspective(p0.xyz * 0.2).point_position;
+  let scale: f32 = 0.002;
 
   output.position = vec4(p * scale, 1.0);
   // let c3: vec3<f32> = hsl(fract(travel/100.), 0.8, fract(0.9 - ages * 0.0002));
@@ -174,6 +161,3 @@ fn frag_main(@location(4) color: vec4<f32>) -> @location(0) vec4<f32> {
   return color;
   // return vec4<f32>(0.7, 0.7, 1., 1.0);
 }
-
-#import protea::perspective
-#import protea::colors

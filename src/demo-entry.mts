@@ -25,6 +25,7 @@ import {} from "./apps/attractor-bouali.mjs";
 import {} from "./apps/orbits-2.mjs";
 import {} from "./apps/attractor-halvorsen.mjs";
 import * as cliffordd from "./apps/clifford.mjs";
+import * as dequanli from "./apps/attractor-dequanli.mjs";
 
 let instanceRenderer: (t: number, skipComputing: boolean) => void;
 let canvas = document.querySelector("#canvas-container") as HTMLCanvasElement;

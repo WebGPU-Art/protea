@@ -107,7 +107,7 @@ export let createRenderer = async (
   computeOptions: {
     seedSize: number;
     seedData: Float32Array;
-    params: number[];
+    getParams: () => number[];
     computeShader: string;
   },
   renderOptions: {
@@ -127,7 +127,7 @@ export let createRenderer = async (
     countLines(shaderCode) - countLines(computeOptions.computeShader);
 
   let vertexCount = renderOptions.vertexCount;
-  let paramsData = computeOptions.params;
+  let paramsData = computeOptions.getParams();
   let vertexData = renderOptions.vertexData;
   let vertexBufferlayout = renderOptions.vertexBufferLayout;
   let indexBuffer = renderOptions.indexData

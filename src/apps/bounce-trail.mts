@@ -10,7 +10,7 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
     {
       seedSize,
       seedData: makeSeed(seedSize, 0),
-      params: [
+      getParams: () => [
         0.002, // deltaT
         0.6, // height
         0.2, // width

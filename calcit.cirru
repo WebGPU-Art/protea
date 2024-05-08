@@ -420,6 +420,12 @@
                       |b $ %{} :Leaf (:at 1715106921105) (:by |rJG4IHzWf) (:text |:clifford)
                       |h $ %{} :Leaf (:at 1715106924197) (:by |rJG4IHzWf) (:text "|\"Clifford")
                       |l $ %{} :Leaf (:at 1713461169806) (:by |rJG4IHzWf) (:text |:dark)
+                  |zv $ %{} :Expr (:at 1713461149809) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1713461150298) (:by |rJG4IHzWf) (:text |::)
+                      |b $ %{} :Leaf (:at 1715197257496) (:by |rJG4IHzWf) (:text |:dequanli)
+                      |h $ %{} :Leaf (:at 1715197263594) (:by |rJG4IHzWf) (:text "|\"Dequan Li")
+                      |l $ %{} :Leaf (:at 1713461169806) (:by |rJG4IHzWf) (:text |:dark)
         |threshold $ %{} :CodeEntry (:doc |)
           :code $ %{} :Expr (:at 1709145122009) (:by |rJG4IHzWf)
             :data $ {}
@@ -984,6 +990,13 @@
                         :data $ {}
                           |T $ %{} :Leaf (:at 1715106951683) (:by |rJG4IHzWf) (:text |clifford/loadRenderer)
                           |b $ %{} :Leaf (:at 1715106952627) (:by |rJG4IHzWf) (:text |canvas)
+                  |zy $ %{} :Expr (:at 1715106936872) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1715197276516) (:by |rJG4IHzWf) (:text |:dequanli)
+                      |b $ %{} :Expr (:at 1715106942061) (:by |rJG4IHzWf)
+                        :data $ {}
+                          |T $ %{} :Leaf (:at 1715197279469) (:by |rJG4IHzWf) (:text |dequanli/loadRenderer)
+                          |b $ %{} :Leaf (:at 1715106952627) (:by |rJG4IHzWf) (:text |canvas)
         |reload! $ %{} :CodeEntry (:doc |)
           :code $ %{} :Expr (:at 1626201152815) (:by |rJG4IHzWf)
             :data $ {}
@@ -1372,6 +1385,11 @@
                     |T $ %{} :Leaf (:at 1715106961638) (:by |rJG4IHzWf) (:text "|\"../src/apps/clifford")
                     |b $ %{} :Leaf (:at 1709356814139) (:by |rJG4IHzWf) (:text |:as)
                     |h $ %{} :Leaf (:at 1715106967436) (:by |rJG4IHzWf) (:text |clifford)
+                |zCzj $ %{} :Expr (:at 1709356808034) (:by |rJG4IHzWf)
+                  :data $ {}
+                    |T $ %{} :Leaf (:at 1715197390360) (:by |rJG4IHzWf) (:text "|\"../src/apps/attractor-dequanli")
+                    |b $ %{} :Leaf (:at 1709356814139) (:by |rJG4IHzWf) (:text |:as)
+                    |h $ %{} :Leaf (:at 1715197291931) (:by |rJG4IHzWf) (:text |dequanli)
                 |zD $ %{} :Expr (:at 1699549071462) (:by |rJG4IHzWf)
                   :data $ {}
                     |T $ %{} :Leaf (:at 1699549074912) (:by |rJG4IHzWf) (:text "|\"../src/index")

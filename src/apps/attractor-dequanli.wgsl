@@ -27,36 +27,33 @@ struct Particles {
 const tau = 10f;
 const rou = 28f;
 
-struct LorenzResult {
+struct AttractorResult {
   position: vec3f,
   velocity: vec3f,
   distance: f32,
 }
 
-fn iterate_fn(p: vec3f, dt: f32) -> LorenzResult {
+/// https://gist.github.com/gcalmettes/b470179e1707700463d236525a0c3613#file-index-html-L202
+fn dequan_li(p: vec3f, dt: f32) -> AttractorResult {
+  let a = 40.0;
+  let c = 11. / 6.;
+  let d = 0.16;
+  let e = 0.65;
+  let k = 55.;
+  let f = 20.;
+
   let x = p.x;
   let y = p.y;
   let z = p.z;
 
-  // // https://paulbourke.net/fractals/yuwang/
-  // let a = 10.;
-  // let b = 40.;
-  // let c = 2.;
-  // let d0 = 2.5;
-  // let dx = a * (y - x);
-  // let dy = b * x - c * x * z;
-  // let dz = exp(x * y) - d0 * z;
-
-  let a = 1.4;
-  let dx = -a * x - 4. * y - 4. * z - y * y;
-  let dy = -a * y - 4. * z - 4. * x - z * z;
-  let dz = -a * z - 4. * x - 4. * y - x * x;
-
-  let d = vec3<f32>(dx, dy, dz) * dt;
-  return LorenzResult(
-    p + d,
+  let dx = a * (y - x) + d * x * z;
+  let dy = k * x + f * y - x * z;
+  let dz = c * z + x * y - e * x * x;
+  let dv = vec3<f32>(dx, dy, dz) * dt;
+  return AttractorResult(
+    p + dv,
     vec3(dx, dy, dz),
-    length(d) * 2.1
+    length(dv) * 2.1
   );
 }
 
@@ -84,7 +81,7 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
     return;
   }
 
-  let ret = iterate_fn(v_pos, params.delta_t * 0.01 * (2. + 2. * rand(f32(index))));
+  let ret = dequan_li(v_pos, params.delta_t * 0.002 * (2. + 0. * rand(f32(index))));
 
   // Write back
   particles_b.particles[index].pos = ret.position;
@@ -116,16 +113,16 @@ fn vert_main(
   let right = normalize(cross(v0, forward));
 
   // let front = params.length;
-  var width = params.width * 8.;
+  var width = params.width * 40.;
 
-  if ages < 0.01 {
-    // prev_position = position;
-    width = 0.0;
-  }
-  // TODO hack
-  if distance(position, prev_pos) > 12.2 {
-    width = 0.0;
-  }
+  // if ages < 0.01 {
+  //   // prev_position = position;
+  //   width = 0.0;
+  // }
+  // // TODO hack
+  // if distance(position, prev_pos) > 12.2 {
+  //   width = 0.0;
+  // }
 
   if idx == 0u {
     pos = position + right * width;

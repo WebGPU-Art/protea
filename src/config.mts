@@ -9,6 +9,6 @@ export let useGamepad = parsed["gamepad"];
 
 export let threshold = parseFloat((parsed["threshold"] as string) || "0.016");
 
-export let useRemoteContrl = parsed["remote-control"];
+export let useRemoteControl = parsed["remote-control"];
 
 export let interval = parseFloat((parsed["interval"] as string) || "20");

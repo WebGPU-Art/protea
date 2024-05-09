@@ -5,6 +5,7 @@ import { fiboGridN, rand_middle } from "../math.mjs";
 let startTime = Date.now();
 
 export let loadRenderer = async (canvas: HTMLCanvasElement) => {
+  // let seedSize = 2000000;
   let seedSize = 2000000;
 
   let renderFrame = await createRenderer(
@@ -38,24 +39,29 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
 };
 
 let randPoint: [number, number, number] = [0, 0, 0];
-let area = 8.0;
+let area = 80;
 
 function makeSeed(numParticles: number, scale: number): Float32Array {
   const buf = new Float32Array(numParticles * 8);
 
   for (let i = 0; i < numParticles; ++i) {
-    if (i % 24 == 0) {
+    if (i % 20 == 0) {
       // let p = fiboGridN(i, numParticles);
-      randPoint = [rand_middle(area), rand_middle(area), rand_middle(area)];
+      randPoint = [
+        1.5 + rand_middle(area),
+        3.2 + rand_middle(area),
+        0.4 + rand_middle(area),
+      ];
     }
+    // console.log(randPoint);
     let b = 8 * i;
-    buf[b + 0] = randPoint[0] * area + 0.5;
-    buf[b + 1] = randPoint[1] * area;
-    buf[b + 2] = randPoint[2] * area;
-    buf[b + 3] = i / 24; // ages
-    buf[b + 4] = randPoint[0] * area + 0.5;
-    buf[b + 5] = randPoint[1] * area;
-    buf[b + 6] = randPoint[2] * area;
+    buf[b + 0] = randPoint[0];
+    buf[b + 1] = randPoint[1];
+    buf[b + 2] = randPoint[2];
+    buf[b + 3] = i / 20; // ages
+    buf[b + 4] = randPoint[0];
+    buf[b + 5] = randPoint[1];
+    buf[b + 6] = randPoint[2];
     buf[b + 7] = 0; // distance
   }
 

@@ -42,16 +42,19 @@ fn dequan_li(p: vec3f, dt: f32) -> AttractorResult {
   let k = 55.;
   let f = 20.;
 
-  let x = p.x;
-  let y = p.y;
-  let z = p.z;
+  var x = p.x;
+  var y = p.y;
+  var z = p.z;
 
   let dx = a * (y - x) + d * x * z;
+  x += dx * dt; // modification order is influential
   let dy = k * x + f * y - x * z;
+  y += dy * dt;
   let dz = c * z + x * y - e * x * x;
+  z += dz * dt;
   let dv = vec3<f32>(dx, dy, dz) * dt;
   return AttractorResult(
-    p + dv,
+    vec3(x, y, z),
     vec3(dx, dy, dz),
     length(dv) * 2.1
   );
@@ -67,10 +70,10 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
   var v_pos = particles_a.particles[index].pos;
   // let dd = floor(f32(index) / 80.0);
 
-  let inner_idx = f32(index % 24u);
-  let group_idx = floor(f32(index) / 24.0);
+  let inner_idx = f32(index % 20u);
+  let group_idx = floor(f32(index) / 20.0);
 
-  if index % 24u != 0u {
+  if index % 20u != 0u {
     let prev = index - 1u;
     particles_b.particles[index].pos = particles_a.particles[prev].pos;
     // particles_b.particles[index].ages = particles_a.particles[prev].ages;
@@ -81,7 +84,7 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
     return;
   }
 
-  let ret = dequan_li(v_pos, params.delta_t * 0.002 * (2. + 0. * rand(f32(index))));
+  let ret = dequan_li(v_pos, params.delta_t * 0.0001 * (20. + 10. * rand(f32(index))));
 
   // Write back
   particles_b.particles[index].pos = ret.position;
@@ -140,7 +143,7 @@ fn vert_main(
   var output: VertexOutput;
   let p0 = vec4(pos * params.scale, 1.0);
 
-  let p: vec3<f32> = transform_perspective(p0.xyz * 0.1).point_position;
+  let p: vec3<f32> = transform_perspective(p0.xyz * 0.4).point_position;
   let scale: f32 = 0.002;
 
   output.position = vec4(p * scale, 1.0);
@@ -148,8 +151,8 @@ fn vert_main(
   // let c3: vec3<f32> = hsl(0.24, 0.8, 0.7 + 0.3 * sin(travel * 0.2));
   // let c3 = hsl(0.24, 0.99, 0.99 - dim);
   // let c3 = vec3<f32>(0.99, 0.94, 0.2) * (1. - ages * 0.01);
-  let c3: vec3<f32> = hsl(fract(travel * 0.000008 + 0.0), 0.998, 0.5 - ages * 0.002);
-  output.color = vec4(c3, params.opacity * (1.2 - ages * 0.04));
+  let c3: vec3<f32> = hsl(fract(travel * 0.000003 + 0.0), 0.998, 0.7 - ages * 0.002);
+  output.color = vec4(c3, params.opacity * (1.2 - ages * 0.002));
   return output;
 }
 

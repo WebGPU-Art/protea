@@ -2,8 +2,6 @@ import { createRenderer } from "../index.mjs";
 import attractorCompute from "./attractor-dequanli.wgsl?raw";
 import { fiboGridN, rand_middle } from "../math.mjs";
 
-let startTime = Date.now();
-
 export let loadRenderer = async (canvas: HTMLCanvasElement) => {
   // let seedSize = 2000000;
   let seedSize = 2000000;
@@ -13,11 +11,9 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
     {
       seedSize,
       seedData: makeSeed(seedSize, 0),
-      getParams: () => {
-        let now = Date.now();
-        let dt = (now - startTime) / 1000;
+      getParams: (dt) => {
         return [
-          dt, // deltaT
+          dt * 0.04, // deltaT
           20.0, // scale
           0.008, // width
           0.99, // opacity

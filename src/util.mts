@@ -33,3 +33,19 @@ export let stringifyCompilationError = (
 export let countLines = (s: string) => {
   return s.match(/\n/g).length;
 };
+
+export class TimeTicker {
+  startedAt: number;
+
+  constructor() {
+    this.startedAt = Date.now();
+  }
+
+  /** return in seconds */
+  ticked(): number {
+    let now = Date.now();
+    let elapsed = now - this.startedAt;
+    this.startedAt = now;
+    return elapsed * 0.001;
+  }
+}

@@ -426,6 +426,18 @@
                       |b $ %{} :Leaf (:at 1715197257496) (:by |rJG4IHzWf) (:text |:dequanli)
                       |h $ %{} :Leaf (:at 1715197263594) (:by |rJG4IHzWf) (:text "|\"Dequan Li")
                       |l $ %{} :Leaf (:at 1713461169806) (:by |rJG4IHzWf) (:text |:dark)
+                  |zw $ %{} :Expr (:at 1713461149809) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1713461150298) (:by |rJG4IHzWf) (:text |::)
+                      |b $ %{} :Leaf (:at 1715355819079) (:by |rJG4IHzWf) (:text |:dadras)
+                      |h $ %{} :Leaf (:at 1715355822368) (:by |rJG4IHzWf) (:text "|\"Dadras")
+                      |l $ %{} :Leaf (:at 1713461169806) (:by |rJG4IHzWf) (:text |:dark)
+                  |zx $ %{} :Expr (:at 1713461149809) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1713461150298) (:by |rJG4IHzWf) (:text |::)
+                      |b $ %{} :Leaf (:at 1715357719865) (:by |rJG4IHzWf) (:text |:burke-shaw)
+                      |h $ %{} :Leaf (:at 1715357725054) (:by |rJG4IHzWf) (:text "|\"Burke Shaw")
+                      |l $ %{} :Leaf (:at 1713461169806) (:by |rJG4IHzWf) (:text |:dark)
         |threshold $ %{} :CodeEntry (:doc |)
           :code $ %{} :Expr (:at 1709145122009) (:by |rJG4IHzWf)
             :data $ {}
@@ -997,6 +1009,20 @@
                         :data $ {}
                           |T $ %{} :Leaf (:at 1715197279469) (:by |rJG4IHzWf) (:text |dequanli/loadRenderer)
                           |b $ %{} :Leaf (:at 1715106952627) (:by |rJG4IHzWf) (:text |canvas)
+                  |zz $ %{} :Expr (:at 1715106936872) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1715355830446) (:by |rJG4IHzWf) (:text |:dadras)
+                      |b $ %{} :Expr (:at 1715106942061) (:by |rJG4IHzWf)
+                        :data $ {}
+                          |T $ %{} :Leaf (:at 1715355832960) (:by |rJG4IHzWf) (:text |dadras/loadRenderer)
+                          |b $ %{} :Leaf (:at 1715106952627) (:by |rJG4IHzWf) (:text |canvas)
+                  |zzD $ %{} :Expr (:at 1715106936872) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1715357732609) (:by |rJG4IHzWf) (:text |:burke-shaw)
+                      |b $ %{} :Expr (:at 1715106942061) (:by |rJG4IHzWf)
+                        :data $ {}
+                          |T $ %{} :Leaf (:at 1715357737317) (:by |rJG4IHzWf) (:text |burke-shaw/loadRenderer)
+                          |b $ %{} :Leaf (:at 1715106952627) (:by |rJG4IHzWf) (:text |canvas)
         |reload! $ %{} :CodeEntry (:doc |)
           :code $ %{} :Expr (:at 1626201152815) (:by |rJG4IHzWf)
             :data $ {}
@@ -1390,6 +1416,16 @@
                     |T $ %{} :Leaf (:at 1715197390360) (:by |rJG4IHzWf) (:text "|\"../src/apps/attractor-dequanli")
                     |b $ %{} :Leaf (:at 1709356814139) (:by |rJG4IHzWf) (:text |:as)
                     |h $ %{} :Leaf (:at 1715197291931) (:by |rJG4IHzWf) (:text |dequanli)
+                |zCzn $ %{} :Expr (:at 1709356808034) (:by |rJG4IHzWf)
+                  :data $ {}
+                    |T $ %{} :Leaf (:at 1715355839777) (:by |rJG4IHzWf) (:text "|\"../src/apps/attractor-dadras")
+                    |b $ %{} :Leaf (:at 1709356814139) (:by |rJG4IHzWf) (:text |:as)
+                    |h $ %{} :Leaf (:at 1715355842655) (:by |rJG4IHzWf) (:text |dadras)
+                |zCzq $ %{} :Expr (:at 1709356808034) (:by |rJG4IHzWf)
+                  :data $ {}
+                    |T $ %{} :Leaf (:at 1715357743395) (:by |rJG4IHzWf) (:text "|\"../src/apps/attractor-burke-shaw")
+                    |b $ %{} :Leaf (:at 1709356814139) (:by |rJG4IHzWf) (:text |:as)
+                    |h $ %{} :Leaf (:at 1715357744406) (:by |rJG4IHzWf) (:text |burke-shaw)
                 |zD $ %{} :Expr (:at 1699549071462) (:by |rJG4IHzWf)
                   :data $ {}
                     |T $ %{} :Leaf (:at 1699549074912) (:by |rJG4IHzWf) (:text "|\"../src/index")

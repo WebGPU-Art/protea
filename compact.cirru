@@ -197,14 +197,14 @@
             "\"./calcit.build-errors" :default build-errors
             "\"bottom-tip" :default hud!
             "\"../src/apps/fireworks" :as fireworks
-            "\"../src/apps/attractor-aizawa" :as aizawa
-            "\"../src/apps/attractor-lorenz" :as lorenz
-            "\"../src/apps/attractor-fourwing" :as fourwing
-            "\"../src/apps/attractor-chen" :as chen
-            "\"../src/apps/attractor-sprott" :as sprott
-            "\"../src/apps/attractor-lorenz83" :as lorenz-83
-            "\"../src/apps/attractor-bouali" :as bouali
-            "\"../src/apps/attractor-halvorsen" :as halvorsen
+            "\"../src/apps/attractor/aizawa" :as aizawa
+            "\"../src/apps/attractor/lorenz" :as lorenz
+            "\"../src/apps/attractor/fourwing" :as fourwing
+            "\"../src/apps/attractor/chen" :as chen
+            "\"../src/apps/attractor/sprott" :as sprott
+            "\"../src/apps/attractor/lorenz83" :as lorenz-83
+            "\"../src/apps/attractor/bouali" :as bouali
+            "\"../src/apps/attractor/halvorsen" :as halvorsen
             "\"../src/apps/fractal" :as fractal
             "\"../src/apps/collision" :as collision
             "\"../src/apps/bounce" :as bounce
@@ -219,11 +219,11 @@
             "\"../src/apps/orbits-2" :as orbits-2
             "\"../src/apps/lamps" :as lamps
             "\"../src/apps/debug-grid" :as debug-grid
-            "\"../src/apps/attractor-den-tsucs" :as den-tsucs
+            "\"../src/apps/attractor/den-tsucs" :as den-tsucs
             "\"../src/apps/clifford" :as clifford
-            "\"../src/apps/attractor-dequanli" :as dequanli
-            "\"../src/apps/attractor-dadras" :as dadras
-            "\"../src/apps/attractor-burke-shaw" :as burke-shaw
+            "\"../src/apps/attractor/dequanli" :as dequanli
+            "\"../src/apps/attractor/dadras" :as dadras
+            "\"../src/apps/attractor/burke-shaw" :as burke-shaw
             "\"../src/index" :refer $ setupInitials
             "\"../src/config" :as js-config
             "\"../src/index" :refer $ listenShaderError

@@ -1,6 +1,6 @@
-import { createRenderer } from "../index.mjs";
-import attractorCompute from "./attractor-fourwing.wgsl?raw";
-import { fiboGridN, rand_middle } from "../math.mjs";
+import { createRenderer } from "../../index.mjs";
+import attractorCompute from "./lorenz.wgsl?raw";
+import { fiboGridN, rand_middle } from "../../math.mjs";
 
 export let loadRenderer = async (canvas: HTMLCanvasElement) => {
   let seedSize = 2000000;
@@ -12,8 +12,8 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
       seedData: makeSeed(seedSize, 0),
       getParams: (dt) => [
         dt * 0.04, // deltaT
-        100.0, // scale
-        0.004, // width
+        20.0, // scale
+        0.008, // width
         0.99, // opacity
       ],
       computeShader: attractorCompute,
@@ -32,11 +32,10 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
 };
 
 let randPoint: [number, number, number] = [0, 0, 0];
-let area = 12.0;
+let area = 16.0;
 
 function makeSeed(numParticles: number, scale: number): Float32Array {
   const buf = new Float32Array(numParticles * 8);
-  let x = numParticles;
 
   for (let i = 0; i < numParticles; ++i) {
     if (i % 24 == 0) {
@@ -44,14 +43,14 @@ function makeSeed(numParticles: number, scale: number): Float32Array {
       randPoint = p;
     }
     let b = 8 * i;
-    buf[b + 0] = randPoint[0];
-    buf[b + 1] = randPoint[1];
-    buf[b + 2] = randPoint[2];
-    buf[b + 3] = 0;
-    buf[b + 4] = randPoint[0];
-    buf[b + 5] = randPoint[1];
-    buf[b + 6] = randPoint[2];
-    buf[b + 7] = 0;
+    buf[b + 0] = randPoint[0] * area;
+    buf[b + 1] = randPoint[1] * area;
+    buf[b + 2] = randPoint[2] * area;
+    buf[b + 3] = i / 24; // ages
+    buf[b + 4] = randPoint[0] * area;
+    buf[b + 5] = randPoint[1] * area;
+    buf[b + 6] = randPoint[2] * area;
+    buf[b + 7] = 0; // distance
   }
 
   return buf;

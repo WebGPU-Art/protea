@@ -1,9 +1,9 @@
-import { createRenderer } from "../index.mjs";
-import attractorCompute from "./attractor-bouali.wgsl?raw";
-import { fiboGridN, rand_middle } from "../math.mjs";
+import { createRenderer } from "../../index.mjs";
+import attractorCompute from "./chen.wgsl?raw";
+import { fiboGridN, rand_middle } from "../../math.mjs";
 
 export let loadRenderer = async (canvas: HTMLCanvasElement) => {
-  let seedSize = 400000;
+  let seedSize = 4100000;
 
   let renderFrame = await createRenderer(
     canvas,
@@ -11,8 +11,8 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
       seedSize,
       seedData: makeSeed(seedSize, 0),
       getParams: (dt) => [
-        dt, // deltaT
-        400.0, // scale
+        dt * 0.04, // deltaT
+        20.0, // scale
         0.008, // width
         0.99, // opacity
       ],
@@ -31,31 +31,26 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
   return renderFrame;
 };
 
-let randPoint: [number, number, number, number] = [0, 0, 0, 0];
-let area = 0.2;
+let randPoint: [number, number, number] = [0, 0, 0];
+let area = 16.0;
 
 function makeSeed(numParticles: number, scale: number): Float32Array {
   const buf = new Float32Array(numParticles * 8);
 
   for (let i = 0; i < numParticles; ++i) {
-    if (i % 40000 == 0) {
-      let p = [
-        2.85 + rand_middle(area),
-        2.85 + rand_middle(area),
-        2.85 + rand_middle(area),
-        2.85 + rand_middle(area),
-      ] as [number, number, number, number];
+    if (i % 24 == 0) {
+      let p = fiboGridN(i, numParticles);
       randPoint = p;
     }
     let b = 8 * i;
     buf[b + 0] = randPoint[0] * area;
     buf[b + 1] = randPoint[1] * area;
     buf[b + 2] = randPoint[2] * area;
-    buf[b + 3] = randPoint[3] * area;
+    buf[b + 3] = i / 24; // ages
     buf[b + 4] = randPoint[0] * area;
     buf[b + 5] = randPoint[1] * area;
     buf[b + 6] = randPoint[2] * area;
-    buf[b + 7] = randPoint[3] * area;
+    buf[b + 7] = 0; // distance
   }
 
   return buf;

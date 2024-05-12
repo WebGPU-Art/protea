@@ -169,7 +169,11 @@ export let createRenderer = async (
   });
 
   shaderModule.getCompilationInfo().then((info) => {
-    window.__lagopusHandleCompilationInfo(info, shaderCode, diffLines);
+    window.__lagopusHandleCompilationInfo(
+      info,
+      computeOptions.computeShader,
+      diffLines
+    );
   });
   const renderPipeline = device.createRenderPipeline({
     layout: device.createPipelineLayout({

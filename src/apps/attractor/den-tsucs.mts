@@ -1,6 +1,6 @@
 import { createRenderer } from "../../index.mjs";
 import attractorCompute from "./den-tsucs.wgsl?raw";
-import { fiboGridN, rand_middle } from "../../math.mjs";
+import { fiboGridN } from "../../math.mjs";
 
 export let loadRenderer = async (canvas: HTMLCanvasElement) => {
   let seedSize = 4000000;

@@ -62,6 +62,8 @@ fn dequan_li(p: vec3f, dt: f32) -> AttractorResult {
 
 fn rand(n: f32) -> f32 { return fract(sin(n) * 43758.5453123); }
 
+const PARTICLES_PER_GROUP = 20u;
+
 // https://github.com/austinEng/Project6-Vulkan-Flocking/blob/master/data/shaders/computeparticles/particle.comp
 @compute @workgroup_size(64)
 fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
@@ -70,10 +72,10 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
   var v_pos = particles_a.particles[index].pos;
   // let dd = floor(f32(index) / 80.0);
 
-  let inner_idx = f32(index % 20u);
+  let inner_idx = f32(index % PARTICLES_PER_GROUP);
   let group_idx = floor(f32(index) / 20.0);
 
-  if index % 20u != 0u {
+  if index % PARTICLES_PER_GROUP != 0u {
     let prev = index - 1u;
     particles_b.particles[index].pos = particles_a.particles[prev].pos;
     // particles_b.particles[index].ages = particles_a.particles[prev].ages;
@@ -147,10 +149,6 @@ fn vert_main(
   let scale: f32 = 0.002;
 
   output.position = vec4(p * scale, 1.0);
-  // let c3: vec3<f32> = hsl(fract(travel/100.), 0.8, fract(0.9 - ages * 0.0002));
-  // let c3: vec3<f32> = hsl(0.24, 0.8, 0.7 + 0.3 * sin(travel * 0.2));
-  // let c3 = hsl(0.24, 0.99, 0.99 - dim);
-  // let c3 = vec3<f32>(0.99, 0.94, 0.2) * (1. - ages * 0.01);
   let c3: vec3<f32> = hsl(fract(travel * 0.000003 + 0.0), 0.998, 0.7 - ages * 0.002);
   output.color = vec4(c3, params.opacity * (1.2 - ages * 0.002));
   return output;

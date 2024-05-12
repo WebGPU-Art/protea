@@ -28,7 +28,7 @@ import * as cliffordd from "./apps/clifford.mjs";
 import * as dequanli from "./apps/attractor/dequanli.mjs";
 import * as daras from "./apps/attractor/dadras.mjs";
 import * as burkeShaw from "./apps/attractor/burke-shaw.mjs";
-import * as quadratic from "./apps/attractor/quadratic.mjs";
+import * as quadratic from "./apps/quadratic.mjs";
 
 let instanceRenderer: (t: number, skipComputing: boolean) => void;
 let canvas = document.querySelector("#canvas-container") as HTMLCanvasElement;

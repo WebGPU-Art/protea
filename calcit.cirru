@@ -438,6 +438,12 @@
                       |b $ %{} :Leaf (:at 1715357719865) (:by |rJG4IHzWf) (:text |:burke-shaw)
                       |h $ %{} :Leaf (:at 1715357725054) (:by |rJG4IHzWf) (:text "|\"Burke Shaw")
                       |l $ %{} :Leaf (:at 1713461169806) (:by |rJG4IHzWf) (:text |:dark)
+                  |zy $ %{} :Expr (:at 1713461149809) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1713461150298) (:by |rJG4IHzWf) (:text |::)
+                      |b $ %{} :Leaf (:at 1715485133728) (:by |rJG4IHzWf) (:text |:quadratic)
+                      |h $ %{} :Leaf (:at 1715485136939) (:by |rJG4IHzWf) (:text "|\"Quadratic")
+                      |l $ %{} :Leaf (:at 1713461169806) (:by |rJG4IHzWf) (:text |:dark)
         |threshold $ %{} :CodeEntry (:doc |)
           :code $ %{} :Expr (:at 1709145122009) (:by |rJG4IHzWf)
             :data $ {}
@@ -1023,6 +1029,13 @@
                         :data $ {}
                           |T $ %{} :Leaf (:at 1715357737317) (:by |rJG4IHzWf) (:text |burke-shaw/loadRenderer)
                           |b $ %{} :Leaf (:at 1715106952627) (:by |rJG4IHzWf) (:text |canvas)
+                  |zzP $ %{} :Expr (:at 1715106936872) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1715485122421) (:by |rJG4IHzWf) (:text |:quadratic)
+                      |b $ %{} :Expr (:at 1715106942061) (:by |rJG4IHzWf)
+                        :data $ {}
+                          |T $ %{} :Leaf (:at 1715485125193) (:by |rJG4IHzWf) (:text |quadratic/loadRenderer)
+                          |b $ %{} :Leaf (:at 1715106952627) (:by |rJG4IHzWf) (:text |canvas)
         |reload! $ %{} :CodeEntry (:doc |)
           :code $ %{} :Expr (:at 1626201152815) (:by |rJG4IHzWf)
             :data $ {}
@@ -1426,6 +1439,11 @@
                     |T $ %{} :Leaf (:at 1715484891719) (:by |rJG4IHzWf) (:text "|\"../src/apps/attractor/burke-shaw")
                     |b $ %{} :Leaf (:at 1709356814139) (:by |rJG4IHzWf) (:text |:as)
                     |h $ %{} :Leaf (:at 1715357744406) (:by |rJG4IHzWf) (:text |burke-shaw)
+                |zCzs $ %{} :Expr (:at 1709356808034) (:by |rJG4IHzWf)
+                  :data $ {}
+                    |T $ %{} :Leaf (:at 1715487624312) (:by |rJG4IHzWf) (:text "|\"../src/apps/quadratic")
+                    |b $ %{} :Leaf (:at 1709356814139) (:by |rJG4IHzWf) (:text |:as)
+                    |h $ %{} :Leaf (:at 1715485115102) (:by |rJG4IHzWf) (:text |quadratic)
                 |zD $ %{} :Expr (:at 1699549071462) (:by |rJG4IHzWf)
                   :data $ {}
                     |T $ %{} :Leaf (:at 1699549074912) (:by |rJG4IHzWf) (:text "|\"../src/index")

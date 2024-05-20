@@ -10,7 +10,7 @@ import { vCross, vLength, vNormalize } from "@triadica/touch-control";
 import { atomDepthTexture, atomDevice } from "./globals.mjs";
 import proteaColors from "../shaders/protea-colors.wgsl?raw";
 import proteaPerspective from "../shaders/protea-perspective.wgsl?raw";
-import { countLines } from "./util.mjs";
+import { TimeTicker, countLines } from "./util.mjs";
 
 let renderGroupEntries: GPUBindGroupLayoutEntry[] = [
   {
@@ -102,12 +102,14 @@ let setupParticlesBindGroups = (
   };
 };
 
+let ticker = new TimeTicker();
+
 export let createRenderer = async (
   canvas: HTMLCanvasElement,
   computeOptions: {
     seedSize: number;
     seedData: Float32Array;
-    params: number[];
+    getParams: (/** in second */ dt: number) => number[];
     computeShader: string;
   },
   renderOptions: {
@@ -127,7 +129,7 @@ export let createRenderer = async (
     countLines(shaderCode) - countLines(computeOptions.computeShader);
 
   let vertexCount = renderOptions.vertexCount;
-  let paramsData = computeOptions.params;
+  let paramsData = computeOptions.getParams(ticker.ticked());
   let vertexData = renderOptions.vertexData;
   let vertexBufferlayout = renderOptions.vertexBufferLayout;
   let indexBuffer = renderOptions.indexData
@@ -167,7 +169,11 @@ export let createRenderer = async (
   });
 
   shaderModule.getCompilationInfo().then((info) => {
-    window.__lagopusHandleCompilationInfo(info, shaderCode, diffLines);
+    window.__lagopusHandleCompilationInfo(
+      info,
+      computeOptions.computeShader,
+      diffLines
+    );
   });
   const renderPipeline = device.createRenderPipeline({
     layout: device.createPipelineLayout({

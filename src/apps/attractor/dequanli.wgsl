@@ -1,42 +1,6 @@
 
-
-/// ok
-fn iterate_fn(p: vec3f, dt: f32) -> LorenzResult {
-  let a = 1.4;
-  let b = 40.;
-  let c = 2.;
-  let d0 = 2.5;
-
-  let x = p.x;
-  let y = p.y;
-  let z = p.z;
-
-  let dx = -a * x - 4. * y - 4. * z - y * y;
-  let dy = -a * y - 4. * z - 4. * x - z * z;
-  let dz = -a * z - 4. * x - 4. * y - x * x;
-
-  // let dx = a * (y - x);
-  // let dy = b * x - c * x * z;
-  // let dz = exp(x * y) - d0 * z;
-
-  var d = vec3<f32>(dx, dy, dz) * dt * 10.;
-  // let dl = length(d);
-  // if (dl > 0.2) {
-  //   d = d / dl * 0.2;
-  // } else if (dl < 0.01) {
-  //   d = d / dl * 0.01;
-  // }
-  let next = p + d;
-  // if (length(next) > 100.0) {
-  //   next = vec3(0.1);
-  // }
-  return LorenzResult(
-    next,
-    vec3(dx, dy, dz),
-    length(d) * 8.8
-  );
-}
-
+#import protea::perspective
+#import protea::colors
 
 struct Particle {
   pos: vec3<f32>,
@@ -63,15 +27,42 @@ struct Particles {
 const tau = 10f;
 const rou = 28f;
 
-struct LorenzResult {
+struct AttractorResult {
   position: vec3f,
   velocity: vec3f,
   distance: f32,
 }
 
+/// https://gist.github.com/gcalmettes/b470179e1707700463d236525a0c3613#file-index-html-L202
+fn dequan_li(p: vec3f, dt: f32) -> AttractorResult {
+  let a = 40.0;
+  let c = 11. / 6.;
+  let d = 0.16;
+  let e = 0.65;
+  let k = 55.;
+  let f = 20.;
 
+  var x = p.x;
+  var y = p.y;
+  var z = p.z;
+
+  let dx = a * (y - x) + d * x * z;
+  x += dx * dt; // modification order is influential
+  let dy = k * x + f * y - x * z;
+  y += dy * dt;
+  let dz = c * z + x * y - e * x * x;
+  z += dz * dt;
+  let dv = vec3<f32>(dx, dy, dz) * dt;
+  return AttractorResult(
+    vec3(x, y, z),
+    vec3(dx, dy, dz),
+    length(dv) * 2.1
+  );
+}
 
 fn rand(n: f32) -> f32 { return fract(sin(n) * 43758.5453123); }
+
+const PARTICLES_PER_GROUP = 20u;
 
 // https://github.com/austinEng/Project6-Vulkan-Flocking/blob/master/data/shaders/computeparticles/particle.comp
 @compute @workgroup_size(64)
@@ -81,10 +72,10 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
   var v_pos = particles_a.particles[index].pos;
   // let dd = floor(f32(index) / 80.0);
 
-  let inner_idx = f32(index % 24u);
-  let group_idx = floor(f32(index) / 24.0);
+  let inner_idx = f32(index % PARTICLES_PER_GROUP);
+  let group_idx = floor(f32(index) / 20.0);
 
-  if index % 24u != 0u {
+  if index % PARTICLES_PER_GROUP != 0u {
     let prev = index - 1u;
     particles_b.particles[index].pos = particles_a.particles[prev].pos;
     // particles_b.particles[index].ages = particles_a.particles[prev].ages;
@@ -95,8 +86,7 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
     return;
   }
 
-  // let ret = lorenz(v_pos, params.delta_t * 0.01 * (2. + 2. * rand(f32(index))));
-  let ret = iterate_fn(v_pos, params.delta_t * 0.001 * (2. + 2. * rand(f32(index))));
+  let ret = dequan_li(v_pos, params.delta_t * 0.0001 * (20. + 10. * rand(f32(index))));
 
   // Write back
   particles_b.particles[index].pos = ret.position;
@@ -128,16 +118,16 @@ fn vert_main(
   let right = normalize(cross(v0, forward));
 
   // let front = params.length;
-  var width = params.width * 8.;
+  var width = params.width * 40.;
 
-  if ages < 0.01 {
-    // prev_position = position;
-    width = 0.0;
-  }
-  // TODO hack
-  if distance(position, prev_pos) > 12.2 {
-    width = 0.0;
-  }
+  // if ages < 0.01 {
+  //   // prev_position = position;
+  //   width = 0.0;
+  // }
+  // // TODO hack
+  // if distance(position, prev_pos) > 12.2 {
+  //   width = 0.0;
+  // }
 
   if idx == 0u {
     pos = position + right * width;
@@ -155,16 +145,12 @@ fn vert_main(
   var output: VertexOutput;
   let p0 = vec4(pos * params.scale, 1.0);
 
-  let p: vec3<f32> = transform_perspective(p0.xyz).point_position;
-  let scale: f32 = 0.00002;
+  let p: vec3<f32> = transform_perspective(p0.xyz * 0.4).point_position;
+  let scale: f32 = 0.002;
 
   output.position = vec4(p * scale, 1.0);
-  // let c3: vec3<f32> = hsl(fract(travel/100.), 0.8, fract(0.9 - ages * 0.0002));
-  // let c3: vec3<f32> = hsl(0.24, 0.8, 0.7 + 0.3 * sin(travel * 0.2));
-  // let c3 = hsl(0.24, 0.99, 0.99 - dim);
-  // let c3 = vec3<f32>(0.99, 0.94, 0.2) * (1. - ages * 0.01);
-  let c3: vec3<f32> = hsl(fract(travel * 0.000008 + 0.0), 0.998, 0.5 - ages * 0.002);
-  output.color = vec4(c3, params.opacity * (1.2 - ages * 0.04));
+  let c3: vec3<f32> = hsl(fract(travel * 0.000003 + 0.0), 0.998, 0.7 - ages * 0.002);
+  output.color = vec4(c3, params.opacity * (1.2 - ages * 0.002));
   return output;
 }
 
@@ -173,6 +159,3 @@ fn frag_main(@location(4) color: vec4<f32>) -> @location(0) vec4<f32> {
   return color;
   // return vec4<f32>(0.7, 0.7, 1., 1.0);
 }
-
-#import protea::perspective
-#import protea::colors

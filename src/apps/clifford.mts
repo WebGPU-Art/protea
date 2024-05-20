@@ -1,22 +1,25 @@
 import { createRenderer } from "../index.mjs";
-import attractorCompute from "./attractor-bouali.wgsl?raw";
-import { fiboGridN, rand_middle } from "../math.mjs";
+import computeOrbits from "./clifford.wgsl?raw";
+import { fiboGridN } from "../math.mjs";
 
 export let loadRenderer = async (canvas: HTMLCanvasElement) => {
-  let seedSize = 400000;
+  let seedSize = 4194240;
+  //  4194304
 
   let renderFrame = await createRenderer(
     canvas,
     {
       seedSize,
       seedData: makeSeed(seedSize, 0),
-      params: [
-        1, // deltaT
-        400.0, // scale
-        0.008, // width
-        0.99, // opacity
+      getParams: (dt) => [
+        dt * 0.004, // deltaT
+        0.6, // height
+        0.2, // width
+        0.8, // opacity
       ],
-      computeShader: attractorCompute,
+      // computeShader: updateSpritesWGSL,
+      // computeShader: computeGravityWgsl,
+      computeShader: computeOrbits,
     },
     {
       vertexCount: 1,
@@ -31,31 +34,27 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
   return renderFrame;
 };
 
-let randPoint: [number, number, number, number] = [0, 0, 0, 0];
-let area = 0.2;
-
-function makeSeed(numParticles: number, scale: number): Float32Array {
-  const buf = new Float32Array(numParticles * 8);
-
+function makeSeed(numParticles: number, _s: number): Float32Array {
+  const unit = 8;
+  const buf = new Float32Array(numParticles * unit);
+  // let scale = 200 * (Math.random() * 0.5 + 0.5);
+  let scale_base = 2;
+  // let p = [-0.4, 0.6] as [number, number];
+  // p = [Math.random(), Math.random()];
   for (let i = 0; i < numParticles; ++i) {
-    if (i % 40000 == 0) {
-      let p = [
-        2.85 + rand_middle(area),
-        2.85 + rand_middle(area),
-        2.85 + rand_middle(area),
-        2.85 + rand_middle(area),
-      ] as [number, number, number, number];
-      randPoint = p;
-    }
-    let b = 8 * i;
-    buf[b + 0] = randPoint[0] * area;
-    buf[b + 1] = randPoint[1] * area;
-    buf[b + 2] = randPoint[2] * area;
-    buf[b + 3] = randPoint[3] * area;
-    buf[b + 4] = randPoint[0] * area;
-    buf[b + 5] = randPoint[1] * area;
-    buf[b + 6] = randPoint[2] * area;
-    buf[b + 7] = randPoint[3] * area;
+    let p = fiboGridN(i, numParticles).slice(0, 2) as [number, number];
+
+    let b = unit * i;
+    // buf[b + 0] = p[0] * scale;
+    // buf[b + 1] = p[1] * scale;
+    buf[b + 0] = p[0] * scale_base;
+    buf[b + 1] = p[1] * scale_base;
+    buf[b + 2] = Math.random();
+    buf[b + 3] = 0; // times
+    buf[b + 4] = p[0] * scale_base;
+    buf[b + 5] = p[1] * scale_base;
+    buf[b + 6] = Math.random();
+    buf[b + 7] = 0; // times
   }
 
   return buf;

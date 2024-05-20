@@ -1,17 +1,17 @@
-import { createRenderer } from "../index.mjs";
-import attractorCompute from "./attractor-chen.wgsl?raw";
-import { fiboGridN, rand_middle } from "../math.mjs";
+import { createRenderer } from "../../index.mjs";
+import attractorCompute from "./den-tsucs.wgsl?raw";
+import { fiboGridN } from "../../math.mjs";
 
 export let loadRenderer = async (canvas: HTMLCanvasElement) => {
-  let seedSize = 4100000;
+  let seedSize = 4000000;
 
   let renderFrame = await createRenderer(
     canvas,
     {
       seedSize,
       seedData: makeSeed(seedSize, 0),
-      params: [
-        0.04, // deltaT
+      getParams: (dt) => [
+        dt * 0.0003, // deltaT
         20.0, // scale
         0.008, // width
         0.99, // opacity
@@ -32,7 +32,7 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
 };
 
 let randPoint: [number, number, number] = [0, 0, 0];
-let area = 16.0;
+let area = 100.0;
 
 function makeSeed(numParticles: number, scale: number): Float32Array {
   const buf = new Float32Array(numParticles * 8);

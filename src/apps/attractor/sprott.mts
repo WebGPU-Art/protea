@@ -1,6 +1,6 @@
-import { createRenderer } from "../index.mjs";
-import attractorCompute from "./attractor-sprott.wgsl?raw";
-import { fiboGridN, rand_middle } from "../math.mjs";
+import { createRenderer } from "../../index.mjs";
+import attractorCompute from "./sprott.wgsl?raw";
+import { fiboGridN, rand_middle } from "../../math.mjs";
 
 export let loadRenderer = async (canvas: HTMLCanvasElement) => {
   let seedSize = 4000000;
@@ -10,8 +10,8 @@ export let loadRenderer = async (canvas: HTMLCanvasElement) => {
     {
       seedSize,
       seedData: makeSeed(seedSize, 0),
-      params: [
-        0.04, // deltaT
+      getParams: (dt) => [
+        dt * 0.04, // deltaT
         600.0, // scale
         0.001, // width
         0.99, // opacity

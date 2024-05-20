@@ -9,7 +9,7 @@ import {
   resetCanvasSize,
   setupRemoteControl,
 } from "./index.mjs";
-import { useGamepad, useRemoveContrl } from "./config.mjs";
+import { useGamepad, useRemoteControl } from "./config.mjs";
 import { loadGamepadControl } from "./control.mjs";
 
 export async function setupInitials(canvas: HTMLCanvasElement) {
@@ -28,13 +28,9 @@ export async function setupInitials(canvas: HTMLCanvasElement) {
 
   startControlLoop(10, onControlEvent);
 
-  if (useRemoveContrl) {
+  loadGamepadControl();
+  if (useRemoteControl) {
     setupRemoteControl();
-  }
-
-  if (useGamepad) {
-    loadGamepadControl();
-  } else {
     renderControl();
   }
 }

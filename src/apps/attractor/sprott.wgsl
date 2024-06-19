@@ -87,7 +87,7 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
 
   // let ret = lorenz(v_pos, params.delta_t * 0.01 * (2. + 2. * rand(f32(index))));
   // let ret = four_wing(v_pos, params.delta_t * 0.01 * (20. + 2. * rand(f32(index))));
-  let ret = sprott(v_pos, params.delta_t * 0.002 * (12. + 4. * rand(f32(index))));
+  let ret = sprott(v_pos, params.delta_t * 0.0004 * (12. + 4. * rand(f32(index))));
 
   // let ret = lorenz(v_pos, params.delta_t * 0.2);
   // let ret = chen(v_pos, params.delta_t * 0.8);

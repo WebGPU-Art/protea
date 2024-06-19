@@ -60,7 +60,7 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
       continue;
     }
     let force = (p.pos - next_pos) / min(1.0, (distance * distance * distance));
-    next_velocity = next_velocity + 0.01 * force * params.delta_t;
+    next_velocity = next_velocity + 0.0006 * force * params.delta_t;
   }
 
   if length(next_velocity) > 100.0 {

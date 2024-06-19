@@ -76,7 +76,8 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
 
   let small_index = index / level_1;
 
-  let age_limit = 3.0;
+  let age_limit = 1.0;
+  let velocity = 0.04;
 
   if small_index % level_2 != 0u {
     // pick a common base point or (small_index / level_2)
@@ -92,7 +93,7 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
       }
       return;
     } else {
-      let ret = compute_move(v_pos, vol, params.delta_t * 0.2 * (0. + 4. * rand(f32(index))));
+      let ret = compute_move(v_pos, vol, params.delta_t * velocity * (0. + 4. * rand(f32(index))));
 
       particles_b.particles[index].pos = ret.position;
       particles_b.particles[index].velocity = ret.velocity;
@@ -104,7 +105,7 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
   }
 
   if particles_a.particles[index].ages < age_limit {
-    let ret = compute_move(v_pos, vol, params.delta_t * 0.2 * (0. + 4. * rand(f32(index))));
+    let ret = compute_move(v_pos, vol, params.delta_t * velocity * (0. + 4. * rand(f32(index))));
     // Write back
     particles_b.particles[index].pos = ret.position;
     particles_b.particles[index].velocity = ret.velocity;

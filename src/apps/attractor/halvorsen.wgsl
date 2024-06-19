@@ -84,7 +84,7 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
     return;
   }
 
-  let ret = iterate_fn(v_pos, params.delta_t * 0.01 * (2. + 2. * rand(f32(index))));
+  let ret = iterate_fn(v_pos, params.delta_t * 0.001 * (2. + 2. * rand(f32(index))));
 
   // Write back
   particles_b.particles[index].pos = ret.position;

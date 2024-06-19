@@ -86,7 +86,7 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
     return;
   }
 
-  let ret = dequan_li(v_pos, params.delta_t * 0.0001 * (20. + 10. * rand(f32(index))));
+  let ret = dequan_li(v_pos, params.delta_t * 0.00004 * (20. + 10. * rand(f32(index))));
 
   // Write back
   particles_b.particles[index].pos = ret.position;

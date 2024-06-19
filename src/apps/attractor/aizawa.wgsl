@@ -50,7 +50,7 @@ fn aizawa(p: vec3f, dt: f32) -> LorenzResult {
   let dy = d0 * x + (z - b) * y;
   let dz = c + a * z - pow(z, 3.0) / 3.0 - (x * x + y * y) * (1. + e * z) + f * z * pow(x, 3.0);
 
-  var d = vec3<f32>(dx, dy, dz) * dt * 10.;
+  var d = vec3<f32>(dx, dy, dz) * dt * 0.8;
   // let dl = length(d);
   // if (dl > 0.2) {
   //   d = d / dl * 0.2;

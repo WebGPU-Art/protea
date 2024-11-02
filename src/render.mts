@@ -112,6 +112,7 @@ export let createRenderer = async (
     /** dispatch size is related to seed size */
     seedSize: number;
     seedData: Float32Array;
+    /** compute on every frame */
     getParams: (/** in second */ dt: number) => number[];
     computeShader: string;
   },
@@ -133,7 +134,6 @@ export let createRenderer = async (
     countLines(shaderCode) - countLines(computeOptions.computeShader);
 
   let vertexCount = renderOptions.vertexCount;
-  let paramsData = computeOptions.getParams(ticker.ticked());
   let vertexData = renderOptions.vertexData;
   let vertexBufferlayout = renderOptions.vertexBufferLayout;
   let indexBuffer = renderOptions.indexData
@@ -252,28 +252,30 @@ export let createRenderer = async (
     seedSize
   );
 
-  let paramBuffer = buildParamBuffer(paramsData);
-
-  let buildParamsBuffer = (partial: number[]) => {
-    let data = paramsData.slice();
-    partial.forEach((n, idx) => {
-      data[idx] = n;
-    });
-    paramBuffer = buildParamBuffer(data);
-
-    let ret = setupParticlesBindGroups(
-      device,
-      computeParticlesLayout,
-      particleBuffers,
-      seedSize
-    );
-    particleBindGroups = ret.particleBindGroups;
-    mockedBindGroups = ret.mockedBindGroups;
-  };
-
-  window.__hotUpdateParams = buildParamsBuffer;
-
   return async function render(t: number, skipComputing: boolean = false) {
+    let paramsData = computeOptions.getParams(ticker.ticked());
+
+    let paramBuffer = buildParamBuffer(paramsData);
+
+    // let buildParamsBuffer = (partial: number[]) => {
+    //   let data = paramsData.slice();
+    //   partial.forEach((n, idx) => {
+    //     data[idx] = n;
+    //   });
+    //   paramBuffer = buildParamBuffer(data);
+
+    //   let ret = setupParticlesBindGroups(
+    //     device,
+    //     computeParticlesLayout,
+    //     particleBuffers,
+    //     seedSize
+    //   );
+    //   particleBindGroups = ret.particleBindGroups;
+    //   mockedBindGroups = ret.mockedBindGroups;
+    // };
+
+    // window.__hotUpdateParams = buildParamsBuffer;
+
     const commandEncoder = device.createCommandEncoder();
 
     let uniformEntries: GPUBindGroupEntry[] = [

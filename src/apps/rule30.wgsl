@@ -3,15 +3,19 @@
 
 
 struct Particle {
-  pos: vec3<f32>,
-  idx: f32,
+  x: f32,
+  y: f32,
+  _z: u32,
+  value: u32,
+  // idx: u32,
+
 }
 
 struct Params {
   delta_t: f32,
   height: f32,
   width: f32,
-  opacity: f32,
+  time: f32,
 }
 
 struct Particles {
@@ -35,17 +39,37 @@ const beta = 0.25;
 // https://github.com/austinEng/Project6-Vulkan-Flocking/blob/master/data/shaders/computeparticles/particle.comp
 @compute @workgroup_size(64)
 fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
-  // var index = GlobalInvocationID.x;
-  // let item = particles_a.particles[index];
-  // let write_target = &particles_b.particles[index];
+  var index = GlobalInvocationID.x;
+  let item = particles_a.particles[index];
+  let write_target = &particles_b.particles[index];
+  let grid_size = 300u;
 
-  // let a = item.pos.y * 0.01;
-  // let x = item.pos.x * 0.02;
-  // let y = item.pos.z * 0.02;
+  let x = item.x;
+  let y = item.y;
 
-  // let pos = bifurcation(a, x, y);
-  // (*write_target).pos.x = pos.x * 50.0;
-  // (*write_target).pos.z = pos.y * 50.0;
+  var a = 0u;
+  var b = 0u;
+  if x < 0.5 {
+    if rand((x + y - params.time)) < 0.2 {
+      a = 1u;
+    }
+  } else {
+    a = particles_a.particles[index - 1u ].value;
+  }
+  if y < 0.5 {
+    if rand((x + y + params.time)) < 0.2 {
+      b = 1u;
+    }
+  } else {
+    b = particles_a.particles[index - grid_size ].value;
+  }
+  let rule = vec4<u32>(1u, 0u, 0u, 1u);
+  let value = rule[a * 2u + b];
+
+  (*write_target).x = x;
+  (*write_target).y = y;
+  (*write_target)._z = 0u;
+  (*write_target).value = value;
 }
 
 
@@ -109,7 +133,7 @@ fn vert_main(
   if value >= 1u {
     c3 = vec3<f32>(bright, bright, bright);
   }
-  output.color = vec4(c3, params.opacity);
+  output.color = vec4(c3, 1.);
   return output;
 }
 

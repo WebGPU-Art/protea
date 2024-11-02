@@ -12,3 +12,5 @@ export let threshold = parseFloat((parsed["threshold"] as string) || "0.016");
 export let useRemoteControl = parsed["remote-control"];
 
 export let interval = parseFloat((parsed["interval"] as string) || "20");
+
+export let skipComputing = (parsed["skip-computing"] as string) === "true";

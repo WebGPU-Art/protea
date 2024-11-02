@@ -1,21 +1,23 @@
 import { createRenderer } from "../index.mjs";
 import computeShader from "./rule30.wgsl?raw";
 import { rand_middle } from "../math.mjs";
+import * as config from "../config.mjs";
 
 export let loadRenderer = async (canvas: HTMLCanvasElement) => {
-  let gridSize = 3000;
+  let gridSize = 300;
 
   let renderFrame = await createRenderer(
     canvas,
     {
-      skipComputing: true,
+      skipComputing: config.skipComputing,
       seedSize: gridSize * gridSize,
       seedData: makeSeed(gridSize, 0),
       getParams: (dt) => [
         dt * 0.004, // deltaT
         0.6, // height
         0.2, // width
-        0.8, // opacity
+        // change every 3 seconds
+        Math.round(0.333 * new Date().getSeconds()),
       ],
       computeShader: computeShader,
     },

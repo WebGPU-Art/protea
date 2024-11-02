@@ -15,14 +15,14 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 20
-          cache: 'yarn'
+          cache: "yarn"
 
-      - uses: calcit-lang/setup-cr@0.0.3
+      - uses: calcit-lang/setup-cr@0.0.7
         with:
-          version: "0.8.58"
+          bundler: false
 
       - name: "compiles calcit to js"
-        run: caps --ci && cr --emit-js --once
+        run: caps --ci && cr -1 js
 
       - run: yarn && yarn vite build --base=./
         name: Build web assets

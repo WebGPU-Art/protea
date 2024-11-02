@@ -107,12 +107,16 @@ let ticker = new TimeTicker();
 export let createRenderer = async (
   canvas: HTMLCanvasElement,
   computeOptions: {
+    /** if we meed to skip for some demos */
+    skipComputing?: boolean;
+    /** dispatch size is related to seed size */
     seedSize: number;
     seedData: Float32Array;
     getParams: (/** in second */ dt: number) => number[];
     computeShader: string;
   },
   renderOptions: {
+    /** not effective when index data passed */
     vertexCount: number;
     vertexData: number[];
     vertexBufferLayout: GPUVertexBufferLayout[];
@@ -277,7 +281,7 @@ export let createRenderer = async (
       { binding: 1, resource: { buffer: paramBuffer } },
     ];
 
-    if (!skipComputing) {
+    if (!skipComputing && !computeOptions.skipComputing) {
       const computePassEncoder = commandEncoder.beginComputePass();
       computePassEncoder.setPipeline(computePipeline);
       computePassEncoder.setBindGroup(

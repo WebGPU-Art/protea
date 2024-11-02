@@ -444,6 +444,12 @@
                       |b $ %{} :Leaf (:at 1715485133728) (:by |rJG4IHzWf) (:text |:quadratic)
                       |h $ %{} :Leaf (:at 1715485136939) (:by |rJG4IHzWf) (:text "|\"Quadratic")
                       |l $ %{} :Leaf (:at 1713461169806) (:by |rJG4IHzWf) (:text |:dark)
+                  |zz $ %{} :Expr (:at 1713461149809) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1713461150298) (:by |rJG4IHzWf) (:text |::)
+                      |b $ %{} :Leaf (:at 1730547349521) (:by |rJG4IHzWf) (:text |:rule30)
+                      |h $ %{} :Leaf (:at 1730556102131) (:by |rJG4IHzWf) (:text "|\"rule1001")
+                      |l $ %{} :Leaf (:at 1713461169806) (:by |rJG4IHzWf) (:text |:dark)
         |threshold $ %{} :CodeEntry (:doc |)
           :code $ %{} :Expr (:at 1709145122009) (:by |rJG4IHzWf)
             :data $ {}
@@ -1036,6 +1042,13 @@
                         :data $ {}
                           |T $ %{} :Leaf (:at 1715485125193) (:by |rJG4IHzWf) (:text |quadratic/loadRenderer)
                           |b $ %{} :Leaf (:at 1715106952627) (:by |rJG4IHzWf) (:text |canvas)
+                  |zzY $ %{} :Expr (:at 1715106936872) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1730547339179) (:by |rJG4IHzWf) (:text |:rule30)
+                      |b $ %{} :Expr (:at 1715106942061) (:by |rJG4IHzWf)
+                        :data $ {}
+                          |T $ %{} :Leaf (:at 1730547342412) (:by |rJG4IHzWf) (:text |rule30/loadRenderer)
+                          |b $ %{} :Leaf (:at 1715106952627) (:by |rJG4IHzWf) (:text |canvas)
         |reload! $ %{} :CodeEntry (:doc |)
           :code $ %{} :Expr (:at 1626201152815) (:by |rJG4IHzWf)
             :data $ {}
@@ -1444,6 +1457,11 @@
                     |T $ %{} :Leaf (:at 1715487624312) (:by |rJG4IHzWf) (:text "|\"../src/apps/quadratic")
                     |b $ %{} :Leaf (:at 1709356814139) (:by |rJG4IHzWf) (:text |:as)
                     |h $ %{} :Leaf (:at 1715485115102) (:by |rJG4IHzWf) (:text |quadratic)
+                |zCzt $ %{} :Expr (:at 1709356808034) (:by |rJG4IHzWf)
+                  :data $ {}
+                    |T $ %{} :Leaf (:at 1730547329410) (:by |rJG4IHzWf) (:text "|\"../src/apps/rule30")
+                    |b $ %{} :Leaf (:at 1709356814139) (:by |rJG4IHzWf) (:text |:as)
+                    |h $ %{} :Leaf (:at 1730547333450) (:by |rJG4IHzWf) (:text |rule30)
                 |zD $ %{} :Expr (:at 1699549071462) (:by |rJG4IHzWf)
                   :data $ {}
                     |T $ %{} :Leaf (:at 1699549074912) (:by |rJG4IHzWf) (:text "|\"../src/index")

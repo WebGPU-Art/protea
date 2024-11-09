@@ -107,12 +107,17 @@ let ticker = new TimeTicker();
 export let createRenderer = async (
   canvas: HTMLCanvasElement,
   computeOptions: {
+    /** if we meed to skip for some demos */
+    skipComputing?: boolean;
+    /** dispatch size is related to seed size */
     seedSize: number;
     seedData: Float32Array;
+    /** compute on every frame */
     getParams: (/** in second */ dt: number) => number[];
     computeShader: string;
   },
   renderOptions: {
+    /** not effective when index data passed */
     vertexCount: number;
     vertexData: number[];
     vertexBufferLayout: GPUVertexBufferLayout[];
@@ -129,7 +134,6 @@ export let createRenderer = async (
     countLines(shaderCode) - countLines(computeOptions.computeShader);
 
   let vertexCount = renderOptions.vertexCount;
-  let paramsData = computeOptions.getParams(ticker.ticked());
   let vertexData = renderOptions.vertexData;
   let vertexBufferlayout = renderOptions.vertexBufferLayout;
   let indexBuffer = renderOptions.indexData
@@ -248,28 +252,30 @@ export let createRenderer = async (
     seedSize
   );
 
-  let paramBuffer = buildParamBuffer(paramsData);
-
-  let buildParamsBuffer = (partial: number[]) => {
-    let data = paramsData.slice();
-    partial.forEach((n, idx) => {
-      data[idx] = n;
-    });
-    paramBuffer = buildParamBuffer(data);
-
-    let ret = setupParticlesBindGroups(
-      device,
-      computeParticlesLayout,
-      particleBuffers,
-      seedSize
-    );
-    particleBindGroups = ret.particleBindGroups;
-    mockedBindGroups = ret.mockedBindGroups;
-  };
-
-  window.__hotUpdateParams = buildParamsBuffer;
-
   return async function render(t: number, skipComputing: boolean = false) {
+    let paramsData = computeOptions.getParams(ticker.ticked());
+
+    let paramBuffer = buildParamBuffer(paramsData);
+
+    // let buildParamsBuffer = (partial: number[]) => {
+    //   let data = paramsData.slice();
+    //   partial.forEach((n, idx) => {
+    //     data[idx] = n;
+    //   });
+    //   paramBuffer = buildParamBuffer(data);
+
+    //   let ret = setupParticlesBindGroups(
+    //     device,
+    //     computeParticlesLayout,
+    //     particleBuffers,
+    //     seedSize
+    //   );
+    //   particleBindGroups = ret.particleBindGroups;
+    //   mockedBindGroups = ret.mockedBindGroups;
+    // };
+
+    // window.__hotUpdateParams = buildParamsBuffer;
+
     const commandEncoder = device.createCommandEncoder();
 
     let uniformEntries: GPUBindGroupEntry[] = [
@@ -277,7 +283,7 @@ export let createRenderer = async (
       { binding: 1, resource: { buffer: paramBuffer } },
     ];
 
-    if (!skipComputing) {
+    if (!skipComputing && !computeOptions.skipComputing) {
       const computePassEncoder = commandEncoder.beginComputePass();
       computePassEncoder.setPipeline(computePipeline);
       computePassEncoder.setBindGroup(

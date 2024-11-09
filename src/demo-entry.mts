@@ -29,6 +29,7 @@ import * as dequanli from "./apps/attractor/dequanli.mjs";
 import * as daras from "./apps/attractor/dadras.mjs";
 import * as burkeShaw from "./apps/attractor/burke-shaw.mjs";
 import * as quadratic from "./apps/quadratic.mjs";
+import * as rule30 from "./apps/rule30.mjs";
 
 let instanceRenderer: (t: number, skipComputing: boolean) => void;
 let canvas = document.querySelector("#canvas-container") as HTMLCanvasElement;

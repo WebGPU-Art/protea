@@ -38,12 +38,12 @@ export class TimeTicker {
   startedAt: number;
 
   constructor() {
-    this.startedAt = Date.now();
+    this.startedAt = performance.now();
   }
 
   /** return in seconds */
   ticked(): number {
-    let now = Date.now();
+    let now = performance.now();
     let elapsed = now - this.startedAt;
     this.startedAt = now;
     return elapsed * 0.001;

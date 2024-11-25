@@ -73,7 +73,7 @@ fn main(@builtin(global_invocation_id) GlobalInvocationID: vec3<u32>) {
     return;
   }
 
-  let ret = bouali(v_pos, params.delta_t * 0.01);
+  let ret = bouali(v_pos, params.delta_t * 1.);
 
   // Write back
   particles_b.particles[index].pos = ret.position;

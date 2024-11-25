@@ -252,7 +252,10 @@ export let createRenderer = async (
     seedSize
   );
 
-  return async function render(t: number, skipComputing: boolean = false) {
+  return async function render(
+    loopTimes: number,
+    skipComputing: boolean = false
+  ) {
     let paramsData = computeOptions.getParams(ticker.ticked());
 
     let paramBuffer = buildParamBuffer(paramsData);
@@ -295,7 +298,7 @@ export let createRenderer = async (
           entries: uniformEntries,
         })
       );
-      computePassEncoder.setBindGroup(1, particleBindGroups[t % 2]);
+      computePassEncoder.setBindGroup(1, particleBindGroups[loopTimes % 2]);
       computePassEncoder.dispatchWorkgroups(Math.ceil(numParticles / 64));
       computePassEncoder.end();
     }
@@ -309,7 +312,7 @@ export let createRenderer = async (
 
     const passEncoder = commandEncoder.beginRenderPass(renderPassDescriptor);
     passEncoder.setPipeline(renderPipeline);
-    passEncoder.setVertexBuffer(0, particleBuffers[(t + 1) % 2]);
+    passEncoder.setVertexBuffer(0, particleBuffers[(loopTimes + 1) % 2]);
     passEncoder.setVertexBuffer(1, buildSpriteVertexBuffer(vertexData));
     passEncoder.setBindGroup(
       0,
@@ -320,7 +323,7 @@ export let createRenderer = async (
         entries: uniformEntries,
       })
     );
-    passEncoder.setBindGroup(1, mockedBindGroups[t % 2]); // mocked
+    passEncoder.setBindGroup(1, mockedBindGroups[loopTimes % 2]); // mocked
 
     if (indexBuffer != null) {
       passEncoder.setIndexBuffer(indexBuffer, "uint32");

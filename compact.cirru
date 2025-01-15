@@ -198,39 +198,39 @@
             app.config :as config
             "\"./calcit.build-errors" :default build-errors
             "\"bottom-tip" :default hud!
-            "\"../src/apps/fireworks" :as fireworks
-            "\"../src/apps/attractor/aizawa" :as aizawa
-            "\"../src/apps/attractor/lorenz" :as lorenz
-            "\"../src/apps/attractor/fourwing" :as fourwing
-            "\"../src/apps/attractor/chen" :as chen
-            "\"../src/apps/attractor/sprott" :as sprott
-            "\"../src/apps/attractor/lorenz83" :as lorenz-83
-            "\"../src/apps/attractor/bouali" :as bouali
-            "\"../src/apps/attractor/halvorsen" :as halvorsen
-            "\"../src/apps/fractal" :as fractal
-            "\"../src/apps/collision" :as collision
-            "\"../src/apps/bounce" :as bounce
-            "\"../src/apps/bounce-trail" :as bounce-trail
-            "\"../src/apps/feday" :as feday
-            "\"../src/apps/bifurcation" :as bifurcation
-            "\"../src/apps/ball-spin" :as ball-spin
-            "\"../src/apps/lifegame" :as lifegame
-            "\"../src/apps/lifegame-trail" :as lifegame-trail
-            "\"../src/apps/orbit-spark" :as orbit-spark
-            "\"../src/apps/orbits" :as orbits
-            "\"../src/apps/orbits-2" :as orbits-2
-            "\"../src/apps/lamps" :as lamps
-            "\"../src/apps/debug-grid" :as debug-grid
-            "\"../src/apps/attractor/den-tsucs" :as den-tsucs
-            "\"../src/apps/clifford" :as clifford
-            "\"../src/apps/attractor/dequanli" :as dequanli
-            "\"../src/apps/attractor/dadras" :as dadras
-            "\"../src/apps/attractor/burke-shaw" :as burke-shaw
-            "\"../src/apps/quadratic" :as quadratic
-            "\"../src/apps/rule30" :as rule30
-            "\"../src/index" :refer $ setupInitials
-            "\"../src/config" :as js-config
-            "\"../src/index" :refer $ listenShaderError
+            "\"../src/apps/fireworks.mts" :as fireworks
+            "\"../src/apps/attractor/aizawa.mts" :as aizawa
+            "\"../src/apps/attractor/lorenz.mts" :as lorenz
+            "\"../src/apps/attractor/fourwing.mts" :as fourwing
+            "\"../src/apps/attractor/chen.mts" :as chen
+            "\"../src/apps/attractor/sprott.mts" :as sprott
+            "\"../src/apps/attractor/lorenz83.mts" :as lorenz-83
+            "\"../src/apps/attractor/bouali.mts" :as bouali
+            "\"../src/apps/attractor/halvorsen.mts" :as halvorsen
+            "\"../src/apps/fractal.mts" :as fractal
+            "\"../src/apps/collision.mts" :as collision
+            "\"../src/apps/bounce.mts" :as bounce
+            "\"../src/apps/bounce-trail.mts" :as bounce-trail
+            "\"../src/apps/feday.mts" :as feday
+            "\"../src/apps/bifurcation.mts" :as bifurcation
+            "\"../src/apps/ball-spin.mts" :as ball-spin
+            "\"../src/apps/lifegame.mts" :as lifegame
+            "\"../src/apps/lifegame-trail.mts" :as lifegame-trail
+            "\"../src/apps/orbit-spark.mts" :as orbit-spark
+            "\"../src/apps/orbits.mts" :as orbits
+            "\"../src/apps/orbits-2.mts" :as orbits-2
+            "\"../src/apps/lamps.mts" :as lamps
+            "\"../src/apps/debug-grid.mts" :as debug-grid
+            "\"../src/apps/attractor/den-tsucs.mts" :as den-tsucs
+            "\"../src/apps/clifford.mts" :as clifford
+            "\"../src/apps/attractor/dequanli.mts" :as dequanli
+            "\"../src/apps/attractor/dadras.mts" :as dadras
+            "\"../src/apps/attractor/burke-shaw.mts" :as burke-shaw
+            "\"../src/apps/quadratic.mts" :as quadratic
+            "\"../src/apps/rule30.mts" :as rule30
+            "\"../src/index.mts" :refer $ setupInitials
+            "\"../src/config.mts" :as js-config
+            "\"../src/index.mts" :refer $ listenShaderError
     |app.schema $ %{} :FileEntry
       :defs $ {}
         |store $ %{} :CodeEntry (:doc |)

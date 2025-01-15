@@ -1,16 +1,16 @@
 {
-  "name": "@triadica/protea",
+  "name": "@webgpu-art/protea",
   "version": "0.0.2-a1",
   "main": "./lib/index.mjs",
   "devDependencies": {
-    "@webgpu/types": "^0.1.51",
+    "@webgpu/types": "^0.1.53",
     "bottom-tip": "^0.1.5",
     "query-string": "^9.1.1",
-    "typescript": "^5.7.2",
-    "vite": "^5.4.11"
+    "typescript": "^5.7.3",
+    "vite": "^6.0.7"
   },
   "dependencies": {
-    "@calcit/procs": "^0.9.6",
+    "@calcit/procs": "^0.9.7",
     "@triadica/touch-control": "^0.0.4-a1",
     "ismobilejs": "^1.1.1"
   },
@@ -21,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Triadica/protea.git"
+    "url": "git+https://github.com/WebGPU-Art/protea.git"
   },
   "keywords": [
     "webgpu"
@@ -29,7 +29,7 @@
   "author": "tiye",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Triadica/protea/issues"
+    "url": "https://github.com/WebGPU-Art/protea/issues"
   },
-  "homepage": "https://github.com/Triadica/protea#readme"
+  "homepage": "https://github.com/WebGPU-Art/protea#readme"
 }

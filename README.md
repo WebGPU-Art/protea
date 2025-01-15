@@ -80,6 +80,14 @@ Bindings in shader:
 
 shaders is mocked to be unified in both compute shader and fragment shader.
 
+### Gamepad Manual
+
+![Default Mode](./assets/protea-default.png)
+
+"Roll mode" means to earier to roll the camera,
+
+![Roll Mode](./assets/protea-roll.png)
+
 ### Licence
 
 MIT

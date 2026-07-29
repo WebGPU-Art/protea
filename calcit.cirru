@@ -1,12 +1,12 @@
 
-{} (:about "|file is generated - never edit directly; learn cr edit/tree workflows before changing") (:package |app)
+{} (:about "|Machine-generated snapshot. Do not edit directly — changes will be overwritten. Use `cr query` to inspect and `cr edit`/`cr tree` to modify. Run `cr docs agents --full` first. Manual edits must follow format and schema conventions, then run `cr edit format`.") (:package |app)
   :configs $ {} (:init-fn |app.main/main!) (:reload-fn |app.main/reload!) (:version |0.0.1)
     :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |reel.calcit/ |hud-nav/
   :entries $ {}
   :files $ {}
     |app.comp.container $ %{} :FileEntry
       :defs $ {}
-        |comp-container $ %{} :CodeEntry (:doc |) (:schema nil)
+        |comp-container $ %{} :CodeEntry (:doc |) (:schema :dynamic)
           :code $ quote
             defcomp comp-container (reel)
               let
@@ -33,38 +33,38 @@
             hud-nav.comp :refer $ comp-hud-nav
     |app.config $ %{} :FileEntry
       :defs $ {}
-        |default-tab $ %{} :CodeEntry (:doc |) (:schema nil)
+        |default-tab $ %{} :CodeEntry (:doc |) (:schema :dynamic)
           :code $ quote
             def default-tab $ turn-tag
               get-env |tab $ turn-string
                 nth (last tabs) 0
           :examples $ []
-        |dev? $ %{} :CodeEntry (:doc |) (:schema nil)
+        |dev? $ %{} :CodeEntry (:doc |) (:schema :dynamic)
           :code $ quote
             def dev? $ = |dev (get-env |mode |release)
           :examples $ []
-        |hide-tabs? $ %{} :CodeEntry (:doc |) (:schema nil)
+        |hide-tabs? $ %{} :CodeEntry (:doc |) (:schema :dynamic)
           :code $ quote
             def hide-tabs? $ = |true (get-env |hide-tabs false)
           :examples $ []
-        |site $ %{} :CodeEntry (:doc |) (:schema nil)
+        |site $ %{} :CodeEntry (:doc |) (:schema :dynamic)
           :code $ quote
             def site $ {} (:storage-key |workflow)
           :examples $ []
-        |skip-rendering? $ %{} :CodeEntry (:doc |) (:schema nil)
+        |skip-rendering? $ %{} :CodeEntry (:doc |) (:schema :dynamic)
           :code $ quote
             def skip-rendering? $ = |true (get-env |skip |false)
           :examples $ []
-        |tabs $ %{} :CodeEntry (:doc |) (:schema nil)
+        |tabs $ %{} :CodeEntry (:doc |) (:schema :dynamic)
           :code $ quote
             def tabs $ [] (:: :fireworks |Fireworks :dark) (:: :lorenz |Lorenz :dark) (:: :aizawa |Aizawa :dark) (:: :fourwing "|Four Wing" :dark) (:: :fractal |Fractal :dark) (:: :collision |Collision :dark) (:: :bounce |Bounce :dark) (:: :feday |FEDAY :dark) (:: :bifurcation |Bifurcation :dark) (:: :ball-spin "|Ball Spin" :dark) (:: :lifegame |Lifegame :dark) (:: :lifegame-trail "|Lifegame Trail" :dark) (:: :bounce-trail "|Bounce Trail" :dark) (:: :orbit-spark "|Orbit Spark" :dark) (:: :chen |Chen :dark) (:: :sprott |Sprott :dark) (:: :lorenz83 |Lorenz83 :dark) (:: :orbits |Orbits :dark) (:: :lamps |Lamps :dark) (:: :debug-grid "|Debug Grid" :dark) (:: :den-tsucs "|Den Tsucs" :dark) (:: :bouali |Bouali :dark) (:: :orbits2 "|Orbits 2" :dark) (:: :halvorsen |Halvorsen :dark) (:: :clifford |Clifford :dark) (:: :dequanli "|Dequan Li" :dark) (:: :dadras |Dadras :dark) (:: :burke-shaw "|Burke Shaw" :dark) (:: :quadratic |Quadratic :dark) (:: :rule1001 |rule1001 :dark)
           :examples $ []
-        |threshold $ %{} :CodeEntry (:doc |) (:schema nil)
+        |threshold $ %{} :CodeEntry (:doc |) (:schema :dynamic)
           :code $ quote
             def threshold $ js/parseFloat
               or (get-env |threshold) |0.016
           :examples $ []
-        |use-gamepad? $ %{} :CodeEntry (:doc |) (:schema nil)
+        |use-gamepad? $ %{} :CodeEntry (:doc |) (:schema :dynamic)
           :code $ quote
             def use-gamepad? $ get-env |gamepad
           :examples $ []
@@ -74,21 +74,21 @@
             app.schema :refer $ tabs
     |app.main $ %{} :FileEntry
       :defs $ {}
-        |*instance-renderer $ %{} :CodeEntry (:doc |) (:schema nil)
+        |*instance-renderer $ %{} :CodeEntry (:doc |) (:schema :dynamic)
           :code $ quote (defatom *instance-renderer nil)
           :examples $ []
-        |*reel $ %{} :CodeEntry (:doc |) (:schema nil)
+        |*reel $ %{} :CodeEntry (:doc |) (:schema :dynamic)
           :code $ quote
             defatom *reel $ -> reel-schema/reel (assoc :base schema/store) (assoc :store schema/store)
           :examples $ []
-        |*t $ %{} :CodeEntry (:doc |) (:schema nil)
+        |*t $ %{} :CodeEntry (:doc |) (:schema :dynamic)
           :code $ quote (defatom *t 0)
           :examples $ []
-        |canvas $ %{} :CodeEntry (:doc |) (:schema nil)
+        |canvas $ %{} :CodeEntry (:doc |) (:schema :dynamic)
           :code $ quote
             def canvas $ js/document.querySelector |canvas
           :examples $ []
-        |dispatch! $ %{} :CodeEntry (:doc |) (:schema nil)
+        |dispatch! $ %{} :CodeEntry (:doc |) (:schema :dynamic)
           :code $ quote
             defn dispatch! (op)
               hint-fn $ {} (:async true)
@@ -97,11 +97,11 @@
                 js/console.log |Dispatch: op
               reset! *reel $ reel-updater updater @*reel op
               tag-match op
-                  :tab t theme
+                (:tab t theme)
                   set-renderer! $ :tab (:store @*reel)
                 _ $ eprintln "|unknown op:" op
           :examples $ []
-        |main! $ %{} :CodeEntry (:doc |) (:schema nil)
+        |main! $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn main! ()
               hint-fn $ {} (:async true)
@@ -116,7 +116,7 @@
               ; js/window.addEventListener |visibilitychange $ fn (event)
                 if (= |hidden js/document.visibilityState) (persist-storage!)
               ; let
-                  raw $ js/localStorage.getItem (:storage-key config/site)
+                (raw (js/localStorage.getItem (:storage-key config/site)))
                 when (some? raw)
                   dispatch! $ :: :hydrate-storage (parse-cirru-edn raw)
               js-await $ set-renderer!
@@ -126,18 +126,22 @@
                 if (some? err) (hud! |error err)
               println "|App started."
           :examples $ []
-        |mount-target $ %{} :CodeEntry (:doc |) (:schema nil)
+          :schema $ :: :fn
+            {} (:return :dynamic)
+              :args $ []
+              :features $ #{} :js-ffi
+        |mount-target $ %{} :CodeEntry (:doc |) (:schema :dynamic)
           :code $ quote
             def mount-target $ js/document.querySelector |.app
           :examples $ []
-        |persist-storage! $ %{} :CodeEntry (:doc |) (:schema nil)
+        |persist-storage! $ %{} :CodeEntry (:doc |) (:schema :dynamic)
           :code $ quote
             defn persist-storage! ()
               println "|Saved at" $ .!toISOString (new js/Date)
               js/localStorage.setItem (:storage-key config/site)
                 format-cirru-edn $ :store @*reel
           :examples $ []
-        |pick-renderer $ %{} :CodeEntry (:doc |) (:schema nil)
+        |pick-renderer $ %{} :CodeEntry (:doc |) (:schema :dynamic)
           :code $ quote
             defn pick-renderer (tab)
               case-default tab
@@ -173,7 +177,7 @@
                 :quadratic $ quadratic/loadRenderer canvas
                 :rule1001 $ rule30/loadRenderer canvas
           :examples $ []
-        |reload! $ %{} :CodeEntry (:doc |) (:schema nil)
+        |reload! $ %{} :CodeEntry (:doc |) (:schema :dynamic)
           :code $ quote
             defn reload! ()
               hint-fn $ {} (:async true)
@@ -185,11 +189,11 @@
                   hud! |ok~ |Ok
                 hud! |error build-errors
           :examples $ []
-        |render-app! $ %{} :CodeEntry (:doc |) (:schema nil)
+        |render-app! $ %{} :CodeEntry (:doc |) (:schema :dynamic)
           :code $ quote
             defn render-app! () $ render! mount-target (comp-container @*reel) dispatch!
           :examples $ []
-        |render-loop! $ %{} :CodeEntry (:doc |) (:schema nil)
+        |render-loop! $ %{} :CodeEntry (:doc |) (:schema :dynamic)
           :code $ quote
             defn render-loop! () $ if (&< js-config/interval 10)
               do
@@ -203,7 +207,7 @@
                   @*instance-renderer @*t js/window.skipComputing
                 , js-config/interval
           :examples $ []
-        |set-renderer! $ %{} :CodeEntry (:doc |) (:schema nil)
+        |set-renderer! $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn set-renderer! (name)
               hint-fn $ {} (:async true)
@@ -211,6 +215,10 @@
                   renderer $ js-await (pick-renderer name)
                 reset! *instance-renderer renderer
           :examples $ []
+          :schema $ :: :fn
+            {} (:return :dynamic)
+              :args $ [] :dynamic
+              :features $ #{} :js-ffi
       :ns $ %{} :NsEntry (:doc |)
         :code $ quote
           ns app.main $ :require
@@ -259,7 +267,7 @@
             |../src/index.mts :refer $ listenShaderError
     |app.schema $ %{} :FileEntry
       :defs $ {}
-        |store $ %{} :CodeEntry (:doc |) (:schema nil)
+        |store $ %{} :CodeEntry (:doc |) (:schema :dynamic)
           :code $ quote
             def store $ {} (:tab default-tab)
               :states $ {}
@@ -271,12 +279,11 @@
             app.config :refer $ default-tab
     |app.updater $ %{} :FileEntry
       :defs $ {}
-        |updater $ %{} :CodeEntry (:doc |) (:schema nil)
+        |updater $ %{} :CodeEntry (:doc |) (:schema :dynamic)
           :code $ quote
             defn updater (store op op-id op-time)
               tag-match op
-                  :states cursor s
-                  update-states store cursor s
+                (:states cursor s) (update-states store cursor s)
                 (:tab t theme) (assoc store :tab t)
                 (:hydrate-storage data) data
                 _ $ do (eprintln "|unknown op:" op) store

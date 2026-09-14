@@ -8,10 +8,10 @@
     "bottom-tip": "^0.1.5",
     "query-string": "^9.2.1",
     "typescript": "^5.8.3",
-    "vite": "^8.0.8"
+    "vite": "^8.3.0"
   },
   "dependencies": {
-    "@calcit/procs": "0.14.16",
+    "@calcit/procs": "0.14.17",
     "@triadica/touch-control": "^0.0.4-a1",
     "ismobilejs": "^1.1.1"
   },

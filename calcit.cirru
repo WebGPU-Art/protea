@@ -144,6 +144,8 @@
             match op
               (:tab t)
                 set-renderer! $ current-tab
+              (:states cursor s) &unit
+              (:hydrate-storage data) &unit
               _ $ eprintln "|unknown op:" op
             , &unit
           :examples $ []
@@ -194,7 +196,7 @@
               assert-type @*reel $ :: 'reel.typed/State 'Enum $ :: 'Map 'Tag 'Dynamic
               assert-type op 'Enum
               generate-id!
-              unsafe-coerce js/Date.now 'Number
+              unsafe-coerce (js/Date.now) 'Number
           :examples $ []
           :schema $ :: 'Fn $ {}
             :args $ [] 'Dynamic

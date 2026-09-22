@@ -12,3 +12,6 @@ lib/
 .vscode/
 
 .DS_Store
+dl-out
+.pnp.cjs
+.pnp.loader.mjs

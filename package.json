@@ -2,7 +2,7 @@
   "name": "@webgpu-art/protea",
   "version": "0.0.2-a1",
   "main": "./lib/index.mjs",
-  "packageManager": "yarn@4.12.0",
+  "packageManager": "yarn@4.18.0",
   "devDependencies": {
     "@webgpu/types": "^0.1.63",
     "bottom-tip": "^0.1.5",

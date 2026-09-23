@@ -8,10 +8,9 @@ node_modules/
 dist/
 
 lib/
-.yarn/*.gz
+.yarn/
 .vscode/
 
 .DS_Store
 dl-out
-.pnp.cjs
-.pnp.loader.mjs
+.pnp.*

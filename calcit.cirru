@@ -5,7 +5,7 @@
   :entries $ {} $ :default
     {} (:description |) (:init-fn 'app.main/main!) (:mode :js) (:reload-fn 'app.main/reload!) (:target :browser)
       :feature-policy $ {}
-      :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |reel.calcit/ |hud-nav/
+      :modules $ [] |respo.calcit/ |lilac/ |respo-ui.calcit/ |reel.calcit/ |hud-nav/
       :type-slots $ {}
   :files $ {}
     'app.comp.container $ %{} 'FileEntry

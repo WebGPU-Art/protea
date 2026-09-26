@@ -14,3 +14,5 @@ lib/
 .DS_Store
 dl-out
 .pnp.*
+.pnp.cjs
+.pnp.loader.mjs

@@ -12,7 +12,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: actions/setup-node@v6
         with:
@@ -24,10 +24,9 @@ jobs:
           corepack prepare yarn@4.18.0 --activate
           yarn --version
 
-      - uses: calcit-lang/setup-calcit@704b3f5cd6f9ce3bd1e0c926dbdd1d181adb8180 # v1.4.0
+      - uses: calcit-lang/setup-calcit@ca701be5a471759e442aa053cd100720bbe1f09f # v1.5
         with:
           tools: calcit,caps
-          caps-version: "0.1.1"
 
       - name: Validate and compile Calcit
         run: |
@@ -49,7 +48,7 @@ jobs:
             --only schema-dynamic,unresolved-type-slot,code-dynamic \
             --intent unresolved \
             --summary-only
-          calcit calcit.cirru analyze dynamic-methods --max 0
+          calcit calcit.cirru analyze dynamic-methods
           calcit calcit.cirru analyze deprecated --summary-only
           calcit calcit.cirru js
 

@@ -5,7 +5,7 @@
   :entries $ {} $ :default
     {} (:description |) (:init-fn 'app.main/main!) (:mode :js) (:reload-fn 'app.main/reload!) (:target :browser)
       :feature-policy $ {}
-      :modules $ [] |respo.calcit/ |lilac/ |respo-ui.calcit/ |reel.calcit/ |hud-nav/
+      :modules $ [] |respo.calcit/ |respo-ui.calcit/ |reel.calcit/ |hud-nav/
       :type-slots $ {}
   :files $ {}
     'app.comp.container $ %{} 'FileEntry
@@ -275,19 +275,18 @@
             :args $ []
         'render-loop! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn render-loop! ()
-            do
-              if (&< js-config/interval 10)
-                do
+            if (&< js-config/interval 10)
+              do
+                js/requestAnimationFrame $ fn (_t) (render-loop!)
+                swap! *t inc
+                @*instance-renderer @*t js/window.skipComputing
+              js/setTimeout
+                fn ()
                   js/requestAnimationFrame $ fn (_t) (render-loop!)
                   swap! *t inc
                   @*instance-renderer @*t js/window.skipComputing
-                js/setTimeout
-                  fn ()
-                    js/requestAnimationFrame $ fn (_t) (render-loop!)
-                    swap! *t inc
-                    @*instance-renderer @*t js/window.skipComputing
-                  , js-config/interval
-              , &unit
+                , js-config/interval
+            , &unit
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Unit)
             :args $ []

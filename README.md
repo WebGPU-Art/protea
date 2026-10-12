@@ -14,6 +14,23 @@ Search parameters:
 
 To use Protea, try [Protea TypeScript workflow](https://github.com/Triadica/protea-ts-workflow).
 
+### Calcit demo development
+
+The demo uses Calcit and `@calcit/procs` 0.29.1, Node 24 and Yarn 4.18.0.
+`calcit.cirru` is the canonical source; dependencies are pinned in `deps.cirru`.
+Run `caps --strict --ci`, `yarn install --immutable`, then `yarn build`.
+
+The application Store has a required Tag `tab` and an explicitly open Respo
+component-state tree. HUD events enter as Enum values; payloads are decoded at
+the updater boundary. JavaScript renderers retain their opaque host identity,
+are checked as functions on load, and are called with Number/Bool arguments.
+
+Actions checks all definitions and rejects deprecated calls and unresolved
+dynamic methods. Only main uploads `dist/assets` to
+`https://cos-sh.tiye.me/WebGPU-Art/protea/assets/`; the COS action performs its
+own checksum verification before the original page deployment runs. The page
+path and TypeScript library's npm release workflow are unchanged.
+
 ### API
 
 Main API of Protea is a function to pass buffers and shaders:

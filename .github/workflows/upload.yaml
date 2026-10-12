@@ -67,7 +67,7 @@ jobs:
       - name: Upload and verify frontend assets
         if: steps.production.outputs.current == 'true'
         timeout-minutes: 10
-        uses: worktools/cos-upload-action@v1.2.0
+        uses: worktools/cos-upload-action@06d6027dcca6413c5936e04a9b6e9f0d5ef71ba0 # v1.2.0
         with:
           source-dir: dist/assets
           bucket: ${{ secrets.COS_BUCKET }}

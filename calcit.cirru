@@ -313,7 +313,9 @@
             hint-fn $ {} $ :async true
             let
                 renderer $ js-await $ pick-renderer name
-              reset! *instance-renderer $ Option :some $ contract/expect-function |renderer renderer
+              when
+                = name $ current-tab
+                reset! *instance-renderer $ Option :some $ contract/expect-function |renderer renderer
             , &unit
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Unit)

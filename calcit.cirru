@@ -110,9 +110,9 @@
     'app.main $ %{} 'FileEntry
       :defs $ {}
         '*instance-renderer $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defref *instance-renderer nil
+          :code $ quote $ defref *instance-renderer (Option :none)
           :examples $ []
-          :schema $ :: 'Ref 'Dynamic
+          :schema $ :: 'Ref $ :: 'calcit.core/Option 'JsObject
         '*reel $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defref *reel (typed/new-reel schema/store)
           :examples $ []
@@ -134,24 +134,37 @@
                 (:states _cursor _state) false
                 _ true
               js/console.log |Dispatch: op
-            reset! *reel $ next-reel op
-            match op
-              (:tab t)
-                set-renderer! $ current-tab
-              (:states cursor s) &unit
-              (:hydrate-storage data) &unit
-              _ $ when
-                .none? $ typed/decode-control op
-                eprintln "|unknown op:" op
+            let
+                previous-tab $ current-tab
+              reset! *reel $ next-reel op
+              match op
+                (:tab t)
+                  set-renderer! $ current-tab
+                (:states cursor s) &unit
+                (:hydrate-storage data)
+                  when
+                    not= previous-tab $ current-tab
+                    set-renderer! $ current-tab
+                _ $ match (typed/decode-control op)
+                  (:some _control)
+                    when
+                      not= previous-tab $ current-tab
+                      set-renderer! $ current-tab
+                  (:none) (eprintln "|unknown op:" op)
             , &unit
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Unit)
             :args $ [] 'Enum
             :features $ #{} :js-ffi
-        'get-canvas $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defn get-canvas () (js/document.querySelector |canvas)
+        'frame-interval $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ def frame-interval (contract/expect-number |frame-interval js-config/interval)
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Dynamic)
+          :schema $ :: 'Number
+        'get-canvas $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defn get-canvas ()
+            .unwrap $ browser/query-selector |canvas
+          :examples $ []
+          :schema $ :: 'Fn $ {} (:return 'js-ffi.browser/DomElementHost)
             :args $ []
             :features $ #{} :js-ffi
         'get-mount-target $ %{} 'CodeEntry (:doc |)
@@ -160,6 +173,15 @@
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'respo.dom/DomElement)
             :args $ []
+            :features $ #{} :js-ffi
+        'invoke-renderer! $ %{} 'CodeEntry
+          :doc "|Calls the JS renderer identity validated by contract/expect-function. Arguments follow src/render.mts's Number/Bool contract. Deliberately does not await the frame Promise, preserving the original frame scheduling."
+          :code $ quote $ defn invoke-renderer! (renderer tick skip?)
+            js/Reflect.apply renderer js/undefined $ to-js-data $ [] tick skip?
+            , &unit
+          :examples $ []
+          :schema $ :: 'Fn $ {} (:return 'Unit)
+            :args $ [] 'JsObject 'Number 'Bool
             :features $ #{} :js-ffi
         'main! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn main! ()
@@ -269,17 +291,18 @@
             :args $ []
         'render-loop! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn render-loop! ()
-            if (&< js-config/interval 10)
+            if (&< frame-interval 10)
               do
-                js/requestAnimationFrame $ fn (_t) (render-loop!)
+                browser/request-animation-frame! $ fn (_t) (render-loop!)
                 swap! *t inc
-                @*instance-renderer @*t js/window.skipComputing
-              js/setTimeout
+                invoke-renderer! (.unwrap @*instance-renderer) @*t $ contract/expect-bool |skip-computing js/window.skipComputing
+              browser/set-timeout!
                 fn ()
-                  js/requestAnimationFrame $ fn (_t) (render-loop!)
+                  browser/request-animation-frame! $ fn (_t) (render-loop!)
                   swap! *t inc
-                  @*instance-renderer @*t js/window.skipComputing
-                , js-config/interval
+                  invoke-renderer! (.unwrap @*instance-renderer) @*t $ contract/expect-bool |skip-computing js/window.skipComputing
+                  , &unit
+                , frame-interval
             , &unit
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Unit)
@@ -290,7 +313,8 @@
             hint-fn $ {} $ :async true
             let
                 renderer $ js-await $ pick-renderer name
-              reset! *instance-renderer renderer
+              reset! *instance-renderer $ Option :some $ contract/expect-function |renderer renderer
+            , &unit
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Unit)
             :args $ [] 'Tag
@@ -343,6 +367,7 @@
             js-ffi.shared :as shared
             js-ffi.browser :as browser
             respo.ffi.browser :as dom
+            js-ffi.contract :as contract
     'app.schema $ %{} 'FileEntry
       :defs $ {}
         'Store $ %{} 'CodeEntry

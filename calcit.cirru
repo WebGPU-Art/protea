@@ -15,14 +15,14 @@
             let
                 store $ :store reel
                 states $ assert-type
-                  option:unwrap-or (get store :states) ({})
+                  .unwrap-or (get store :states) ({})
                   :: 'Map 'Tag 'Dynamic
                 tab $ assert-type
-                  option:unwrap-or (get store :tab) default-tab
+                  .unwrap-or (get store :tab) default-tab
                   , 'Tag
               div ({})
                 if-not hide-tabs? $ comp-hud-nav tab tabs
-                when dev? $ comp-reel (>> states :reel) reel $ {}
+                when dev? $ comp-typed-reel (>> states :reel) reel $ {}
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
             :args $ [] $ :: 'reel.typed/State 'Enum (:: 'Map 'Tag 'Dynamic)
@@ -32,7 +32,7 @@
             respo.css :refer $ defstyle
             respo.core :refer $ defcomp defeffect <> >> div button textarea span input
             respo.comp.space :refer $ =<
-            reel.comp.reel :refer $ comp-reel
+            reel.comp.reel :refer $ comp-typed-reel
             app.config :refer $ dev? hide-tabs?
             app.config :refer $ default-tab tabs
             hud-nav.comp :refer $ comp-hud-nav
@@ -114,15 +114,15 @@
     'app.main $ %{} 'FileEntry
       :defs $ {}
         '*instance-renderer $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defatom *instance-renderer nil
+          :code $ quote $ defref *instance-renderer nil
           :examples $ []
           :schema $ :: 'Ref 'Dynamic
         '*reel $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defatom *reel (typed/new-reel schema/store)
+          :code $ quote $ defref *reel (typed/new-reel schema/store)
           :examples $ []
           :schema $ :: 'Ref $ :: 'reel.typed/State 'Enum (:: 'Map 'Tag 'Dynamic)
         '*t $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defatom *t 0
+          :code $ quote $ defref *t 0
           :examples $ []
           :schema $ :: 'Ref 'Number
         'current-tab $ %{} 'CodeEntry (:doc |)
@@ -130,7 +130,7 @@
             let
                 store $ :store @*reel
               assert-type
-                option:unwrap-or (get store :tab) config/default-tab
+                .unwrap-or (get store :tab) config/default-tab
                 , 'Tag
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Tag)
@@ -159,9 +159,10 @@
             :args $ []
             :features $ #{} :js-ffi
         'get-mount-target $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defn get-mount-target () (js/document.querySelector |.app)
+          :code $ quote $ defn get-mount-target ()
+            dom/narrow-element $ .unwrap $ browser/query-selector |.app
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Dynamic)
+          :schema $ :: 'Fn $ {} (:return 'respo.dom/DomElement)
             :args $ []
             :features $ #{} :js-ffi
         'main! $ %{} 'CodeEntry (:doc |)
@@ -172,22 +173,22 @@
             println "|Running mode:" $ if config/dev? |dev |release
             if config/dev? $ load-console-formatter!
             render-app!
-            add-watch *reel :changes $ fn (reel prev) (render-app!)
+            add-watch! *reel :changes $ fn (reel prev) (render-app!)
             listen-devtools! |k dispatch!
             ; js/window.addEventListener |beforeunload $ fn (event) (persist-storage!)
             ; js/window.addEventListener |visibilitychange $ fn (event)
               if (= |hidden js/document.visibilityState) (persist-storage!)
             ; let
               (raw (js/localStorage.getItem (:storage-key config/site)))
-              when (some? raw)
+              when (non-nil? raw)
                 dispatch! $ :: :hydrate-storage $ parse-cirru-edn raw
             js-await $ set-renderer! $ current-tab
             render-loop!
             listenShaderError $ fn (err)
-              if (some? err) (hud! |error err)
+              if (non-nil? err) (hud! |error err)
             println "|App started."
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Dynamic)
+          :schema $ :: 'Fn $ {} (:return 'Unit)
             :args $ []
             :features $ #{} :js-ffi
         'next-reel $ %{} 'CodeEntry (:doc |)
@@ -206,7 +207,7 @@
           :code $ quote $ defn persist-storage! ()
             println |Saved_at $ shared/date-now-snapshot
             browser/storage-set!
-              option:unwrap $ get config/site :storage-key
+              .unwrap $ get config/site :storage-key
               format-cirru-edn $ :store @*reel
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Unit)
@@ -214,9 +215,7 @@
             :features $ #{} :js-ffi
         'pick-renderer $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn pick-renderer (tab)
-            case-default tab
-              do (eprintln "|unknown tab:" tab)
-                fireworks/loadRenderer $ get-canvas
+            match tab
               :fireworks $ fireworks/loadRenderer $ get-canvas
               :lorenz $ lorenz/loadRenderer $ get-canvas
               :aizawa $ aizawa/loadRenderer $ get-canvas
@@ -247,16 +246,18 @@
               :burke-shaw $ burke-shaw/loadRenderer $ get-canvas
               :quadratic $ quadratic/loadRenderer $ get-canvas
               :rule1001 $ rule30/loadRenderer $ get-canvas
+              _ $ do (eprintln "|unknown tab:" tab)
+                fireworks/loadRenderer $ get-canvas
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Dynamic)
-            :args $ [] 'Dynamic
+            :args $ [] 'Tag
             :features $ #{} :js-ffi
         'reload! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn reload! ()
             hint-fn $ {} $ :async true
             if (nil? build-errors)
-              do (remove-watch *reel :changes) (clear-cache!)
-                add-watch *reel :changes $ fn (reel prev) (render-app!)
+              do (remove-watch! *reel :changes) (clear-cache!)
+                add-watch! *reel :changes $ fn (reel prev) (render-app!)
                 reset! *reel $ typed/refresh updater
                   assert-type @*reel $ :: 'reel.typed/State 'Enum $ :: 'Map 'Tag 'Dynamic
                   assert-type schema/store $ :: 'Map 'Tag 'Dynamic
@@ -298,8 +299,8 @@
                 renderer $ js-await $ pick-renderer name
               reset! *instance-renderer renderer
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Dynamic)
-            :args $ [] 'Dynamic
+          :schema $ :: 'Fn $ {} (:return 'Unit)
+            :args $ [] 'Tag
             :features $ #{} :js-ffi
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.main
@@ -348,6 +349,7 @@
             |../src/index.mts :refer $ listenShaderError
             js-ffi.shared :as shared
             js-ffi.browser :as browser
+            respo.ffi.browser :as dom
     'app.schema $ %{} 'FileEntry
       :defs $ {} $ 'store
         %{} 'CodeEntry (:doc |)

@@ -41,17 +41,17 @@
       :defs $ {}
         'default-tab $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def default-tab
-            turn-tag $ option:unwrap-or (get-env |tab) |rule1001
+            turn-tag $ .unwrap-or (get-env |tab) |rule1001
           :examples $ []
           :schema $ :: 'Tag
         'dev? $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def dev?
-            = |dev $ option:unwrap-or (get-env |mode) |release
+            = |dev $ .unwrap-or (get-env |mode) |release
           :examples $ []
           :schema $ :: 'Bool
         'hide-tabs? $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def hide-tabs?
-            = |true $ option:unwrap-or (get-env |hide-tabs) |false
+            = |true $ .unwrap-or (get-env |hide-tabs) |false
           :examples $ []
           :schema $ :: 'Bool
         'site $ %{} 'CodeEntry (:doc |)
@@ -61,7 +61,7 @@
           :schema $ :: 'Map 'Tag 'String
         'skip-rendering? $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def skip-rendering?
-            = |true $ option:unwrap-or (get-env |skip) |false
+            = |true $ .unwrap-or (get-env |skip) |false
           :examples $ []
           :schema $ :: 'Bool
         'tabs $ %{} 'CodeEntry (:doc |)
@@ -105,7 +105,7 @@
           :schema $ :: 'Number
         'use-gamepad? $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def use-gamepad?
-            option:some? $ get-env |gamepad
+            .some? $ get-env |gamepad
           :examples $ []
           :schema $ :: 'Bool
       :ns $ %{} 'NsEntry (:doc |)

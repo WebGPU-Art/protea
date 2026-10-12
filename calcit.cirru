@@ -14,18 +14,14 @@
           :code $ quote $ defcomp comp-container (reel)
             let
                 store $ :store reel
-                states $ assert-type
-                  .unwrap-or (get store :states) ({})
-                  :: 'Map 'Tag 'Dynamic
-                tab $ assert-type
-                  .unwrap-or (get store :tab) default-tab
-                  , 'Tag
+                states $ :states store
+                tab $ :tab store
               div ({})
                 if-not hide-tabs? $ comp-hud-nav tab tabs
                 when dev? $ comp-typed-reel (>> states :reel) reel $ {}
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
-            :args $ [] $ :: 'reel.typed/State 'Enum (:: 'Map 'Tag 'Dynamic)
+            :args $ [] $ :: 'reel.typed/State 'Enum 'app.schema/Store
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.comp.container
           :require (respo-ui.css :as css)
@@ -120,25 +116,23 @@
         '*reel $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defref *reel (typed/new-reel schema/store)
           :examples $ []
-          :schema $ :: 'Ref $ :: 'reel.typed/State 'Enum (:: 'Map 'Tag 'Dynamic)
+          :schema $ :: 'Ref $ :: 'reel.typed/State 'Enum 'app.schema/Store
         '*t $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defref *t 0
           :examples $ []
           :schema $ :: 'Ref 'Number
         'current-tab $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn current-tab ()
-            let
-                store $ :store @*reel
-              assert-type
-                .unwrap-or (get store :tab) config/default-tab
-                , 'Tag
+            :tab $ :store @*reel
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Tag)
             :args $ []
         'dispatch! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn dispatch! (op)
             when
-              and config/dev? $ not= op :states
+              and config/dev? $ match op
+                (:states _cursor _state) false
+                _ true
               js/console.log |Dispatch: op
             reset! *reel $ next-reel op
             match op
@@ -146,11 +140,13 @@
                 set-renderer! $ current-tab
               (:states cursor s) &unit
               (:hydrate-storage data) &unit
-              _ $ eprintln "|unknown op:" op
+              _ $ when
+                .none? $ typed/decode-control op
+                eprintln "|unknown op:" op
             , &unit
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Unit)
-            :args $ [] 'Dynamic
+            :args $ [] 'Enum
             :features $ #{} :js-ffi
         'get-canvas $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn get-canvas () (js/document.querySelector |canvas)
@@ -193,16 +189,15 @@
             :features $ #{} :js-ffi
         'next-reel $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn next-reel (op)
-            typed/record-op updater
-              assert-type @*reel $ :: 'reel.typed/State 'Enum $ :: 'Map 'Tag 'Dynamic
-              assert-type op 'Enum
-              generate-id!
-              unsafe-coerce (js/Date.now) 'Number
+            match (typed/decode-control op)
+              (:some control) (typed/apply-control updater @*reel control)
+              (:none)
+                typed/record-op updater @*reel op (generate-id!) (shared/now-ms)
           :examples $ []
           :schema $ :: 'Fn $ {}
-            :args $ [] 'Dynamic
+            :args $ [] 'Enum
             :features $ #{} :js-ffi
-            :return $ :: 'reel.typed/State 'Enum $ :: 'Map 'Tag 'Dynamic
+            :return $ :: 'reel.typed/State 'Enum 'app.schema/Store
         'persist-storage! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn persist-storage! ()
             println |Saved_at $ shared/date-now-snapshot
@@ -258,9 +253,7 @@
             if (nil? build-errors)
               do (remove-watch! *reel :changes) (clear-cache!)
                 add-watch! *reel :changes $ fn (reel prev) (render-app!)
-                reset! *reel $ typed/refresh updater
-                  assert-type @*reel $ :: 'reel.typed/State 'Enum $ :: 'Map 'Tag 'Dynamic
-                  assert-type schema/store $ :: 'Map 'Tag 'Dynamic
+                reset! *reel $ typed/refresh updater @*reel schema/store
                 set-renderer! $ current-tab
                 hud! |ok~ |Ok
               hud! |error build-errors
@@ -351,13 +344,18 @@
             js-ffi.browser :as browser
             respo.ffi.browser :as dom
     'app.schema $ %{} 'FileEntry
-      :defs $ {} $ 'store
-        %{} 'CodeEntry (:doc |)
-          :code $ quote $ def store
-            {} (:tab default-tab)
-              :states $ {} $ :cursor ([])
+      :defs $ {}
+        'Store $ %{} 'CodeEntry
+          :doc "|Application fields are closed: tab is a Tag; states is Respo's heterogeneous cursor tree and remains an explicitly open map at that component boundary. Hydration decodes this shape rather than asserting an unchecked map."
+          :code $ quote $ defstruct Store (:tab 'Tag)
+            :states $ :: 'Map 'Dynamic 'Dynamic
           :examples $ []
-          :schema $ :: 'Map 'Tag 'Dynamic
+          :schema $ :: 'StructDef
+        'store $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ def store
+            Store :tab default-tab :states $ {} $ :cursor ([])
+          :examples $ []
+          :schema $ :: 'app.schema/Store
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.schema
           :require $ app.config :refer $ default-tab
@@ -366,14 +364,19 @@
         %{} 'CodeEntry (:doc |)
           :code $ quote $ defn updater (store op op-id op-time)
             match op
-              (:states cursor s) (update-states store cursor s)
-              (:tab t) (assoc store :tab t)
-              (:hydrate-storage data) data
+              (:states cursor s)
+                struct-with store $ :states $ decode-map-as
+                  update-state-tree (:states store)
+                    decode-map-as cursor $ :: 'List 'Dynamic
+                    , s
+                  :: 'Map 'Dynamic 'Dynamic
+              (:tab t)
+                struct-with store $ :tab $ decode-map-as t 'Tag
+              (:hydrate-storage data) (decode-map-as data 'app.schema/Store)
               _ $ do (eprintln "|unknown op:" op) store
           :examples $ []
-          :schema $ :: 'Fn $ {}
-            :args $ [] (:: 'Map 'Tag 'Dynamic) 'Enum 'String 'Number
-            :return $ :: 'Map 'Tag 'Dynamic
+          :schema $ :: 'Fn $ {} (:return 'app.schema/Store)
+            :args $ [] 'app.schema/Store 'Enum 'String 'Number
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.updater
-          :require $ respo.cursor :refer $ update-states
+          :require $ respo.cursor :refer $ update-state-tree

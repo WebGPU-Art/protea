@@ -9,6 +9,7 @@ dist/
 
 lib/
 .yarn/
+.calcit/
 .vscode/
 
 .DS_Store

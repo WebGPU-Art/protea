@@ -14,25 +14,21 @@
           :code $ quote $ defcomp comp-container (reel)
             let
                 store $ :store reel
-                states $ assert-type
-                  option:unwrap-or (get store :states) ({})
-                  :: 'Map 'Tag 'Dynamic
-                tab $ assert-type
-                  option:unwrap-or (get store :tab) default-tab
-                  , 'Tag
+                states $ :states store
+                tab $ :tab store
               div ({})
                 if-not hide-tabs? $ comp-hud-nav tab tabs
-                when dev? $ comp-reel (>> states :reel) reel $ {}
+                when dev? $ comp-typed-reel (>> states :reel) reel $ {}
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
-            :args $ [] $ :: 'reel.typed/State 'Enum (:: 'Map 'Tag 'Dynamic)
+            :args $ [] $ :: 'reel.typed/State 'Enum 'app.schema/Store
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.comp.container
           :require (respo-ui.css :as css)
             respo.css :refer $ defstyle
             respo.core :refer $ defcomp defeffect <> >> div button textarea span input
             respo.comp.space :refer $ =<
-            reel.comp.reel :refer $ comp-reel
+            reel.comp.reel :refer $ comp-typed-reel
             app.config :refer $ dev? hide-tabs?
             app.config :refer $ default-tab tabs
             hud-nav.comp :refer $ comp-hud-nav
@@ -41,17 +37,17 @@
       :defs $ {}
         'default-tab $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def default-tab
-            turn-tag $ option:unwrap-or (get-env |tab) |rule1001
+            turn-tag $ .unwrap-or (get-env |tab) |rule1001
           :examples $ []
           :schema $ :: 'Tag
         'dev? $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def dev?
-            = |dev $ option:unwrap-or (get-env |mode) |release
+            = |dev $ .unwrap-or (get-env |mode) |release
           :examples $ []
           :schema $ :: 'Bool
         'hide-tabs? $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def hide-tabs?
-            = |true $ option:unwrap-or (get-env |hide-tabs) |false
+            = |true $ .unwrap-or (get-env |hide-tabs) |false
           :examples $ []
           :schema $ :: 'Bool
         'site $ %{} 'CodeEntry (:doc |)
@@ -61,7 +57,7 @@
           :schema $ :: 'Map 'Tag 'String
         'skip-rendering? $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def skip-rendering?
-            = |true $ option:unwrap-or (get-env |skip) |false
+            = |true $ .unwrap-or (get-env |skip) |false
           :examples $ []
           :schema $ :: 'Bool
         'tabs $ %{} 'CodeEntry (:doc |)
@@ -105,7 +101,7 @@
           :schema $ :: 'Number
         'use-gamepad? $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def use-gamepad?
-            option:some? $ get-env |gamepad
+            .some? $ get-env |gamepad
           :examples $ []
           :schema $ :: 'Bool
       :ns $ %{} 'NsEntry (:doc |)
@@ -114,55 +110,78 @@
     'app.main $ %{} 'FileEntry
       :defs $ {}
         '*instance-renderer $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defatom *instance-renderer nil
+          :code $ quote $ defref *instance-renderer (Option :none)
           :examples $ []
-          :schema $ :: 'Ref 'Dynamic
+          :schema $ :: 'Ref $ :: 'calcit.core/Option 'JsObject
         '*reel $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defatom *reel (typed/new-reel schema/store)
+          :code $ quote $ defref *reel (typed/new-reel schema/store)
           :examples $ []
-          :schema $ :: 'Ref $ :: 'reel.typed/State 'Enum (:: 'Map 'Tag 'Dynamic)
+          :schema $ :: 'Ref $ :: 'reel.typed/State 'Enum 'app.schema/Store
         '*t $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defatom *t 0
+          :code $ quote $ defref *t 0
           :examples $ []
           :schema $ :: 'Ref 'Number
         'current-tab $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn current-tab ()
-            let
-                store $ :store @*reel
-              assert-type
-                option:unwrap-or (get store :tab) config/default-tab
-                , 'Tag
+            :tab $ :store @*reel
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Tag)
             :args $ []
         'dispatch! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn dispatch! (op)
             when
-              and config/dev? $ not= op :states
+              and config/dev? $ match op
+                (:states _cursor _state) false
+                _ true
               js/console.log |Dispatch: op
-            reset! *reel $ next-reel op
-            match op
-              (:tab t)
-                set-renderer! $ current-tab
-              (:states cursor s) &unit
-              (:hydrate-storage data) &unit
-              _ $ eprintln "|unknown op:" op
+            let
+                previous-tab $ current-tab
+              reset! *reel $ next-reel op
+              match op
+                (:tab t)
+                  set-renderer! $ current-tab
+                (:states cursor s) &unit
+                (:hydrate-storage data)
+                  when
+                    not= previous-tab $ current-tab
+                    set-renderer! $ current-tab
+                _ $ match (typed/decode-control op)
+                  (:some _control)
+                    when
+                      not= previous-tab $ current-tab
+                      set-renderer! $ current-tab
+                  (:none) (eprintln "|unknown op:" op)
             , &unit
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Unit)
-            :args $ [] 'Dynamic
+            :args $ [] 'Enum
             :features $ #{} :js-ffi
-        'get-canvas $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defn get-canvas () (js/document.querySelector |canvas)
+        'frame-interval $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ def frame-interval (contract/expect-number |frame-interval js-config/interval)
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Dynamic)
+          :schema $ :: 'Number
+        'get-canvas $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defn get-canvas ()
+            .unwrap $ browser/query-selector |canvas
+          :examples $ []
+          :schema $ :: 'Fn $ {} (:return 'js-ffi.browser/DomElementHost)
             :args $ []
             :features $ #{} :js-ffi
         'get-mount-target $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defn get-mount-target () (js/document.querySelector |.app)
+          :code $ quote $ defn get-mount-target ()
+            dom/narrow-element $ .unwrap $ browser/query-selector |.app
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Dynamic)
+          :schema $ :: 'Fn $ {} (:return 'respo.dom/DomElement)
             :args $ []
+            :features $ #{} :js-ffi
+        'invoke-renderer! $ %{} 'CodeEntry
+          :doc "|Calls the JS renderer identity validated by contract/expect-function. Arguments follow src/render.mts's Number/Bool contract. Deliberately does not await the frame Promise, preserving the original frame scheduling."
+          :code $ quote $ defn invoke-renderer! (renderer tick skip?)
+            js/Reflect.apply renderer js/undefined $ to-js-data $ [] tick skip?
+            , &unit
+          :examples $ []
+          :schema $ :: 'Fn $ {} (:return 'Unit)
+            :args $ [] 'JsObject 'Number 'Bool
             :features $ #{} :js-ffi
         'main! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn main! ()
@@ -172,41 +191,40 @@
             println "|Running mode:" $ if config/dev? |dev |release
             if config/dev? $ load-console-formatter!
             render-app!
-            add-watch *reel :changes $ fn (reel prev) (render-app!)
+            add-watch! *reel :changes $ fn (reel prev) (render-app!)
             listen-devtools! |k dispatch!
             ; js/window.addEventListener |beforeunload $ fn (event) (persist-storage!)
             ; js/window.addEventListener |visibilitychange $ fn (event)
               if (= |hidden js/document.visibilityState) (persist-storage!)
             ; let
               (raw (js/localStorage.getItem (:storage-key config/site)))
-              when (some? raw)
+              when (non-nil? raw)
                 dispatch! $ :: :hydrate-storage $ parse-cirru-edn raw
             js-await $ set-renderer! $ current-tab
             render-loop!
             listenShaderError $ fn (err)
-              if (some? err) (hud! |error err)
+              if (non-nil? err) (hud! |error err)
             println "|App started."
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Dynamic)
+          :schema $ :: 'Fn $ {} (:return 'Unit)
             :args $ []
             :features $ #{} :js-ffi
         'next-reel $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn next-reel (op)
-            typed/record-op updater
-              assert-type @*reel $ :: 'reel.typed/State 'Enum $ :: 'Map 'Tag 'Dynamic
-              assert-type op 'Enum
-              generate-id!
-              unsafe-coerce (js/Date.now) 'Number
+            match (typed/decode-control op)
+              (:some control) (typed/apply-control updater @*reel control)
+              (:none)
+                typed/record-op updater @*reel op (generate-id!) (shared/now-ms)
           :examples $ []
           :schema $ :: 'Fn $ {}
-            :args $ [] 'Dynamic
+            :args $ [] 'Enum
             :features $ #{} :js-ffi
-            :return $ :: 'reel.typed/State 'Enum $ :: 'Map 'Tag 'Dynamic
+            :return $ :: 'reel.typed/State 'Enum 'app.schema/Store
         'persist-storage! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn persist-storage! ()
             println |Saved_at $ shared/date-now-snapshot
             browser/storage-set!
-              option:unwrap $ get config/site :storage-key
+              .unwrap $ get config/site :storage-key
               format-cirru-edn $ :store @*reel
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Unit)
@@ -214,9 +232,7 @@
             :features $ #{} :js-ffi
         'pick-renderer $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn pick-renderer (tab)
-            case-default tab
-              do (eprintln "|unknown tab:" tab)
-                fireworks/loadRenderer $ get-canvas
+            match tab
               :fireworks $ fireworks/loadRenderer $ get-canvas
               :lorenz $ lorenz/loadRenderer $ get-canvas
               :aizawa $ aizawa/loadRenderer $ get-canvas
@@ -247,19 +263,19 @@
               :burke-shaw $ burke-shaw/loadRenderer $ get-canvas
               :quadratic $ quadratic/loadRenderer $ get-canvas
               :rule1001 $ rule30/loadRenderer $ get-canvas
+              _ $ do (eprintln "|unknown tab:" tab)
+                fireworks/loadRenderer $ get-canvas
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Dynamic)
-            :args $ [] 'Dynamic
+            :args $ [] 'Tag
             :features $ #{} :js-ffi
         'reload! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn reload! ()
             hint-fn $ {} $ :async true
             if (nil? build-errors)
-              do (remove-watch *reel :changes) (clear-cache!)
-                add-watch *reel :changes $ fn (reel prev) (render-app!)
-                reset! *reel $ typed/refresh updater
-                  assert-type @*reel $ :: 'reel.typed/State 'Enum $ :: 'Map 'Tag 'Dynamic
-                  assert-type schema/store $ :: 'Map 'Tag 'Dynamic
+              do (remove-watch! *reel :changes) (clear-cache!)
+                add-watch! *reel :changes $ fn (reel prev) (render-app!)
+                reset! *reel $ typed/refresh updater @*reel schema/store
                 set-renderer! $ current-tab
                 hud! |ok~ |Ok
               hud! |error build-errors
@@ -275,17 +291,18 @@
             :args $ []
         'render-loop! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn render-loop! ()
-            if (&< js-config/interval 10)
+            if (&< frame-interval 10)
               do
-                js/requestAnimationFrame $ fn (_t) (render-loop!)
+                browser/request-animation-frame! $ fn (_t) (render-loop!)
                 swap! *t inc
-                @*instance-renderer @*t js/window.skipComputing
-              js/setTimeout
+                invoke-renderer! (.unwrap @*instance-renderer) @*t $ contract/expect-bool |skip-computing js/window.skipComputing
+              browser/set-timeout!
                 fn ()
-                  js/requestAnimationFrame $ fn (_t) (render-loop!)
+                  browser/request-animation-frame! $ fn (_t) (render-loop!)
                   swap! *t inc
-                  @*instance-renderer @*t js/window.skipComputing
-                , js-config/interval
+                  invoke-renderer! (.unwrap @*instance-renderer) @*t $ contract/expect-bool |skip-computing js/window.skipComputing
+                  , &unit
+                , frame-interval
             , &unit
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Unit)
@@ -296,10 +313,13 @@
             hint-fn $ {} $ :async true
             let
                 renderer $ js-await $ pick-renderer name
-              reset! *instance-renderer renderer
+              when
+                = name $ current-tab
+                reset! *instance-renderer $ Option :some $ contract/expect-function |renderer renderer
+            , &unit
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Dynamic)
-            :args $ [] 'Dynamic
+          :schema $ :: 'Fn $ {} (:return 'Unit)
+            :args $ [] 'Tag
             :features $ #{} :js-ffi
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.main
@@ -348,14 +368,21 @@
             |../src/index.mts :refer $ listenShaderError
             js-ffi.shared :as shared
             js-ffi.browser :as browser
+            respo.ffi.browser :as dom
+            js-ffi.contract :as contract
     'app.schema $ %{} 'FileEntry
-      :defs $ {} $ 'store
-        %{} 'CodeEntry (:doc |)
-          :code $ quote $ def store
-            {} (:tab default-tab)
-              :states $ {} $ :cursor ([])
+      :defs $ {}
+        'Store $ %{} 'CodeEntry
+          :doc "|Application fields are closed: tab is a Tag; states is Respo's heterogeneous cursor tree and remains an explicitly open map at that component boundary. Hydration decodes this shape rather than asserting an unchecked map."
+          :code $ quote $ defstruct Store (:tab 'Tag)
+            :states $ :: 'Map 'Dynamic 'Dynamic
           :examples $ []
-          :schema $ :: 'Map 'Tag 'Dynamic
+          :schema $ :: 'StructDef
+        'store $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ def store
+            Store :tab default-tab :states $ {} $ :cursor ([])
+          :examples $ []
+          :schema $ :: 'app.schema/Store
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.schema
           :require $ app.config :refer $ default-tab
@@ -364,14 +391,19 @@
         %{} 'CodeEntry (:doc |)
           :code $ quote $ defn updater (store op op-id op-time)
             match op
-              (:states cursor s) (update-states store cursor s)
-              (:tab t) (assoc store :tab t)
-              (:hydrate-storage data) data
+              (:states cursor s)
+                struct-with store $ :states $ decode-map-as
+                  update-state-tree (:states store)
+                    decode-map-as cursor $ :: 'List 'Dynamic
+                    , s
+                  :: 'Map 'Dynamic 'Dynamic
+              (:tab t)
+                struct-with store $ :tab $ decode-map-as t 'Tag
+              (:hydrate-storage data) (decode-map-as data 'app.schema/Store)
               _ $ do (eprintln "|unknown op:" op) store
           :examples $ []
-          :schema $ :: 'Fn $ {}
-            :args $ [] (:: 'Map 'Tag 'Dynamic) 'Enum 'String 'Number
-            :return $ :: 'Map 'Tag 'Dynamic
+          :schema $ :: 'Fn $ {} (:return 'app.schema/Store)
+            :args $ [] 'app.schema/Store 'Enum 'String 'Number
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.updater
-          :require $ respo.cursor :refer $ update-states
+          :require $ respo.cursor :refer $ update-state-tree

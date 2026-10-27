@@ -16,9 +16,9 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7.0.1
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v6.5.0
         with:
           node-version: 24
 
@@ -28,9 +28,11 @@ jobs:
           corepack prepare yarn@4.18.0 --activate
           yarn --version
 
-      - uses: calcit-lang/setup-calcit@ca701be5a471759e442aa053cd100720bbe1f09f # v1.5
+      - uses: calcit-lang/setup-calcit@v1.5.0
         with:
           tools: calcit,caps
+          caps-version: "0.1.1"
+          deps-file: deps.cirru
 
       - name: Validate and compile Calcit
         run: |
@@ -38,9 +40,9 @@ jobs:
           caps --strict --ci
           yarn install --immutable
           caps verify --toolchain
-          calcit calcit.cirru edit format
-          git diff --exit-code -- calcit.cirru
+          calcit calcit.cirru edit transaction --code '[["edit","format"]]' --dry-run --format json | jq -e '.changed == false'
           calcit calcit.cirru --check-only --all-defs
+          calcit fix --workflow strict --verify --format json | jq -e '.data.workflow.status == "passed" and .diagnostics == []'
           calcit analyze weak-types --only dynamic-method --summary-only --format json | jq -e '.data.summary.findings == 0'
           calcit analyze weak-types --only deprecated-call --summary-only --format json | jq -e '.data.summary.calls == 0'
           calcit calcit.cirru js
@@ -67,7 +69,7 @@ jobs:
       - name: Upload and verify frontend assets
         if: steps.production.outputs.current == 'true'
         timeout-minutes: 10
-        uses: worktools/cos-upload-action@06d6027dcca6413c5936e04a9b6e9f0d5ef71ba0 # v1.2.0
+        uses: worktools/cos-upload-action@v1.2.0
         with:
           source-dir: dist/assets
           bucket: ${{ secrets.COS_BUCKET }}

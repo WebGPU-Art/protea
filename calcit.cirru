@@ -6,7 +6,7 @@
     {} (:description |) (:init-fn 'app.main/main!) (:mode :js) (:reload-fn 'app.main/reload!) (:target :browser)
       :feature-policy $ {}
       :modules $ [] |respo.calcit/ |respo-ui.calcit/ |reel.calcit/ |hud-nav/
-      :type-slots $ {}
+      :type-slots $ {} $ :dispatch-op |app.schema/DispatchOp
   :files $ {}
     'app.comp.container $ %{} 'FileEntry
       :defs $ {} $ 'comp-container
@@ -279,13 +279,19 @@
                 set-renderer! $ current-tab
                 hud! |ok~ |Ok
               hud! |error build-errors
+            , &unit
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Unit)
             :args $ []
             :features $ #{} :js-ffi
         'render-app! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn render-app! ()
-            render! (get-mount-target) (comp-container @*reel) dispatch!
+            render! (get-mount-target) (comp-container @*reel)
+              fn (op)
+                hint-fn $ {}
+                  :args $ [] *dispatch-op
+                  :return 'Unit
+                if (enum? op) (dispatch! op) (raise "|Expected Enum operation")
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Unit)
             :args $ []
@@ -328,7 +334,7 @@
             app.comp.container :refer $ comp-container
             app.updater :refer $ updater
             app.schema :as schema
-            reel.util :refer $ listen-devtools! generate-id!
+            reel.util :refer $ listen-devtools!
             reel.typed :as typed
             app.config :as config
             |./calcit.build-errors :default build-errors
@@ -372,6 +378,10 @@
             js-ffi.contract :as contract
     'app.schema $ %{} 'FileEntry
       :defs $ {}
+        'DispatchOp $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ def DispatchOp (:: :tab :fireworks)
+          :examples $ []
+          :schema $ :: 'Enum
         'Store $ %{} 'CodeEntry
           :doc "|Application fields are closed: tab is a Tag; states is Respo's heterogeneous cursor tree and remains an explicitly open map at that component boundary. Hydration decodes this shape rather than asserting an unchecked map."
           :code $ quote $ defstruct Store (:tab 'Tag)

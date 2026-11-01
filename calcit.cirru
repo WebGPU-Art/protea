@@ -20,8 +20,7 @@
                 if-not hide-tabs? $ comp-hud-nav tab tabs
                 when dev? $ comp-typed-reel (>> states :reel) reel $ {}
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
-            :args $ [] $ :: 'reel.typed/State 'Enum 'app.schema/Store
+          :schema $ quote $ Fn (reel.typed/State Enum app.schema/Store) (-> respo.schema/Component)
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.comp.container
           :require (respo-ui.css :as css)
@@ -39,27 +38,27 @@
           :code $ quote $ def default-tab
             turn-tag $ .unwrap-or (get-env |tab) |rule1001
           :examples $ []
-          :schema $ :: 'Tag
+          :schema $ quote Tag
         'dev? $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def dev?
             = |dev $ .unwrap-or (get-env |mode) |release
           :examples $ []
-          :schema $ :: 'Bool
+          :schema $ quote Bool
         'hide-tabs? $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def hide-tabs?
             = |true $ .unwrap-or (get-env |hide-tabs) |false
           :examples $ []
-          :schema $ :: 'Bool
+          :schema $ quote Bool
         'site $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def site
             {} $ :storage-key |workflow
           :examples $ []
-          :schema $ :: 'Map 'Tag 'String
+          :schema $ quote $ Map Tag String
         'skip-rendering? $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def skip-rendering?
             = |true $ .unwrap-or (get-env |skip) |false
           :examples $ []
-          :schema $ :: 'Bool
+          :schema $ quote Bool
         'tabs $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def tabs
             []
@@ -94,16 +93,16 @@
               %{} TabItem (:id :quadratic) (:label |Quadratic)
               %{} TabItem (:id :rule1001) (:label |rule1001)
           :examples $ []
-          :schema $ :: 'List 'hud-nav.schema/TabItem
+          :schema $ quote $ List hud-nav.schema/TabItem
         'threshold $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def threshold 0.016
           :examples $ []
-          :schema $ :: 'Number
+          :schema $ quote Number
         'use-gamepad? $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def use-gamepad?
             .some? $ get-env |gamepad
           :examples $ []
-          :schema $ :: 'Bool
+          :schema $ quote Bool
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.config
           :require $ hud-nav.schema :refer $ TabItem
@@ -112,21 +111,20 @@
         '*instance-renderer $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defref *instance-renderer (Option :none)
           :examples $ []
-          :schema $ :: 'Ref $ :: 'calcit.core/Option 'JsObject
+          :schema $ quote $ Ref (calcit.core/Option JsObject)
         '*reel $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defref *reel (typed/new-reel schema/store)
           :examples $ []
-          :schema $ :: 'Ref $ :: 'reel.typed/State 'Enum 'app.schema/Store
+          :schema $ quote $ Ref (reel.typed/State Enum app.schema/Store)
         '*t $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defref *t 0
           :examples $ []
-          :schema $ :: 'Ref 'Number
+          :schema $ quote $ Ref Number
         'current-tab $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn current-tab ()
             :tab $ :store @*reel
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Tag)
-            :args $ []
+          :schema $ quote $ Fn (-> Tag)
         'dispatch! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn dispatch! (op)
             when
@@ -153,39 +151,30 @@
                   (:none) (eprintln "|unknown op:" op)
             , &unit
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Unit)
-            :args $ [] 'Enum
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn Enum (-> Unit) (:features :js-ffi)
         'frame-interval $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def frame-interval (contract/expect-number |frame-interval js-config/interval)
           :examples $ []
-          :schema $ :: 'Number
+          :schema $ quote Number
         'get-canvas $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn get-canvas ()
             .unwrap $ browser/query-selector |canvas
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'js-ffi.browser/DomElementHost)
-            :args $ []
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn (-> js-ffi.browser/DomElementHost) (:features :js-ffi)
         'get-mount-target $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn get-mount-target ()
             dom/narrow-element $ .unwrap $ browser/query-selector |.app
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'respo.dom/DomElement)
-            :args $ []
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn (-> respo.dom/DomElement) (:features :js-ffi)
         'invoke-renderer! $ %{} 'CodeEntry
           :doc "|Calls the JS renderer identity validated by contract/expect-function. Arguments follow src/render.mts's Number/Bool contract. Deliberately does not await the frame Promise, preserving the original frame scheduling."
           :code $ quote $ defn invoke-renderer! (renderer tick skip?)
             js/Reflect.apply renderer js/undefined $ to-js-data $ [] tick skip?
             , &unit
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Unit)
-            :args $ [] 'JsObject 'Number 'Bool
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn JsObject Number Bool (-> Unit) (:features :js-ffi)
         'main! $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defn main! ()
-            hint-fn $ {} $ :async true
+          :code $ quote $ defn main! () (hint-fn Async)
             js-await $ setupInitials $ get-canvas
             set! js/window.skipComputing config/skip-rendering?
             println "|Running mode:" $ if config/dev? |dev |release
@@ -206,9 +195,7 @@
               if (non-nil? err) (hud! |error err)
             println "|App started."
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Unit)
-            :args $ []
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
         'next-reel $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn next-reel (op)
             match (typed/decode-control op)
@@ -216,10 +203,9 @@
               (:none)
                 typed/record-op updater @*reel op (generate-id!) (shared/now-ms)
           :examples $ []
-          :schema $ :: 'Fn $ {}
-            :args $ [] 'Enum
-            :features $ #{} :js-ffi
-            :return $ :: 'reel.typed/State 'Enum 'app.schema/Store
+          :schema $ quote $ Fn Enum
+            -> $ reel.typed/State Enum app.schema/Store
+            :features :js-ffi
         'persist-storage! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn persist-storage! ()
             println |Saved_at $ shared/date-now-snapshot
@@ -227,9 +213,7 @@
               .unwrap $ get config/site :storage-key
               format-cirru-edn $ :store @*reel
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Unit)
-            :args $ []
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
         'pick-renderer $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn pick-renderer (tab)
             match tab
@@ -266,12 +250,9 @@
               _ $ do (eprintln "|unknown tab:" tab)
                 fireworks/loadRenderer $ get-canvas
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Dynamic)
-            :args $ [] 'Tag
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn Tag (-> Dynamic) (:features :js-ffi)
         'reload! $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defn reload! ()
-            hint-fn $ {} $ :async true
+          :code $ quote $ defn reload! () (hint-fn Async)
             if (nil? build-errors)
               do (remove-watch! *reel :changes) (clear-cache!)
                 add-watch! *reel :changes $ fn (reel prev) (render-app!)
@@ -281,20 +262,15 @@
               hud! |error build-errors
             , &unit
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Unit)
-            :args $ []
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
         'render-app! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn render-app! ()
             render! (get-mount-target) (comp-container @*reel)
               fn (op)
-                hint-fn $ {}
-                  :args $ [] *dispatch-op
-                  :return 'Unit
+                hint-fn $ Fn *dispatch-op $ -> Unit
                 if (enum? op) (dispatch! op) (raise "|Expected Enum operation")
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Unit)
-            :args $ []
+          :schema $ quote $ Fn (-> Unit)
         'render-loop! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn render-loop! ()
             if (&< frame-interval 10)
@@ -311,12 +287,9 @@
                 , frame-interval
             , &unit
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Unit)
-            :args $ []
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
         'set-renderer! $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defn set-renderer! (name)
-            hint-fn $ {} $ :async true
+          :code $ quote $ defn set-renderer! (name) (hint-fn Async)
             let
                 renderer $ js-await $ pick-renderer name
               when
@@ -324,9 +297,7 @@
                 reset! *instance-renderer $ Option :some $ contract/expect-function |renderer renderer
             , &unit
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Unit)
-            :args $ [] 'Tag
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn Tag (-> Unit) (:features :js-ffi)
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.main
           :require
@@ -381,18 +352,18 @@
         'DispatchOp $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def DispatchOp (:: :tab :fireworks)
           :examples $ []
-          :schema $ :: 'Enum
+          :schema $ quote Enum
         'Store $ %{} 'CodeEntry
           :doc "|Application fields are closed: tab is a Tag; states is Respo's heterogeneous cursor tree and remains an explicitly open map at that component boundary. Hydration decodes this shape rather than asserting an unchecked map."
           :code $ quote $ defstruct Store (:tab 'Tag)
-            :states $ :: 'Map 'Dynamic 'Dynamic
+            :states $ quote $ Map Dynamic Dynamic
           :examples $ []
-          :schema $ :: 'StructDef
+          :schema $ quote StructDef
         'store $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def store
             Store :tab default-tab :states $ {} $ :cursor ([])
           :examples $ []
-          :schema $ :: 'app.schema/Store
+          :schema $ quote app.schema/Store
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.schema
           :require $ app.config :refer $ default-tab
@@ -412,8 +383,7 @@
               (:hydrate-storage data) (decode-map-as data 'app.schema/Store)
               _ $ do (eprintln "|unknown op:" op) store
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'app.schema/Store)
-            :args $ [] 'app.schema/Store 'Enum 'String 'Number
+          :schema $ quote $ Fn app.schema/Store Enum String Number (-> app.schema/Store)
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.updater
           :require $ respo.cursor :refer $ update-state-tree

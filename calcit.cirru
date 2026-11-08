@@ -6,21 +6,26 @@
     {} (:description |) (:init-fn 'app.main/main!) (:mode :js) (:reload-fn 'app.main/reload!) (:target :browser)
       :feature-policy $ {}
       :modules $ [] |respo.calcit/ |respo-ui.calcit/ |reel.calcit/ |hud-nav/
-      :type-slots $ {} $ :dispatch-op |app.schema/DispatchOp
+      :type-slots $ {} $ :dispatch-op 'app.schema/ViewOp
   :files $ {}
     'app.comp.container $ %{} 'FileEntry
       :defs $ {} $ 'comp-container
         %{} 'CodeEntry (:doc |)
-          :code $ quote $ defcomp comp-container (reel)
+          :code $ quote $ defcomp comp-container (reel on-control!)
             let
                 store $ :store reel
                 states $ :states store
                 tab $ :tab store
               div ({})
-                if-not hide-tabs? $ comp-hud-nav tab tabs
-                when dev? $ comp-typed-reel (>> states :reel) reel $ {}
+                if hide-tabs? (Option :none)
+                  Option :some $ comp-hud-nav tab tabs
+                if dev?
+                  Option :some $ comp-typed-reel (>> states :reel) reel ({}) on-control!
+                  Option :none
           :examples $ []
-          :schema $ quote $ Fn (reel.typed/State Enum app.schema/Store) (-> respo.schema/Component)
+          :schema $ quote $ Fn (reel.typed/State app.schema/AppOp app.schema/Store)
+            Fn reel.typed/Control $ -> Unit
+            -> respo.schema/Component
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.comp.container
           :require (respo-ui.css :as css)
@@ -115,7 +120,7 @@
         '*reel $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defref *reel (typed/new-reel schema/store)
           :examples $ []
-          :schema $ quote $ Ref (reel.typed/State Enum app.schema/Store)
+          :schema $ quote $ Ref (reel.typed/State app.schema/AppOp app.schema/Store)
         '*t $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defref *t 0
           :examples $ []
@@ -134,24 +139,29 @@
               js/console.log |Dispatch: op
             let
                 previous-tab $ current-tab
-              reset! *reel $ next-reel op
+              reset! *reel $ typed/record-op updater @*reel op (generate-id!) (shared/now-ms)
               match op
-                (:tab t)
+                (:tab _)
                   set-renderer! $ current-tab
-                (:states cursor s) &unit
-                (:hydrate-storage data)
+                (:hydrate-storage _)
                   when
                     not= previous-tab $ current-tab
                     set-renderer! $ current-tab
-                _ $ match (typed/decode-control op)
-                  (:some _control)
-                    when
-                      not= previous-tab $ current-tab
-                      set-renderer! $ current-tab
-                  (:none) (eprintln "|unknown op:" op)
+                (:states _cursor _state) &unit
             , &unit
           :examples $ []
-          :schema $ quote $ Fn Enum (-> Unit) (:features :js-ffi)
+          :schema $ quote $ Fn app.schema/AppOp (-> Unit) (:features :js-ffi)
+        'dispatch-view! $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defn dispatch-view! (op)
+            match op
+              (app.schema/AppOp action) (dispatch! action)
+              (hud-nav.schema/Op action)
+                match action
+                  (:tab tab)
+                    dispatch! $ schema/AppOp :tab tab
+                  (:hydrate-storage _) (raise |expected-hud-nav-tab-operation)
+          :examples $ []
+          :schema $ quote $ Fn app.schema/ViewOp (-> Unit)
         'frame-interval $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def frame-interval (contract/expect-number |frame-interval js-config/interval)
           :examples $ []
@@ -181,14 +191,14 @@
             if config/dev? $ load-console-formatter!
             render-app!
             add-watch! *reel :changes $ fn (reel prev) (render-app!)
-            listen-devtools! |k dispatch!
+            listen-devtools! |k on-control!
             ; js/window.addEventListener |beforeunload $ fn (event) (persist-storage!)
             ; js/window.addEventListener |visibilitychange $ fn (event)
               if (= |hidden js/document.visibilityState) (persist-storage!)
             ; let
               (raw (js/localStorage.getItem (:storage-key config/site)))
               when (non-nil? raw)
-                dispatch! $ :: :hydrate-storage $ parse-cirru-edn raw
+                dispatch! $ schema/AppOp :hydrate-storage $ decode-map-as (parse-cirru-edn raw) schema/Store
             js-await $ set-renderer! $ current-tab
             render-loop!
             listenShaderError $ fn (err)
@@ -196,16 +206,17 @@
             println "|App started."
           :examples $ []
           :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
-        'next-reel $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defn next-reel (op)
-            match (typed/decode-control op)
-              (:some control) (typed/apply-control updater @*reel control)
-              (:none)
-                typed/record-op updater @*reel op (generate-id!) (shared/now-ms)
+        'on-control! $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defn on-control! (control)
+            let
+                previous-tab $ current-tab
+              reset! *reel $ typed/apply-control updater @*reel control
+              when
+                not= previous-tab $ current-tab
+                set-renderer! $ current-tab
+            , &unit
           :examples $ []
-          :schema $ quote $ Fn Enum
-            -> $ reel.typed/State Enum app.schema/Store
-            :features :js-ffi
+          :schema $ quote $ Fn reel.typed/Control (-> Unit)
         'persist-storage! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn persist-storage! ()
             println |Saved_at $ shared/date-now-snapshot
@@ -216,7 +227,7 @@
           :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
         'pick-renderer $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn pick-renderer (tab)
-            match tab
+            contract/expect-object |renderer-promise $ match tab
               :fireworks $ fireworks/loadRenderer $ get-canvas
               :lorenz $ lorenz/loadRenderer $ get-canvas
               :aizawa $ aizawa/loadRenderer $ get-canvas
@@ -250,7 +261,7 @@
               _ $ do (eprintln "|unknown tab:" tab)
                 fireworks/loadRenderer $ get-canvas
           :examples $ []
-          :schema $ quote $ Fn Tag (-> Dynamic) (:features :js-ffi)
+          :schema $ quote $ Fn Tag (-> JsObject) (:features :js-ffi)
         'reload! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn reload! () (hint-fn Async)
             if (nil? build-errors)
@@ -265,10 +276,11 @@
           :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
         'render-app! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn render-app! ()
-            render! (get-mount-target) (comp-container @*reel)
+            render-with! (get-mount-target)
+              fn () $ comp-container @*reel on-control!
               fn (op)
                 hint-fn $ Fn *dispatch-op $ -> Unit
-                if (enum? op) (dispatch! op) (raise "|Expected Enum operation")
+                dispatch-view! $ decode-map-as op app.schema/ViewOp
           :examples $ []
           :schema $ quote $ Fn (-> Unit)
         'render-loop! $ %{} 'CodeEntry (:doc |)
@@ -301,7 +313,7 @@
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.main
           :require
-            respo.core :refer $ render! clear-cache!
+            respo.core :refer $ render-with! clear-cache!
             app.comp.container :refer $ comp-container
             app.updater :refer $ updater
             app.schema :as schema
@@ -349,16 +361,22 @@
             js-ffi.contract :as contract
     'app.schema $ %{} 'FileEntry
       :defs $ {}
-        'DispatchOp $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ def DispatchOp (:: :tab :fireworks)
+        'AppOp $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defenum AppOp (:tab Tag)
+            :states (List respo.schema/CoordKey) Dynamic
+            :hydrate-storage app.schema/Store
           :examples $ []
-          :schema $ quote Enum
+          :schema $ quote EnumDef
         'Store $ %{} 'CodeEntry
           :doc "|Application fields are closed: tab is a Tag; states is Respo's heterogeneous cursor tree and remains an explicitly open map at that component boundary. Hydration decodes this shape rather than asserting an unchecked map."
-          :code $ quote $ defstruct Store (:tab 'Tag)
-            :states $ quote $ Map Dynamic Dynamic
+          :code $ quote $ defstruct Store (:tab Tag)
+            :states $ Map Dynamic Dynamic
           :examples $ []
           :schema $ quote StructDef
+        'ViewOp $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defunion ViewOp AppOp hud-nav.schema/Op
+          :examples $ []
+          :schema $ quote UnionDef
         'store $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def store
             Store :tab default-tab :states $ {} $ :cursor ([])
@@ -372,18 +390,14 @@
         %{} 'CodeEntry (:doc |)
           :code $ quote $ defn updater (store op op-id op-time)
             match op
-              (:states cursor s)
-                struct-with store $ :states $ decode-map-as
-                  update-state-tree (:states store)
-                    decode-map-as cursor $ :: 'List 'Dynamic
-                    , s
-                  :: 'Map 'Dynamic 'Dynamic
-              (:tab t)
-                struct-with store $ :tab $ decode-map-as t 'Tag
-              (:hydrate-storage data) (decode-map-as data 'app.schema/Store)
-              _ $ do (eprintln "|unknown op:" op) store
+              (:states cursor state)
+                assoc store :states $ decode-map-as
+                  update-state-tree (:states store) cursor state
+                  Map Dynamic Dynamic
+              (:tab tab) (assoc store :tab tab)
+              (:hydrate-storage data) data
           :examples $ []
-          :schema $ quote $ Fn app.schema/Store Enum String Number (-> app.schema/Store)
+          :schema $ quote $ Fn app.schema/Store app.schema/AppOp String Number (-> app.schema/Store)
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.updater
           :require $ respo.cursor :refer $ update-state-tree

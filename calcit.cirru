@@ -116,7 +116,8 @@
         '*instance-renderer $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defref *instance-renderer (Option :none)
           :examples $ []
-          :schema $ quote $ Ref (calcit.core/Option JsObject)
+          :schema $ quote $ Ref
+            Option $ Fn Number Bool (-> Unit) (:features :js-ffi)
         '*reel $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defref *reel (typed/new-reel schema/store)
           :examples $ []
@@ -176,13 +177,6 @@
             dom/narrow-element $ .unwrap $ browser/query-selector |.app
           :examples $ []
           :schema $ quote $ Fn (-> respo.dom/DomElement) (:features :js-ffi)
-        'invoke-renderer! $ %{} 'CodeEntry
-          :doc "|Calls the JS renderer identity validated by contract/expect-function. Arguments follow src/render.mts's Number/Bool contract. Deliberately does not await the frame Promise, preserving the original frame scheduling."
-          :code $ quote $ defn invoke-renderer! (renderer tick skip?)
-            js/Reflect.apply renderer js/undefined $ to-js-data $ [] tick skip?
-            , &unit
-          :examples $ []
-          :schema $ quote $ Fn JsObject Number Bool (-> Unit) (:features :js-ffi)
         'main! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn main! () (hint-fn Async)
             js-await $ setupInitials $ get-canvas
@@ -289,24 +283,42 @@
               do
                 browser/request-animation-frame! $ fn (_t) (render-loop!)
                 swap! *t inc
-                invoke-renderer! (.unwrap @*instance-renderer) @*t $ contract/expect-bool |skip-computing js/window.skipComputing
+                let
+                    render! $ .unwrap @*instance-renderer
+                  render! @*t $ contract/expect-bool |skip-computing js/window.skipComputing
               browser/set-timeout!
                 fn ()
                   browser/request-animation-frame! $ fn (_t) (render-loop!)
                   swap! *t inc
-                  invoke-renderer! (.unwrap @*instance-renderer) @*t $ contract/expect-bool |skip-computing js/window.skipComputing
+                  let
+                      render! $ .unwrap @*instance-renderer
+                    render! @*t $ contract/expect-bool |skip-computing js/window.skipComputing
                   , &unit
                 , frame-interval
             , &unit
           :examples $ []
           :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
+        'renderer-callback $ %{} 'CodeEntry
+          :doc "|Validate the loaded JS renderer once and expose the frame callback with the Number/Bool contract. Frames stay fire-and-forget."
+          :code $ quote $ defn renderer-callback (raw)
+            let
+                renderer $ contract/expect-function |renderer raw
+              fn (tick skip?)
+                hint-fn $ Fn Number Bool (-> Unit) (:features :js-ffi)
+                js/Reflect.apply renderer js/undefined $ to-js-data $ [] tick skip?
+                , &unit
+          :examples $ []
+          :schema $ quote $ Fn Input
+            -> $ Fn Number Bool (-> Unit) (:features :js-ffi)
+            :generics Input
+            :features :js-ffi
         'set-renderer! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn set-renderer! (name) (hint-fn Async)
             let
                 renderer $ js-await $ pick-renderer name
               when
                 = name $ current-tab
-                reset! *instance-renderer $ Option :some $ contract/expect-function |renderer renderer
+                reset! *instance-renderer $ Option :some $ renderer-callback renderer
             , &unit
           :examples $ []
           :schema $ quote $ Fn Tag (-> Unit) (:features :js-ffi)

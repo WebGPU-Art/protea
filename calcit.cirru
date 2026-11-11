@@ -14,23 +14,21 @@
           :code $ quote $ defcomp comp-container (reel on-control!)
             let
                 store $ :store reel
-                states $ :states store
                 tab $ :tab store
               div ({})
-                if hide-tabs? (Option :none)
-                  Option :some $ comp-hud-nav tab tabs
+                if hide-tabs? None $ Some $ comp-hud-nav tab tabs
                 if dev?
-                  Option :some $ comp-typed-reel (>> states :reel) reel ({}) on-control!
-                  Option :none
+                  Some $ comp-typed-reel ({}) reel ({}) on-control!
+                  , None
           :examples $ []
-          :schema $ quote $ Fn (reel.typed/State app.schema/AppOp app.schema/Store)
-            Fn reel.typed/Control $ -> Unit
+          :schema $ quote $ Fn (typed/State app.schema/AppOp app.schema/Store)
+            Fn typed/Control $ -> Unit
             -> respo.schema/Component
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.comp.container
           :require (respo-ui.css :as css)
             respo.css :refer $ defstyle
-            respo.core :refer $ defcomp defeffect <> >> div button textarea span input
+            respo.core :refer $ defcomp defeffect <> div button textarea span input
             respo.comp.space :refer $ =<
             reel.comp.reel :refer $ comp-typed-reel
             app.config :refer $ dev? hide-tabs?
@@ -98,7 +96,7 @@
               %{} TabItem (:id :quadratic) (:label |Quadratic)
               %{} TabItem (:id :rule1001) (:label |rule1001)
           :examples $ []
-          :schema $ quote $ List hud-nav.schema/TabItem
+          :schema $ quote $ List TabItem
         'threshold $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def threshold 0.016
           :examples $ []
@@ -114,14 +112,14 @@
     'app.main $ %{} 'FileEntry
       :defs $ {}
         '*instance-renderer $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defref *instance-renderer (Option :none)
+          :code $ quote $ defref *instance-renderer None
           :examples $ []
           :schema $ quote $ Ref
             Option $ Fn Number Bool (-> Unit) (:features :js-ffi)
         '*reel $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defref *reel (typed/new-reel schema/store)
           :examples $ []
-          :schema $ quote $ Ref (reel.typed/State app.schema/AppOp app.schema/Store)
+          :schema $ quote $ Ref (typed/State schema/AppOp schema/Store)
         '*t $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defref *t 0
           :examples $ []
@@ -133,11 +131,7 @@
           :schema $ quote $ Fn (-> Tag)
         'dispatch! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn dispatch! (op)
-            when
-              and config/dev? $ match op
-                (:states _cursor _state) false
-                _ true
-              js/console.log |Dispatch: op
+            when config/dev? $ js/console.log |Dispatch: op
             let
                 previous-tab $ current-tab
               reset! *reel $ typed/record-op updater @*reel op (generate-id!) (shared/now-ms)
@@ -148,10 +142,9 @@
                   when
                     not= previous-tab $ current-tab
                     set-renderer! $ current-tab
-                (:states _cursor _state) &unit
             , &unit
           :examples $ []
-          :schema $ quote $ Fn app.schema/AppOp (-> Unit) (:features :js-ffi)
+          :schema $ quote $ Fn schema/AppOp (-> Unit) (:features :js-ffi)
         'dispatch-view! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn dispatch-view! (op)
             match op
@@ -162,7 +155,7 @@
                     dispatch! $ schema/AppOp :tab tab
                   (:hydrate-storage _) (raise |expected-hud-nav-tab-operation)
           :examples $ []
-          :schema $ quote $ Fn app.schema/ViewOp (-> Unit)
+          :schema $ quote $ Fn schema/ViewOp (-> Unit)
         'frame-interval $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def frame-interval (contract/expect-number |frame-interval js-config/interval)
           :examples $ []
@@ -171,7 +164,7 @@
           :code $ quote $ defn get-canvas ()
             .unwrap $ browser/query-selector |canvas
           :examples $ []
-          :schema $ quote $ Fn (-> js-ffi.browser/DomElementHost) (:features :js-ffi)
+          :schema $ quote $ Fn (-> browser/DomElementHost) (:features :js-ffi)
         'get-mount-target $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn get-mount-target ()
             dom/narrow-element $ .unwrap $ browser/query-selector |.app
@@ -210,7 +203,7 @@
                 set-renderer! $ current-tab
             , &unit
           :examples $ []
-          :schema $ quote $ Fn reel.typed/Control (-> Unit)
+          :schema $ quote $ Fn typed/Control (-> Unit)
         'persist-storage! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn persist-storage! ()
             println |Saved_at $ shared/date-now-snapshot
@@ -272,9 +265,7 @@
           :code $ quote $ defn render-app! ()
             render-with! (get-mount-target)
               fn () $ comp-container @*reel on-control!
-              fn (op)
-                hint-fn $ Fn *dispatch-op $ -> Unit
-                dispatch-view! $ decode-map-as op app.schema/ViewOp
+              , dispatch-view!
           :examples $ []
           :schema $ quote $ Fn (-> Unit)
         'render-loop! $ %{} 'CodeEntry (:doc |)
@@ -318,7 +309,7 @@
                 renderer $ js-await $ pick-renderer name
               when
                 = name $ current-tab
-                reset! *instance-renderer $ Option :some $ renderer-callback renderer
+                reset! *instance-renderer $ Some $ renderer-callback renderer
             , &unit
           :examples $ []
           :schema $ quote $ Fn Tag (-> Unit) (:features :js-ffi)
@@ -374,15 +365,12 @@
     'app.schema $ %{} 'FileEntry
       :defs $ {}
         'AppOp $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defenum AppOp (:tab Tag)
-            :states (List respo.schema/CoordKey) Dynamic
-            :hydrate-storage app.schema/Store
+          :code $ quote $ defenum AppOp (:tab Tag) (:hydrate-storage app.schema/Store)
           :examples $ []
           :schema $ quote EnumDef
         'Store $ %{} 'CodeEntry
-          :doc "|Application fields are closed: tab is a Tag; states is Respo's heterogeneous cursor tree and remains an explicitly open map at that component boundary. Hydration decodes this shape rather than asserting an unchecked map."
+          :doc "|Application state records the active renderer tab."
           :code $ quote $ defstruct Store (:tab Tag)
-            :states $ Map Dynamic Dynamic
           :examples $ []
           :schema $ quote StructDef
         'ViewOp $ %{} 'CodeEntry (:doc |)
@@ -390,10 +378,9 @@
           :examples $ []
           :schema $ quote UnionDef
         'store $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ def store
-            Store :tab default-tab :states $ {} $ :cursor ([])
+          :code $ quote $ def store (Store :tab default-tab)
           :examples $ []
-          :schema $ quote app.schema/Store
+          :schema $ quote Store
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.schema
           :require $ app.config :refer $ default-tab
@@ -402,14 +389,9 @@
         %{} 'CodeEntry (:doc |)
           :code $ quote $ defn updater (store op op-id op-time)
             match op
-              (:states cursor state)
-                assoc store :states $ decode-map-as
-                  update-state-tree (:states store) cursor state
-                  Map Dynamic Dynamic
               (:tab tab) (assoc store :tab tab)
               (:hydrate-storage data) data
           :examples $ []
           :schema $ quote $ Fn app.schema/Store app.schema/AppOp String Number (-> app.schema/Store)
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.updater
-          :require $ respo.cursor :refer $ update-state-tree

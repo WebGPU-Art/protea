@@ -98,7 +98,7 @@
           :code $ quote $ defn current-tab ()
             :tab $ :store @*reel
           :examples $ []
-          :schema $ quote $ Fn (-> Tag)
+          :schema $ quote $ Fn (-> Tag) (:features :state)
         'dispatch! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn dispatch! (op)
             when config/dev? $ js/console.log |Dispatch: op
@@ -114,7 +114,7 @@
                     set-renderer! $ current-tab
             , &unit
           :examples $ []
-          :schema $ quote $ Fn schema/AppOp (-> Unit) (:features :js-ffi)
+          :schema $ quote $ Fn schema/AppOp (-> Unit) (:features :io :js-ffi :state)
         'dispatch-view! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn dispatch-view! (op)
             match op
@@ -125,7 +125,7 @@
                     dispatch! $ schema/AppOp :tab tab
                   (:hydrate-storage _) (raise |expected-hud-nav-tab-operation)
           :examples $ []
-          :schema $ quote $ Fn schema/ViewOp (-> Unit)
+          :schema $ quote $ Fn schema/ViewOp (-> Unit) (:features :io :state)
         'frame-interval $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def frame-interval (contract/expect-number |frame-interval js-config/interval)
           :examples $ []
@@ -162,7 +162,7 @@
               if (non-nil? err) (hud! |error err)
             println "|App started."
           :examples $ []
-          :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
+          :schema $ quote $ Fn (-> Unit) (:features :io :js-ffi :state)
         'on-control! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn on-control! (control)
             let
@@ -173,7 +173,7 @@
                 set-renderer! $ current-tab
             , &unit
           :examples $ []
-          :schema $ quote $ Fn typed/Control (-> Unit)
+          :schema $ quote $ Fn typed/Control (-> Unit) (:features :io :state)
         'persist-storage! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn persist-storage! ()
             println |Saved_at $ shared/date-now-snapshot
@@ -181,7 +181,7 @@
               .unwrap $ get config/site :storage-key
               format-cirru-edn $ :store @*reel
           :examples $ []
-          :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
+          :schema $ quote $ Fn (-> Unit) (:features :io :js-ffi :state)
         'pick-renderer $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn pick-renderer (tab)
             contract/expect-object |renderer-promise $ match tab
@@ -218,7 +218,7 @@
               _ $ do (eprintln "|unknown tab:" tab)
                 fireworks/loadRenderer $ get-canvas
           :examples $ []
-          :schema $ quote $ Fn Tag (-> JsObject) (:features :js-ffi)
+          :schema $ quote $ Fn Tag (-> JsObject) (:features :io :js-ffi)
         'reload! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn reload! () (hint-fn Async)
             if (nil? build-errors)
@@ -230,14 +230,14 @@
               hud! |error build-errors
             , &unit
           :examples $ []
-          :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
+          :schema $ quote $ Fn (-> Unit) (:features :io :js-ffi :state)
         'render-app! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn render-app! ()
             render-with! (get-mount-target)
               fn () $ comp-container @*reel on-control!
               , dispatch-view!
           :examples $ []
-          :schema $ quote $ Fn (-> Unit)
+          :schema $ quote $ Fn (-> Unit) (:features :io :state)
         'render-loop! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn render-loop! ()
             if (&< frame-interval 10)
@@ -258,7 +258,7 @@
                 , frame-interval
             , &unit
           :examples $ []
-          :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
+          :schema $ quote $ Fn (-> Unit) (:features :js-ffi :state)
         'renderer-callback $ %{} 'CodeEntry
           :doc "|Validate the loaded JS renderer once and expose the frame callback with the Number/Bool contract. Frames stay fire-and-forget."
           :code $ quote $ defn renderer-callback (raw)
@@ -282,7 +282,7 @@
                 reset! *instance-renderer $ Some $ renderer-callback renderer
             , &unit
           :examples $ []
-          :schema $ quote $ Fn Tag (-> Unit) (:features :js-ffi)
+          :schema $ quote $ Fn Tag (-> Unit) (:features :io :js-ffi :state)
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.main
           :require

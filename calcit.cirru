@@ -22,8 +22,9 @@
                   , None
           :examples $ []
           :schema $ quote $ Fn (typed/State app.schema/AppOp app.schema/Store)
-            Fn typed/Control $ -> Unit
+            Fn typed/Control (-> Unit) (:features :io :state)
             -> respo.schema/Component
+            :features :state
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.comp.container
           :require (respo-ui.css :as css)

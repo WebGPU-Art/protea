@@ -16,9 +16,9 @@ To use Protea, try [Protea TypeScript workflow](https://github.com/Triadica/prot
 
 ### Calcit demo development
 
-使用者影响：Calcit Demo 使用正式 CLI 和 `@calcit/procs` **0.44.0**，本地升级后需重装依赖并刷新页面。模型切换、Reel 开发面板、远程控制的启用条件和 TypeScript 库 API 保持原行为。
+使用者影响：Calcit Demo 使用正式 CLI 和 `@calcit/procs` **0.45.1**，本地升级后需重装依赖并刷新页面。模型切换、Reel 开发面板、远程控制的启用条件和 TypeScript 库 API 保持原行为。
 
-Demo 配对 HUD Nav 0.0.13、Respo 0.19.13、UI 0.15.7 和 Reel 0.11.5。渲染事件使用
+Demo 配对 HUD Nav 0.0.14、Respo 0.19.18、UI 0.16.5 和 Reel 0.11.9。渲染事件使用
 `ViewOp` union 区分应用操作和 HUD Nav 操作，Reel 面板与快捷键通过独立的
 `Control` 回调处理。应用状态只保存所选模型，Reel 面板不写入应用状态。编译和 shader 错误继续通过
 `hud!` 在页面显示。正常刷新回到原默认模型。
